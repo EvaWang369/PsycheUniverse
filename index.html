@@ -599,6 +599,40 @@
       margin-top: 1rem;
     }
 
+    /* Music Player */
+    .music-player {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(218, 165, 32, 0.4);
+      transition: all 0.3s;
+      z-index: 999;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .music-player:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(218, 165, 32, 0.6);
+    }
+
+    .music-player.playing {
+      animation: divineGlow 3s ease-in-out infinite;
+    }
+
+    .music-player svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .hero h1 {
@@ -622,6 +656,18 @@
 
       .logo {
         font-size: 1.5rem;
+      }
+
+      .music-player {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 45px;
+        height: 45px;
+      }
+
+      .music-player svg {
+        width: 20px;
+        height: 20px;
       }
     }
   </style>
@@ -769,6 +815,19 @@
     <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">© 2025 Psyche. All rights reserved.</p>
   </footer>
 
+  <!-- Music Player -->
+  <div class="music-player" id="musicPlayer" onclick="toggleMusic()">
+    <svg id="playIcon" viewBox="0 0 24 24">
+      <path d="M8 5v14l11-7z"/>
+    </svg>
+    <svg id="pauseIcon" viewBox="0 0 24 24" style="display: none;">
+      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+    </svg>
+  </div>
+  <audio id="bgMusic" loop>
+    <source src="divine-meditation.mp3" type="audio/mpeg">
+  </audio>
+
   <!-- Auth Modal -->
   <div id="authModal" class="modal">
     <div class="modal-content">
@@ -785,6 +844,39 @@
   </div>
 
   <script>
+    // Music Player
+    const bgMusic = document.getElementById('bgMusic');
+    const musicPlayer = document.getElementById('musicPlayer');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    
+    function toggleMusic() {
+      if (bgMusic.paused) {
+        bgMusic.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        musicPlayer.classList.add('playing');
+        localStorage.setItem('musicPlaying', 'true');
+      } else {
+        bgMusic.pause();
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+        musicPlayer.classList.remove('playing');
+        localStorage.setItem('musicPlaying', 'false');
+      }
+    }
+    
+    // Auto-play music on page load
+    window.addEventListener('load', () => {
+      const shouldPlay = localStorage.getItem('musicPlaying') !== 'false';
+      if (shouldPlay) {
+        bgMusic.play().catch(() => {});
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        musicPlayer.classList.add('playing');
+      }
+    });
+
     // Auth Modal
     function openAuthModal() {
       document.getElementById('authModal').classList.add('active');
