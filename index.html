@@ -866,10 +866,9 @@
       }
     }
     
-    // Auto-play music on page load
+    // Restore music state on page load
     window.addEventListener('load', () => {
-      const shouldPlay = localStorage.getItem('musicPlaying') !== 'false';
-      if (shouldPlay) {
+      if (localStorage.getItem('musicPlaying') === 'true') {
         bgMusic.play().catch(() => {});
         playIcon.style.display = 'none';
         pauseIcon.style.display = 'block';
