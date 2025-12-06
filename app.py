@@ -23,6 +23,10 @@ def index():
 def static_files(path):
     return send_from_directory('.', path)
 
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'healthy'}), 200
+
 @app.route('/api/subscribe', methods=['POST'])
 def subscribe():
     data = request.get_json()
