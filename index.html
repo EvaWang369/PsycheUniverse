@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Psyche - Divine Consciousness Platform</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      background: linear-gradient(135deg, #fdfbfb 0%, #fef9f7 25%, #fef5f9 50%, #f9f5fc 75%, #fdfbfb 100%);
+      color: #4a4a4a;
+      overflow-x: hidden;
+    }
+
+    /* Divine Glow Animations */
+    @keyframes divineGlow {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+
+    /* Navbar */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 0.8rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(218, 165, 32, 0.2);
+      z-index: 1000;
+      box-shadow: 0 4px 30px rgba(218, 165, 32, 0.1);
+    }
+
+    .logo {
+      height: 50px;
+      width: auto;
+    }
+
+    .nav-links a {
+      margin-left: 2.5rem;
+      text-decoration: none;
+      color: #6b5b95;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .nav-links a:hover {
+      color: #daa520;
+      text-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
+    }
+
+    .auth-btn {
+      padding: 0.6rem 1.8rem;
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      box-shadow: 0 8px 25px rgba(218, 165, 32, 0.3);
+      transition: all 0.3s;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(218, 165, 32, 0.4);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(218, 165, 32, 0.15), transparent 70%);
+      border-radius: 50%;
+      animation: divineGlow 6s ease-in-out infinite;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      font-size: 6rem;
+      font-weight: 300;
+      letter-spacing: 12px;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #daa520, #f4e4c1, #e6d5f5, #daa520);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 8s linear infinite;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 0 60px rgba(218, 165, 32, 0.4);
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      max-width: 700px;
+      line-height: 1.8;
+      color: #7b6b9e;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 1;
+      font-weight: 300;
+    }
+
+    .hero-logo {
+      width: 200px;
+      height: auto;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 0 30px rgba(218, 165, 32, 0.4));
+      animation: floatUp 6s ease-in-out infinite;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    /* Section Styling */
+    section {
+      padding: 6rem 2rem;
+      position: relative;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 3rem;
+      font-weight: 300;
+      letter-spacing: 6px;
+      margin-bottom: 4rem;
+      background: linear-gradient(135deg, #daa520, #e6d5f5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Purpose Section */
+    .purpose {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .purpose p {
+      font-size: 1.2rem;
+      text-align: left;
+      line-height: 1.5;
+      color: #7b6b9e;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+    }
+
+    /* Products Section */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .product-card {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(218, 165, 32, 0.2);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s;
+      box-shadow: 0 8px 32px rgba(218, 165, 32, 0.1);
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(218, 165, 32, 0.1), transparent 60%);
+      animation: floatUp 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(218, 165, 32, 0.25);
+      border-color: rgba(218, 165, 32, 0.4);
+    }
+
+    .product-card h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+      color: #6b5b95;
+    }
+
+    .product-card p {
+      font-size: 1rem;
+      color: #8b7ba8;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .product-label {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .launch-date {
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      color: white;
+      box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+    }
+
+    .coming-soon {
+      background: rgba(230, 213, 245, 0.5);
+      color: #6b5b95;
+      border: 1px solid rgba(107, 91, 149, 0.3);
+    }
+
+    /* Pricing Section */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      transition: all 0.4s;
+      border: 2px solid transparent;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .pricing-card.free {
+      border-color: rgba(200, 200, 200, 0.3);
+      box-shadow: 0 8px 30px rgba(200, 200, 200, 0.2);
+    }
+
+    .pricing-card.gold {
+      border-color: rgba(218, 165, 32, 0.4);
+      box-shadow: 0 8px 40px rgba(218, 165, 32, 0.3);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(244, 228, 193, 0.3));
+    }
+
+    .pricing-card.platinum {
+      border-color: rgba(230, 213, 245, 0.5);
+      box-shadow: 0 8px 40px rgba(230, 213, 245, 0.4);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(230, 213, 245, 0.3));
+    }
+
+    .pricing-card h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+
+    .pricing-card .price {
+      font-size: 2.5rem;
+      font-weight: 300;
+      margin-bottom: 2rem;
+      color: #6b5b95;
+    }
+
+    .pricing-card ul {
+      list-style: none;
+      margin-bottom: 2rem;
+      text-align: left;
+      padding-left: 1rem;
+    }
+
+    .pricing-card li {
+      margin-bottom: 0.8rem;
+      color: #7b6b9e;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .pricing-btn {
+      padding: 0.8rem 2.5rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .btn-free {
+      background: linear-gradient(135deg, #8b8b8b, #b8b8b8);
+      color: white;
+      box-shadow: 0 6px 20px rgba(139, 139, 139, 0.3);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      color: white;
+      box-shadow: 0 6px 25px rgba(218, 165, 32, 0.4);
+    }
+
+    .btn-platinum {
+      background: linear-gradient(135deg, #e6d5f5, #c8b8e0);
+      color: white;
+      box-shadow: 0 6px 25px rgba(230, 213, 245, 0.5);
+    }
+
+    .pricing-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 35px rgba(218, 165, 32, 0.5);
+    }
+
+    /* Subscribe Section */
+    .subscribe {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .subscribe p {
+      font-size: 1.1rem;
+      color: #7b6b9e;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .subscribe-form {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .subscribe input {
+      padding: 1rem 2rem;
+      border: 2px solid rgba(218, 165, 32, 0.3);
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      font-size: 1rem;
+      width: 300px;
+      outline: none;
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(218, 165, 32, 0.1);
+    }
+
+    .subscribe input:focus {
+      border-color: rgba(218, 165, 32, 0.6);
+      box-shadow: 0 8px 30px rgba(218, 165, 32, 0.2);
+    }
+
+    .subscribe button {
+      padding: 1rem 3rem;
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      box-shadow: 0 6px 25px rgba(218, 165, 32, 0.3);
+    }
+
+    .subscribe button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 35px rgba(218, 165, 32, 0.4);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(218, 165, 32, 0.2);
+      color: #7b6b9e;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+
+    /* Auth Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(254, 249, 247, 0.95));
+      padding: 3rem;
+      border-radius: 30px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 80px rgba(218, 165, 32, 0.3);
+      border: 2px solid rgba(218, 165, 32, 0.3);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #7b6b9e;
+      transition: all 0.3s;
+    }
+
+    .modal-close:hover {
+      color: #daa520;
+    }
+
+    .modal h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, #daa520, #e6d5f5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: 2px solid rgba(218, 165, 32, 0.3);
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .modal input:focus {
+      border-color: rgba(218, 165, 32, 0.6);
+      box-shadow: 0 4px 20px rgba(218, 165, 32, 0.2);
+    }
+
+    .modal button {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      box-shadow: 0 6px 25px rgba(218, 165, 32, 0.3);
+    }
+
+    .modal button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 35px rgba(218, 165, 32, 0.4);
+    }
+
+    .divider {
+      margin: 1.5rem 0;
+      color: #7b6b9e;
+      font-size: 0.9rem;
+    }
+
+    #googleSignIn {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 3.5rem;
+        letter-spacing: 6px;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        letter-spacing: 3px;
+      }
+
+      nav {
+        padding: 1rem 1.5rem;
+      }
+
+      .nav-links a {
+        margin-left: 1rem;
+        font-size: 0.85rem;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <img src="IMG_6725.jpg" alt="Psyche" class="logo">
+    <div class="nav-links">
+      <a href="#products">Products</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#subscribe">Subscribe</a>
+      <button class="auth-btn" onclick="openAuthModal()">Sign In</button>
+    </div>
+  </nav>
+
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <img src="p2.gif" alt="Psyche Logo" class="hero-logo">
+    <h1>PSYCHE</h1>
+      <p>Remembering & Being Authentic Self</p>
+      <br>
+      <p>A unified platform for grounding & centering your energy, strengthening your sense of purpose, and living with clarity and intention in everyday life. </p>
+      <br>
+      <p>Elevate your essence through AI-driven mastery and celestial wisdom.</p>
+  </section>
+
+  <!-- Purpose Section -->
+  <section id="purpose">
+    <h2 class="section-title">Our Essence</h2>
+    <div class="purpose">
+      <p>It's about being—by returning to your authentic self, aligning with your higher self, and flowing with life’s
+          natural rhythm and the universe.</p>
+        <br>
+        <p>By cultivating a neutral mind and balanced awareness, you awaken to a state of wholeness where love flows naturally.</p>
+        <br>
+        <p>You learn to remain centered and peaceful at heart with all your passion, to experience your emotions fully, and to embrace life with trust and harmony.</p>
+        <br>
+        <p>Together, we learn, support, inspire and grow—deepening our connection with the higher self and the divine counterpart, the one and only.</p>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products">
+    <h2 class="section-title">Our Products</h2>
+
+    <div class="products-grid">
+      
+      <div class="product-card">
+        <h3>Subliminal Gen</h3>
+        <p>AI-powered subliminal music generator designed to reprogram your subconscious mind with divine frequencies and transformational affirmations.</p>
+        <span class="product-label launch-date">Launch Date: December 15</span>
+      </div>
+
+      <div class="product-card">
+        <h3>Essence</h3>
+        <p>High-level consciousness and transformation app. Journey through elevated states of awareness and unlock your divine potential.</p>
+        <span class="product-label coming-soon">Coming Soon</span>
+      </div>
+
+      <div class="product-card">
+        <h3>Auroria</h3>
+        <p>A luminous experience awaits. Discover the next evolution in spiritual technology and conscious living.</p>
+        <span class="product-label coming-soon">Coming Soon</span>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing">
+    <h2 class="section-title">Membership Tiers</h2>
+    <div class="pricing-grid">
+
+      <div class="pricing-card free">
+        <h3>Free Tier</h3>
+        <div class="price">$0</div>
+        <ul>
+          <li>✦ Limited daily subliminals</li>
+          <li>✦ Access to basic content</li>
+          <li>✦ Community support</li>
+          <li>✦ Monthly guided meditations</li>
+        </ul>
+        <button class="pricing-btn btn-free" onclick="openAuthModal()">Start Free</button>
+      </div>
+
+      <div class="pricing-card gold">
+        <h3>VIP Gold</h3>
+        <div class="price">$5.55<span style="font-size: 1rem;">/mo</span></div>
+        <ul>
+          <li>✦ Unlimited subliminals</li>
+          <li>✦ Exclusive divine content</li>
+          <li>✦ VIP support access</li>
+          <li>✦ Advanced AI features</li>
+          <li>✦ Custom affirmations</li>
+        </ul>
+        <a href="https://link.com/" class="pricing-btn btn-gold">Subscribe</a>
+      </div>
+
+      <div class="pricing-card platinum">
+        <h3>VIP Platinum</h3>
+        <div class="price">$9.99<span style="font-size: 1rem;">/mo</span></div>
+        <ul>
+          <li>✦ All Gold features</li>
+          <li>✦ Advanced AI consciousness tools</li>
+          <li>✦ Early beta access</li>
+          <li>✦ 1-on-1 guidance sessions</li>
+          <li>✦ Exclusive masterclasses</li>
+        </ul>
+        <a href="https://link.com/" class="pricing-btn btn-platinum">Subscribe</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Subscribe Section -->
+  <section id="subscribe">
+    <div class="subscribe">
+      <h2 class="section-title">Stay Updated</h2>
+      <p>Enter your email to receive divine updates, launch announcements, and exclusive high-frequency content.</p>
+      <form class="subscribe-form" onsubmit="handleSubscribe(event)">
+        <input type="email" placeholder="your@email.com" required>
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Contact: contact@psyche.com</p>
+    <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">© 2024 Psyche. All rights reserved.</p>
+  </footer>
+
+  <!-- Auth Modal -->
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeAuthModal()">&times;</span>
+      <h2>Welcome</h2>
+      <form onsubmit="handleEmailAuth(event)">
+        <input type="email" placeholder="Email" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Sign In / Sign Up</button>
+      </form>
+      <div class="divider">— or —</div>
+      <div id="googleSignIn"></div>
+    </div>
+  </div>
+
+  <script>
+    // Auth Modal
+    function openAuthModal() {
+      document.getElementById('authModal').classList.add('active');
+      initGoogleSignIn();
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('active');
+    }
+
+    // Email Auth
+    function handleEmailAuth(e) {
+      e.preventDefault();
+      alert('Authentication successful! Welcome to Psyche.');
+      closeAuthModal();
+    }
+
+    // Subscribe
+    function handleSubscribe(e) {
+      e.preventDefault();
+      alert('Thank you for subscribing! You will receive divine updates soon.');
+      e.target.reset();
+    }
+
+    // Google Sign In
+    function initGoogleSignIn() {
+      if (window.google) {
+        google.accounts.id.initialize({
+          client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+          callback: handleGoogleSignIn
+        });
+        google.accounts.id.renderButton(
+          document.getElementById('googleSignIn'),
+          { theme: 'outline', size: 'large', text: 'signin_with', shape: 'pill' }
+        );
+      }
+    }
+
+    function handleGoogleSignIn(response) {
+      console.log('Google Sign In:', response);
+      alert('Google Sign In successful! Welcome to Psyche.');
+      closeAuthModal();
+    }
+
+    // Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
