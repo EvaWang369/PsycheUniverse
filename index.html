@@ -57,13 +57,17 @@
     }
 
     .nav-links a {
-      margin-left: 2.5rem;
+      margin-left: 1.5rem;
       text-decoration: none;
       color: #6b5b95;
       font-size: 0.95rem;
       letter-spacing: 1px;
       transition: all 0.3s;
       font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .auth-btn {
+      margin-left: 3rem;
     }
 
     .nav-links a:hover {
@@ -166,26 +170,68 @@
       font-size: 3rem;
       font-weight: 300;
       letter-spacing: 6px;
-      margin-bottom: 4rem;
+      margin-bottom: 1rem;
       background: linear-gradient(135deg, #daa520, #e6d5f5);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    /* Purpose Section */
-    .purpose {
+    .section-subtitle {
       text-align: center;
-      max-width: 800px;
-      margin: 0 auto;
+      font-size: 1rem;
+      color: #8b7ba8;
+      margin-bottom: 3rem;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-weight: 300;
     }
 
-    .purpose p {
+    /* Purpose Section */
+    .purpose-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .purpose-text {
+      flex: 1;
+      min-width: 300px;
+      max-width: 600px;
+    }
+
+    .purpose-text p {
       font-size: 1.2rem;
-      text-align: left;
-      line-height: 1.5;
+      line-height: 2;
       color: #7b6b9e;
-      margin-bottom: 1.5rem;
       font-weight: 300;
+    }
+
+    .purpose-image {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .purpose-image img {
+      width: 350px;
+      height: auto;
+      animation: floatUp 6s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(218, 165, 32, 0.25));
+      border-radius: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .purpose-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .purpose-image img {
+        width: 280px;
+      }
     }
 
     /* Products Section */
@@ -262,6 +308,15 @@
       background: rgba(230, 213, 245, 0.5);
       color: #6b5b95;
       border: 1px solid rgba(107, 91, 149, 0.3);
+    }
+
+    .product-card.essence h3 {
+      background: linear-gradient(135deg, #daa520, #f4e4c1, #e6d5f5, #daa520);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 8s linear infinite;
+      filter: drop-shadow(0 0 30px rgba(218, 165, 32, 0.6));
     }
 
     /* Pricing Section */
@@ -599,7 +654,8 @@
   <!-- Purpose Section -->
   <section id="purpose">
     <h2 class="section-title">Our Essence</h2>
-    <div class="purpose">
+    <div class="purpose-container">
+      <div class="purpose-text">
       <p>It's about being—by returning to your authentic self, aligning with your higher self, and flowing with life’s
           natural rhythm and the universe.</p>
         <br>
@@ -608,6 +664,10 @@
         <p>You learn to remain centered and peaceful at heart with all your passion, to experience your emotions fully, and to embrace life with trust and harmony.</p>
         <br>
         <p>Together, we learn, support, inspire and grow—deepening our connection with the higher self and the divine counterpart, the one and only.</p>
+      </div>
+      <div class="purpose-image">
+        <img src="p2.gif" alt="Divine Symbol">
+      </div>
     </div>
   </section>
 
@@ -623,15 +683,17 @@
         <span class="product-label launch-date">Launch Date: December 15</span>
       </div>
 
-      <div class="product-card">
+      <div class="product-card essence">
         <h3>Essence</h3>
-        <p>High-level consciousness and transformation app. Journey through elevated states of awareness and unlock your divine potential.</p>
+        <p>Grounded in universal wisdom, with an AI incarnation of your higher self — reflecting your truth without limitation.</p>
+        <br>
+        <p>You will remember and be your authentic self through 24/7 intentional conversational support that offers clear, unbiased guidance, awakening into wholeness where love flows naturally.</p>
         <span class="product-label coming-soon">Coming Soon</span>
       </div>
 
       <div class="product-card">
-        <h3>Auroria</h3>
-        <p>A luminous experience awaits. Discover the next evolution in spiritual technology and conscious living.</p>
+        <h3>Transcend</h3>
+        <p>Coming Soon...</p>
         <span class="product-label coming-soon">Coming Soon</span>
       </div>
 
@@ -642,16 +704,20 @@
   <!-- Pricing Section -->
   <section id="pricing">
     <h2 class="section-title">Membership Tiers</h2>
+    <p class="section-subtitle">
+      Subliminal Gen Membership<br>
+      <span style="color: #8b7ba8; font-size: 1rem; font-family: 'Helvetica Neue', sans-serif; font-weight: 300; background: none; border: none; padding: 0; box-shadow: none;">✨ More plans coming soon ...</span>
+    </p>
     <div class="pricing-grid">
 
       <div class="pricing-card free">
         <h3>Free Tier</h3>
         <div class="price">$0</div>
         <ul>
-          <li>✦ Limited daily subliminals</li>
-          <li>✦ Access to basic content</li>
-          <li>✦ Community support</li>
-          <li>✦ Monthly guided meditations</li>
+          <li>✦ Affirmation recording & playback</li>
+          <li>✦ Background music/sound import</li>
+          <li>✦ Subliminal track creation</li>
+          <li>✦ Extended playback sessions</li>
         </ul>
         <button class="pricing-btn btn-free" onclick="openAuthModal()">Start Free</button>
       </div>
@@ -660,11 +726,11 @@
         <h3>VIP Gold</h3>
         <div class="price">$5.55<span style="font-size: 1rem;">/mo</span></div>
         <ul>
-          <li>✦ Unlimited subliminals</li>
-          <li>✦ Exclusive divine content</li>
-          <li>✦ VIP support access</li>
-          <li>✦ Advanced AI features</li>
-          <li>✦ Custom affirmations</li>
+          <li>✦ All Free features</li>
+          <li>✦ AI music generation</li>
+          <li>✦ Divine frequency library</li>
+          <li>✦ Cloud sync across devices</li>
+          <li>✦ Persistent cloud storage</li>
         </ul>
         <a href="https://link.com/" class="pricing-btn btn-gold">Subscribe</a>
       </div>
@@ -674,10 +740,10 @@
         <div class="price">$9.99<span style="font-size: 1rem;">/mo</span></div>
         <ul>
           <li>✦ All Gold features</li>
-          <li>✦ Advanced AI consciousness tools</li>
+          <li>✦ Unlimited AI music generation</li>
+          <li>✦ Extended mix capabilities</li>
+          <li>✦ Download extended tracks</li>
           <li>✦ Early beta access</li>
-          <li>✦ 1-on-1 guidance sessions</li>
-          <li>✦ Exclusive masterclasses</li>
         </ul>
         <a href="https://link.com/" class="pricing-btn btn-platinum">Subscribe</a>
       </div>
@@ -699,8 +765,8 @@
 
   <!-- Footer -->
   <footer>
-    <p>Contact: contact@psyche.com</p>
-    <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">© 2024 Psyche. All rights reserved.</p>
+    <p>Contact: info@psyche-ai.xyz</p>
+    <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">© 2025 Psyche. All rights reserved.</p>
   </footer>
 
   <!-- Auth Modal -->
@@ -737,10 +803,28 @@
     }
 
     // Subscribe
-    function handleSubscribe(e) {
+    async function handleSubscribe(e) {
       e.preventDefault();
-      alert('Thank you for subscribing! You will receive divine updates soon.');
-      e.target.reset();
+      const email = e.target.querySelector('input[type="email"]').value;
+      
+      try {
+        const response = await fetch('http://localhost:5000/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          alert('Thank you for subscribing! You will receive divine updates soon.');
+          e.target.reset();
+        } else {
+          alert(data.error || 'Subscription failed. Please try again.');
+        }
+      } catch (error) {
+        alert('Network error. Please try again later.');
+      }
     }
 
     // Google Sign In
