@@ -36,9 +36,8 @@ def subscribe():
         return jsonify({'error': 'Email is required'}), 400
     
     try:
-        result = supabase.table('subscribers').insert({
-            'email': email,
-            'subscribed_at': datetime.utcnow().isoformat()
+        result = supabase.table('universal_subscription').insert({
+            'email': email
         }).execute()
         
         return jsonify({'message': 'Successfully subscribed!'}), 200
