@@ -17,7 +17,15 @@ supabase = create_client(
 
 @app.route('/')
 def index():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory('views', 'index.html')
+
+@app.route('/subliminalgen')
+def subliminalgen():
+    return send_from_directory('views', 'subliminalgen.html')
+
+@app.route('/pitch')
+def pitch():
+    return send_from_directory('views', 'pitch.html')
 
 @app.route('/<path:path>')
 def static_files(path):
@@ -47,4 +55,4 @@ def subscribe():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host='127.0.0.1', port=8080)
