@@ -27,6 +27,14 @@ def subliminalgen():
 def pitch():
     return send_from_directory('views', 'pitch.html')
 
+@app.route('/views/<path:filename>')
+def views_static(filename):
+    return send_from_directory('views', filename)
+
+@app.route('/logos/<path:filename>')
+def logos_static(filename):
+    return send_from_directory('logos', filename)
+
 @app.route('/<path:path>')
 def static_files(path):
     return send_from_directory('.', path)
