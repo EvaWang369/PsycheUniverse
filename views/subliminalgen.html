@@ -283,7 +283,119 @@
       color: #6a5c90;
     }
 
-    /* CTA Section */
+    /* Pricing Section */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      transition: all 0.4s;
+      border: 2px solid transparent;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .pricing-card.free {
+      border-color: rgba(200, 200, 200, 0.3);
+      box-shadow: 0 8px 30px rgba(200, 200, 200, 0.2);
+    }
+
+    .pricing-card.gold {
+      border-color: rgba(166, 140, 89, 0.4);
+      box-shadow: 0 8px 40px rgba(166, 140, 89, 0.3);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(244, 228, 193, 0.3));
+    }
+
+    .pricing-card.platinum {
+      border-color: rgba(230, 213, 245, 0.5);
+      box-shadow: 0 8px 40px rgba(230, 213, 245, 0.4);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(230, 213, 245, 0.3));
+    }
+
+    .pricing-card h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+      color: #5b4a86;
+    }
+
+    .pricing-card .price {
+      font-size: 2.5rem;
+      font-weight: 300;
+      margin-bottom: 2rem;
+      color: #5b4a86;
+    }
+
+    .pricing-card ul {
+      list-style: none;
+      margin-bottom: 2rem;
+      text-align: left;
+      padding-left: 1rem;
+    }
+
+    .pricing-card li {
+      margin-bottom: 0.8rem;
+      color: #6a5c90;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .pricing-btn {
+      padding: 0.8rem 2.5rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .btn-free {
+      background: linear-gradient(135deg, #8b8b8b, #b8b8b8);
+      color: white;
+      box-shadow: 0 6px 20px rgba(139, 139, 139, 0.3);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #a68c59, #f4e4c1);
+      color: white;
+      box-shadow: 0 6px 25px rgba(166, 140, 89, 0.4);
+    }
+
+    .btn-platinum {
+      background: linear-gradient(135deg, #e6d5f5, #c8b8e0);
+      color: white;
+      box-shadow: 0 6px 25px rgba(230, 213, 245, 0.5);
+    }
+
+    .pricing-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 35px rgba(166, 140, 89, 0.5);
+    }
+
+    .section-subtitle {
+      text-align: center;
+      font-size: 1rem;
+      color: #8b7ba8;
+      margin-bottom: 3rem;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-weight: 300;
+    }
     .cta {
       padding: 6rem 2rem;
       text-align: center;
@@ -504,6 +616,53 @@
     </div>
   </section>
 
+  <!-- Pricing Section -->
+  <section id="pricing">
+    <h2 class="section-title">Membership Tiers</h2>
+
+    <div class="pricing-grid">
+
+      <div class="pricing-card free">
+        <h3>Free Tier</h3>
+        <div class="price">$0</div>
+        <ul>
+          <li>✦ Affirmation recording & playback</li>
+          <li>✦ Background music/sound import</li>
+          <li>✦ Subliminal track creation</li>
+          <li>✦ Extended playback sessions</li>
+        </ul>
+        <button class="pricing-btn btn-free" onclick="openAuthModal()">Start Free</button>
+      </div>
+
+      <div class="pricing-card gold">
+        <h3>VIP Gold</h3>
+        <div class="price">$5.55<span style="font-size: 1rem;">/mo</span></div>
+        <ul>
+          <li>✦ All Free features</li>
+          <li>✦ AI music generation</li>
+          <li>✦ Psyche music library</li>
+          <li>✦ Divine frequency library</li>
+          <li>✦ Persistent cloud storage</li>
+        </ul>
+        <a href="https://link.com/" class="pricing-btn btn-gold">Subscribe</a>
+      </div>
+
+      <div class="pricing-card platinum">
+        <h3>VIP Platinum</h3>
+        <div class="price">$9.99<span style="font-size: 1rem;">/mo</span></div>
+        <ul>
+          <li>✦ All Gold features</li>
+          <li>✦ Unlimited AI music generation</li>
+          <li>✦ Extended mix capabilities</li>
+          <li>✦ Download extended tracks</li>
+          <li>✦ Early beta access</li>
+        </ul>
+        <a href="https://link.com/" class="pricing-btn btn-platinum">Subscribe</a>
+      </div>
+
+    </div>
+  </section>
+
   <!-- CTA Section -->
   <section class="cta">
     <div class="cta-content">
@@ -519,7 +678,7 @@
   <!-- Footer -->
   <footer>
     <p>Contact: info@psyche-ai.xyz</p>
-    <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 1rem;">© 2025 Psyche. All rights reserved.</p>
+    <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 1rem;">© 2026 Psyche. All rights reserved.</p>
   </footer>
 
 </body>
