@@ -1,6 +1,9 @@
 # Environment variables
 .env
 
+# Test directory
+ztest/
+
 # Python
 __pycache__/
 *.py[cod]

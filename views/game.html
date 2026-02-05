@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metaphors - Psyche</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>✨</text></svg>">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      background: linear-gradient(135deg, #fdfbfb 0%, #fef9f7 25%, #fef5f9 50%, #f9f5fc 75%, #fdfbfb 100%);
+      color: #4a4a4a;
+      overflow-x: hidden;
+    }
+
+    @keyframes divineGlow {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+
+    /* Navbar */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 0.8rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(218, 165, 32, 0.2);
+      z-index: 1000;
+      box-shadow: 0 4px 30px rgba(218, 165, 32, 0.1);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 300;
+      letter-spacing: 4px;
+      color: #daa520;
+      text-decoration: none;
+    }
+
+    .nav-links a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #6b5b95;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .nav-links a:hover {
+      color: #daa520;
+      text-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
+    }
+
+    .auth-btn {
+      margin-left: 3rem;
+      padding: 0.6rem 1.8rem;
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      box-shadow: 0 8px 25px rgba(218, 165, 32, 0.3);
+      transition: all 0.3s;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(218, 165, 32, 0.4);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 10rem 4rem 4rem;
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 300;
+      letter-spacing: 8px;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #daa520, #f4e4c1, #e6d5f5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero .subtitle {
+      font-size: 1.5rem;
+      color: #7b6b9e;
+      letter-spacing: 2px;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: #8b7ba8;
+      line-height: 1.8;
+      max-width: 700px;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    /* Section */
+    section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 6px;
+      margin-bottom: 1rem;
+      color: #6b5b95;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: #8b7ba8;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    /* Metaphor Cards Grid */
+    .metaphor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .metaphor-card {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(218, 165, 32, 0.2);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      transition: all 0.4s;
+      box-shadow: 0 8px 32px rgba(218, 165, 32, 0.1);
+    }
+
+    .metaphor-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(218, 165, 32, 0.25);
+      border-color: rgba(218, 165, 32, 0.4);
+    }
+
+    .metaphor-symbol {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 0 20px rgba(218, 165, 32, 0.3));
+    }
+
+    .metaphor-card h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+      color: #6b5b95;
+      text-transform: uppercase;
+    }
+
+    .metaphor-keywords {
+      font-size: 0.9rem;
+      color: #8b7ba8;
+      margin-bottom: 1rem;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .metaphor-doctrine {
+      font-size: 1.1rem;
+      color: #daa520;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      min-height: 50px;
+    }
+
+    .metaphor-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.7rem 1.8rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      font-family: 'Helvetica Neue', sans-serif;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-preview {
+      background: rgba(230, 213, 245, 0.5);
+      color: #6b5b95;
+      border: 1px solid rgba(107, 91, 149, 0.3);
+    }
+
+    .btn-preview:hover {
+      background: rgba(230, 213, 245, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-unlock {
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      color: white;
+      box-shadow: 0 6px 20px rgba(218, 165, 32, 0.3);
+    }
+
+    .btn-unlock:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(218, 165, 32, 0.4);
+    }
+
+    .btn-read {
+      background: linear-gradient(135deg, #6b5b95, #8b7ba8);
+      color: white;
+      box-shadow: 0 6px 20px rgba(107, 91, 149, 0.3);
+    }
+
+    .btn-read:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(107, 91, 149, 0.4);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      font-family: 'Helvetica Neue', sans-serif;
+      margin-top: 0.5rem;
+    }
+
+    .status-coming-soon {
+      background: rgba(230, 213, 245, 0.5);
+      color: #6b5b95;
+      border: 1px solid rgba(107, 91, 149, 0.3);
+    }
+
+    /* Expand Section */
+    .expand-section {
+      text-align: center;
+      margin: 3rem 0;
+    }
+
+    .expand-btn {
+      padding: 1rem 3rem;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(218, 165, 32, 0.3);
+      border-radius: 50px;
+      color: #6b5b95;
+      cursor: pointer;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      transition: all 0.3s;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .expand-btn:hover {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(218, 165, 32, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .expand-btn.expanded::after {
+      content: ' ⌃';
+    }
+
+    .expand-btn:not(.expanded)::after {
+      content: ' ⌄';
+    }
+
+    /* Suggest Section */
+    .suggest-section {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, rgba(218, 165, 32, 0.08), rgba(230, 213, 245, 0.08));
+      border: 2px dashed rgba(218, 165, 32, 0.3);
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .suggest-section:hover {
+      background: linear-gradient(135deg, rgba(218, 165, 32, 0.12), rgba(230, 213, 245, 0.12));
+      border-color: rgba(218, 165, 32, 0.5);
+    }
+
+    .suggest-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .suggest-symbol {
+      font-size: 3rem;
+      filter: drop-shadow(0 0 20px rgba(218, 165, 32, 0.3));
+    }
+
+    .suggest-text h3 {
+      font-size: 1.8rem;
+      letter-spacing: 3px;
+      color: #6b5b95;
+      margin-bottom: 0.5rem;
+    }
+
+    .suggest-text p {
+      font-size: 1rem;
+      color: #8b7ba8;
+      font-family: 'Helvetica Neue', sans-serif;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .suggest-content {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+    }
+
+    /* Doctrine Footer */
+    .doctrine-footer {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(218, 165, 32, 0.2);
+      margin-top: 4rem;
+    }
+
+    .doctrine-footer p {
+      font-size: 1.1rem;
+      color: #7b6b9e;
+      line-height: 1.8;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(254, 249, 247, 0.95));
+      padding: 3rem;
+      border-radius: 30px;
+      max-width: 700px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 80px rgba(218, 165, 32, 0.3);
+      border: 2px solid rgba(218, 165, 32, 0.3);
+      position: relative;
+      margin: 2rem;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #7b6b9e;
+      transition: all 0.3s;
+    }
+
+    .modal-close:hover {
+      color: #daa520;
+    }
+
+    .modal-symbol {
+      font-size: 5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 0 20px rgba(218, 165, 32, 0.3));
+    }
+
+    .modal h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: 4px;
+      text-align: center;
+      background: linear-gradient(135deg, #daa520, #e6d5f5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .modal-keywords {
+      text-align: center;
+      font-size: 1rem;
+      color: #8b7ba8;
+      margin-bottom: 2rem;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .modal-preview {
+      font-size: 1.1rem;
+      color: #7b6b9e;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    /* Suggestion Form */
+    .suggestion-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .suggestion-form input,
+    .suggestion-form textarea {
+      padding: 1rem;
+      border: 2px solid rgba(218, 165, 32, 0.3);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      font-family: 'Helvetica Neue', sans-serif;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .suggestion-form input:focus,
+    .suggestion-form textarea:focus {
+      border-color: rgba(218, 165, 32, 0.6);
+      box-shadow: 0 4px 20px rgba(218, 165, 32, 0.2);
+    }
+
+    .suggestion-form textarea {
+      min-height: 120px;
+      resize: vertical;
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 8rem 2rem 3rem;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+        letter-spacing: 4px;
+      }
+
+      .metaphor-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        padding: 1rem 1.5rem;
+      }
+
+      .nav-links a {
+        margin-left: 1rem;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="logo">PSYCHE ∞ AI</a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/metaphors">Metaphors</a>
+      <a href="/#products">Apps</a>
+      <button class="auth-btn" onclick="alert('Auth coming soon')">Sign In</button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>REALITY, EXPLAINED THROUGH LENSES</h1>
+    <p class="subtitle">One Law. Infinite Reflections.</p>
+    <p>These are playful models—not the truth.<br>They help you feel the law, faster.</p>
+  </section>
+
+  <!-- Core Lenses Section -->
+  <section id="core-lenses">
+    <div class="section-header">
+      <h2 class="section-title">CORE LENSES</h2>
+      <p class="section-subtitle">The foundational mirrors</p>
+    </div>
+    <div class="metaphor-grid" id="coreGrid">
+      <!-- Cards will be loaded dynamically -->
+    </div>
+  </section>
+
+  <!-- More Lenses Section -->
+  <div class="expand-section">
+    <button class="expand-btn" id="expandBtn" onclick="toggleMoreLenses()">MORE LENSES</button>
+  </div>
+
+  <section id="more-lenses" style="display: none;">
+    <div class="metaphor-grid" id="moreGrid">
+      <!-- More cards will be loaded dynamically -->
+    </div>
+  </section>
+
+  <!-- Expanding Library Section -->
+  <section id="expanding-library">
+    <div class="section-header">
+      <h2 class="section-title">EXPANDING LIBRARY</h2>
+      <p class="section-subtitle">Coming soon</p>
+    </div>
+    <div class="metaphor-grid" id="expandingGrid">
+      <!-- Coming soon cards will be loaded dynamically -->
+    </div>
+  </section>
+
+  <!-- Suggest Metaphor Section -->
+  <section class="suggest-section">
+    <div class="suggest-content">
+      <div class="suggest-symbol">✦</div>
+      <div class="suggest-text">
+        <h3>SUGGEST A METAPHOR</h3>
+        <p>Help us expand the library · Community · Co-creation</p>
+      </div>
+      <button class="btn btn-unlock" onclick="openSuggestionModal()">Share Your Idea →</button>
+    </div>
+  </section>
+
+  <!-- Doctrine Footer -->
+  <div class="doctrine-footer">
+    <p>These metaphors are not Psyche.<br>They are mirrors—tiny models that help you recognize one law.</p>
+    <a href="/" class="btn btn-preview">Read the Psyche System →</a>
+  </div>
+
+  <!-- Preview Modal -->
+  <div id="previewModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Suggestion Modal -->
+  <div id="suggestionModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeSuggestionModal()">&times;</span>
+      <h2>Suggest a Metaphor</h2>
+      <p class="modal-keywords">Help us expand the library</p>
+      <form class="suggestion-form" onsubmit="submitSuggestion(event)">
+        <input type="text" name="name" placeholder="Your name (optional)">
+        <input type="email" name="email" placeholder="Your email (optional)">
+        <textarea name="suggestion" placeholder="Your metaphor suggestion" required></textarea>
+        <textarea name="reason" placeholder="Why it fits Psyche"></textarea>
+        <button type="submit" class="btn btn-unlock">Submit Suggestion</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Frontend content catalog (easy to update)
+    const METAPHOR_CATALOG = [
+      {
+        id: "poker",
+        title: "Poker",
+        symbol: "♠",
+        keywords: ["Uncertainty", "State", "Mastery"],
+        doctrine: "Trust without proof.",
+        preview_content: "Poker is one of the cleanest metaphors for the Psyche concept, because it mirrors how the universe works in 3D life: uncertainty by design, incomplete information, and emotional triggers. You don't control the cards—you control the self.",
+        full_content: "[Full Poker metaphor content - all 6 sections will go here]",
+        price: 5.00,
+        status: "available",
+        order_index: 1
+      },
+      {
+        id: "chess",
+        title: "Chess",
+        symbol: "♟",
+        keywords: ["Clarity", "Intention", "Strategy"],
+        doctrine: "Mastery inside.",
+        preview_content: "Chess represents perfect information and strategic thinking. Every piece visible, every move calculated. It teaches clarity of intention and the power of foresight.",
+        full_content: "[Full Chess metaphor content will go here]",
+        price: 5.00,
+        status: "available",
+        order_index: 2
+      },
+      {
+        id: "choir",
+        title: "Choir",
+        symbol: "♫",
+        keywords: ["Resonance", "Unity", "Harmony"],
+        doctrine: "Many voices, one tone.",
+        preview_content: "A choir demonstrates how individual voices create collective beauty. Each voice unique, yet harmonizing into something greater than the sum of its parts.",
+        full_content: "[Full Choir metaphor content will go here]",
+        price: 5.00,
+        status: "available",
+        order_index: 3
+      },
+      {
+        id: "orchestra",
+        title: "Orchestra",
+        symbol: "🎻",
+        keywords: ["Structure", "Timing", "Flow"],
+        doctrine: "Order becomes music.",
+        preview_content: "An orchestra shows how structure and timing create harmony. Different instruments, different roles, unified by rhythm and intention.",
+        full_content: "[Full Orchestra metaphor content will go here]",
+        price: 5.00,
+        status: "coming_soon",
+        order_index: 4
+      },
+      {
+        id: "zodiac",
+        title: "Zodiac",
+        symbol: "✶",
+        keywords: ["Cycles", "Archetypes", "Timing"],
+        doctrine: "Timing reveals law.",
+        preview_content: "The zodiac represents cyclical patterns and archetypal energies. Twelve faces of one truth, moving through time in eternal rhythm.",
+        full_content: "[Full Zodiac metaphor content will go here]",
+        price: 5.00,
+        status: "coming_soon",
+        order_index: 5
+      }
+    ];
+
+    let metaphors = METAPHOR_CATALOG.slice();
+    let userPurchases = [];
+
+    // Load metaphors on page load
+    async function loadMetaphors() {
+      try {
+        // Use frontend catalog, ordered by order_index
+        metaphors = METAPHOR_CATALOG
+          .slice()
+          .sort((a, b) => (a.order_index ?? 9999) - (b.order_index ?? 9999));
+
+        // Fetch user purchases (temporary demo user)
+        const purchasesResponse = await fetch('/api/user/purchases', {
+          headers: { 'X-User-Id': 'demo_user' }
+        });
+        userPurchases = await purchasesResponse.json();
+
+        // Render cards
+        renderMetaphors();
+      } catch (error) {
+        console.error('Error loading metaphors:', error);
+        // Still render cards even if purchases endpoint fails
+        metaphors = METAPHOR_CATALOG
+          .slice()
+          .sort((a, b) => (a.order_index ?? 9999) - (b.order_index ?? 9999));
+        userPurchases = [];
+        renderMetaphors();
+      }
+    }
+
+    function renderMetaphors() {
+      const coreGrid = document.getElementById('coreGrid');
+      const moreGrid = document.getElementById('moreGrid');
+      const expandingGrid = document.getElementById('expandingGrid');
+
+      // Clear grids
+      coreGrid.innerHTML = '';
+      moreGrid.innerHTML = '';
+      expandingGrid.innerHTML = '';
+
+      // Separate metaphors by status and order
+      const available = metaphors.filter(m => m.status === 'available');
+      const comingSoon = metaphors.filter(m => m.status === 'coming_soon');
+
+      // Core lenses (first 3 available)
+      available.slice(0, 3).forEach(m => {
+        coreGrid.innerHTML += createMetaphorCard(m);
+      });
+
+      // More lenses (remaining available)
+      available.slice(3).forEach(m => {
+        moreGrid.innerHTML += createMetaphorCard(m);
+      });
+
+      // Expanding library (coming soon)
+      comingSoon.forEach(m => {
+        expandingGrid.innerHTML += createMetaphorCard(m);
+      });
+
+      // Don't add suggest card to grid anymore - it's now a separate section
+    }
+
+    function createMetaphorCard(metaphor) {
+      const isPurchased = userPurchases.includes(metaphor.id);
+      const isComingSoon = metaphor.status === 'coming_soon';
+      const keywords = metaphor.keywords ? metaphor.keywords.join(' · ') : '';
+
+      let actions = '';
+      if (isComingSoon) {
+        actions = '<span class="status-badge status-coming-soon">Coming Soon</span>';
+      } else if (isPurchased) {
+        actions = `<button class="btn btn-read" onclick="readFull('${metaphor.id}')">Read Full →</button>`;
+      } else {
+        actions = `
+          <button class="btn btn-preview" onclick="showPreview('${metaphor.id}')">Preview →</button>
+          <button class="btn btn-unlock" onclick="unlockMetaphor('${metaphor.id}')">Unlock $${metaphor.price}</button>
+        `;
+      }
+
+      return `
+        <div class="metaphor-card">
+          <div class="metaphor-symbol">${metaphor.symbol || '✦'}</div>
+          <h3>${metaphor.title}</h3>
+          <div class="metaphor-keywords">${keywords}</div>
+          <div class="metaphor-doctrine">${metaphor.doctrine || ''}</div>
+          <div class="metaphor-actions">${actions}</div>
+        </div>
+      `;
+    }
+
+    // Remove createSuggestCard function - no longer needed
+
+    function toggleMoreLenses() {
+      const section = document.getElementById('more-lenses');
+      const btn = document.getElementById('expandBtn');
+      
+      if (section.style.display === 'none') {
+        section.style.display = 'block';
+        btn.classList.add('expanded');
+      } else {
+        section.style.display = 'none';
+        btn.classList.remove('expanded');
+      }
+    }
+
+    function showPreview(metaphorId) {
+      const metaphor = metaphors.find(m => m.id === metaphorId);
+      if (!metaphor) return;
+
+      const keywords = metaphor.keywords ? metaphor.keywords.join(' · ') : '';
+      const modalContent = `
+        <div class="modal-symbol">${metaphor.symbol || '✦'}</div>
+        <h2>${metaphor.title}</h2>
+        <div class="modal-keywords">${keywords}</div>
+        <div class="modal-preview">${metaphor.preview_content || 'Preview content coming soon...'}</div>
+        <div class="modal-actions">
+          <button class="btn btn-unlock" onclick="unlockMetaphor('${metaphor.id}')">Unlock for $${metaphor.price}</button>
+          <button class="btn btn-preview" onclick="closeModal()">Back to Library</button>
+        </div>
+      `;
+
+      document.getElementById('modalContent').innerHTML = modalContent;
+      document.getElementById('previewModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('previewModal').classList.remove('active');
+    }
+
+    function readFull(metaphorId) {
+      const metaphor = metaphors.find(m => m.id === metaphorId);
+      if (!metaphor) return;
+
+      const keywords = metaphor.keywords ? metaphor.keywords.join(' · ') : '';
+      const modalContent = `
+        <div class="modal-symbol">${metaphor.symbol || '✦'}</div>
+        <h2>${metaphor.title}</h2>
+        <div class="modal-keywords">${keywords}</div>
+        <div class="modal-preview">${metaphor.full_content || 'Full content coming soon...'}</div>
+        <div class="modal-actions">
+          <button class="btn btn-preview" onclick="closeModal()">Back to Library</button>
+        </div>
+      `;
+
+      document.getElementById('modalContent').innerHTML = modalContent;
+      document.getElementById('previewModal').classList.add('active');
+    }
+
+    function unlockMetaphor(metaphorId) {
+      // TODO: Implement Stripe checkout
+      alert(`Stripe checkout for ${metaphorId} coming soon!`);
+    }
+
+    function openSuggestionModal() {
+      document.getElementById('suggestionModal').classList.add('active');
+    }
+
+    function closeSuggestionModal() {
+      document.getElementById('suggestionModal').classList.remove('active');
+    }
+
+    async function submitSuggestion(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      
+      try {
+        const response = await fetch('/api/metaphor-suggestions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: formData.get('name'),
+            email: formData.get('email'),
+            suggestion: formData.get('suggestion'),
+            reason: formData.get('reason')
+          })
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+          alert('Thank you for your suggestion! We will review it soon.');
+          closeSuggestionModal();
+          e.target.reset();
+        } else {
+          alert(data.error || 'Failed to submit suggestion.');
+        }
+      } catch (error) {
+        alert('Network error. Please try again later.');
+      }
+    }
+
+    // Load metaphors on page load
+    window.addEventListener('load', loadMetaphors);
+  </script>
+
+</body>
+</html>
