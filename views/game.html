@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Metaphors - Psyche</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>✨</text></svg>">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     * {
       margin: 0;
@@ -58,6 +59,12 @@
       text-decoration: none;
     }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
     .nav-links a {
       margin-left: 1.5rem;
       text-decoration: none;
@@ -73,8 +80,64 @@
       text-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
     }
 
+    /* Navbar Mode Switch */
+    .nav-mode-switch {
+      display: inline-flex;
+      gap: 0.25rem;
+      padding: 0.25rem;
+      border-radius: 999px;
+      border: 1px solid rgba(218, 165, 32, 0.25);
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(16px);
+      margin-left: 1.5rem;
+    }
+
+    .nav-mode-tab {
+      border: none;
+      cursor: pointer;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      color: #6b5b95;
+      background: transparent;
+      transition: all 0.25s ease;
+    }
+
+    .nav-mode-tab:hover {
+      background: rgba(218, 165, 32, 0.1);
+    }
+
+    .nav-mode-tab.active {
+      color: white;
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      box-shadow: 0 4px 12px rgba(218, 165, 32, 0.25);
+    }
+
+    .nav-bundles-cta {
+      margin-left: 1rem;
+      padding: 0.4rem 1rem;
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(218, 165, 32, 0.25);
+      transition: all 0.3s;
+      font-family: 'Helvetica Neue', sans-serif;
+      text-decoration: none;
+    }
+
+    .nav-bundles-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(218, 165, 32, 0.35);
+    }
+
     .auth-btn {
-      margin-left: 3rem;
+      margin-left: 1rem;
       padding: 0.6rem 1.8rem;
       background: linear-gradient(135deg, #daa520, #f4e4c1);
       border: none;
@@ -95,65 +158,65 @@
 
     /* Hero Section */
     .hero {
-      min-height: 60vh;
+      min-height: 40vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      padding: 10rem 4rem 4rem;
+      padding: 8rem 4rem 3rem;
       position: relative;
       max-width: 1200px;
       margin: 0 auto;
     }
 
     .hero h1 {
-      font-size: 4rem;
+      font-size: 2.5rem;
       font-weight: 300;
-      letter-spacing: 8px;
-      margin-bottom: 1rem;
+      letter-spacing: 6px;
+      margin-bottom: 0.8rem;
       background: linear-gradient(135deg, #daa520, #f4e4c1, #e6d5f5);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .hero .subtitle {
-      font-size: 1.5rem;
+      font-size: 1.1rem;
       color: #7b6b9e;
-      letter-spacing: 2px;
-      margin-bottom: 2rem;
+      letter-spacing: 1.5px;
+      margin-bottom: 1rem;
       font-weight: 300;
     }
 
     .hero p {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       color: #8b7ba8;
-      line-height: 1.8;
-      max-width: 700px;
+      line-height: 1.6;
+      max-width: 600px;
       font-family: 'Helvetica Neue', sans-serif;
     }
 
     /* Section */
     section {
-      padding: 4rem 2rem;
+      padding: 2.5rem 2rem;
       max-width: 1200px;
       margin: 0 auto;
     }
 
     .section-header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
     }
 
     .section-title {
-      font-size: 2.5rem;
+      font-size: 1.8rem;
       font-weight: 300;
-      letter-spacing: 6px;
-      margin-bottom: 1rem;
+      letter-spacing: 4px;
+      margin-bottom: 0.5rem;
       color: #6b5b95;
     }
 
     .section-subtitle {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #8b7ba8;
       font-family: 'Helvetica Neue', sans-serif;
     }
@@ -161,9 +224,10 @@
     /* Metaphor Cards Grid */
     .metaphor-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2.5rem;
-      margin-bottom: 3rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 280px));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      justify-content: center;
     }
 
     .metaphor-card {
@@ -171,62 +235,66 @@
       backdrop-filter: blur(20px);
       border: 1px solid rgba(218, 165, 32, 0.2);
       border-radius: 20px;
-      padding: 2.5rem 2rem;
+      padding: 1.8rem 1.5rem;
       text-align: center;
       position: relative;
       transition: all 0.4s;
       box-shadow: 0 8px 32px rgba(218, 165, 32, 0.1);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     .metaphor-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 60px rgba(218, 165, 32, 0.25);
+      transform: translateY(-8px);
+      box-shadow: 0 16px 48px rgba(218, 165, 32, 0.2);
       border-color: rgba(218, 165, 32, 0.4);
     }
 
     .metaphor-symbol {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      filter: drop-shadow(0 0 20px rgba(218, 165, 32, 0.3));
+      font-size: 2.5rem;
+      margin-bottom: 0.8rem;
+      filter: drop-shadow(0 0 15px rgba(218, 165, 32, 0.3));
     }
 
     .metaphor-card h3 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      letter-spacing: 3px;
+      font-size: 1.4rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: 2px;
       color: #6b5b95;
       text-transform: uppercase;
     }
 
     .metaphor-keywords {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       color: #8b7ba8;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       font-family: 'Helvetica Neue', sans-serif;
     }
 
     .metaphor-doctrine {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       color: #daa520;
       font-style: italic;
-      margin-bottom: 1.5rem;
-      min-height: 50px;
+      margin-bottom: 1rem;
+      min-height: 40px;
+      flex-grow: 1;
     }
 
     .metaphor-actions {
       display: flex;
-      gap: 1rem;
+      gap: 0.6rem;
       justify-content: center;
       flex-wrap: wrap;
     }
 
     .btn {
-      padding: 0.7rem 1.8rem;
+      padding: 0.6rem 1.4rem;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
       transition: all 0.3s;
       font-family: 'Helvetica Neue', sans-serif;
       text-decoration: none;
@@ -268,12 +336,12 @@
 
     .status-badge {
       display: inline-block;
-      padding: 0.4rem 1rem;
+      padding: 0.3rem 0.8rem;
       border-radius: 50px;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
       font-family: 'Helvetica Neue', sans-serif;
-      margin-top: 0.5rem;
+      margin-top: 0.3rem;
     }
 
     .status-coming-soon {
@@ -285,18 +353,18 @@
     /* Expand Section */
     .expand-section {
       text-align: center;
-      margin: 3rem 0;
+      margin: 2rem 0;
     }
 
     .expand-btn {
-      padding: 1rem 3rem;
+      padding: 0.8rem 2rem;
       background: rgba(255, 255, 255, 0.6);
       border: 1px solid rgba(218, 165, 32, 0.3);
       border-radius: 50px;
       color: #6b5b95;
       cursor: pointer;
-      font-size: 1rem;
-      letter-spacing: 2px;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
       transition: all 0.3s;
       font-family: 'Helvetica Neue', sans-serif;
     }
@@ -318,8 +386,8 @@
     /* Suggest Section */
     .suggest-section {
       max-width: 1200px;
-      margin: 4rem auto;
-      padding: 3rem 2rem;
+      margin: 2.5rem auto;
+      padding: 2rem 1.5rem;
       background: linear-gradient(135deg, rgba(218, 165, 32, 0.08), rgba(230, 213, 245, 0.08));
       border: 2px dashed rgba(218, 165, 32, 0.3);
       border-radius: 20px;
@@ -336,27 +404,27 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 3rem;
+      gap: 2rem;
       flex-wrap: wrap;
     }
 
     .suggest-symbol {
-      font-size: 3rem;
-      filter: drop-shadow(0 0 20px rgba(218, 165, 32, 0.3));
+      font-size: 2rem;
+      filter: drop-shadow(0 0 15px rgba(218, 165, 32, 0.3));
     }
 
     .suggest-text h3 {
-      font-size: 1.8rem;
-      letter-spacing: 3px;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
       color: #6b5b95;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.3rem;
     }
 
     .suggest-text p {
-      font-size: 1rem;
+      font-size: 0.85rem;
       color: #8b7ba8;
       font-family: 'Helvetica Neue', sans-serif;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
     @media (max-width: 768px) {
@@ -366,22 +434,120 @@
       }
     }
 
+    /* Video Card */
+    .video-card {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(107, 91, 149, 0.25);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s;
+      box-shadow: 0 8px 32px rgba(107, 91, 149, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 48px rgba(107, 91, 149, 0.2);
+      border-color: rgba(107, 91, 149, 0.4);
+    }
+
+    .video-card-poster {
+      height: 140px;
+      background: linear-gradient(135deg, rgba(107, 91, 149, 0.85), rgba(139, 123, 168, 0.7));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .video-card-poster::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+    }
+
+    .play-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 50%;
+      font-size: 1.2rem;
+      color: #6b5b95;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .video-card:hover .play-badge {
+      transform: scale(1.1);
+    }
+
+    .video-card-info {
+      padding: 1.2rem;
+      text-align: center;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-card-info h3 {
+      font-size: 1.1rem;
+      letter-spacing: 1.5px;
+      color: #6b5b95;
+      margin-bottom: 0.3rem;
+    }
+
+    .video-card-info p {
+      font-size: 0.8rem;
+      color: #8b7ba8;
+      font-family: 'Helvetica Neue', sans-serif;
+      margin-bottom: 0.8rem;
+      flex-grow: 1;
+    }
+
+    .video-card-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .video-card-duration {
+      display: inline-block;
+      margin-bottom: 0.8rem;
+      padding: 0.2rem 0.6rem;
+      background: rgba(107, 91, 149, 0.15);
+      border-radius: 20px;
+      font-size: 0.7rem;
+      color: #6b5b95;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
     /* Doctrine Footer */
     .doctrine-footer {
       text-align: center;
-      padding: 4rem 2rem;
+      padding: 2.5rem 2rem;
       background: rgba(255, 255, 255, 0.5);
       backdrop-filter: blur(20px);
       border-top: 1px solid rgba(218, 165, 32, 0.2);
-      margin-top: 4rem;
+      margin-top: 2.5rem;
     }
 
     .doctrine-footer p {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       color: #7b6b9e;
-      line-height: 1.8;
-      max-width: 700px;
-      margin: 0 auto 2rem;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto 1.5rem;
       font-family: 'Helvetica Neue', sans-serif;
     }
 
@@ -474,6 +640,25 @@
       margin-top: 2rem;
     }
 
+    .modal-video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      margin-bottom: 1.5rem;
+      border-radius: 15px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .modal-video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
     /* Suggestion Form */
     .suggestion-form {
       display: flex;
@@ -505,6 +690,100 @@
       font-family: 'Cormorant Garamond', 'Georgia', serif;
     }
 
+    /* Auth Modal */
+    .auth-modal-content {
+      max-width: 450px;
+    }
+
+    .auth-modal-content h2 {
+      margin-bottom: 2rem;
+    }
+
+    .divider {
+      margin: 1.5rem 0;
+      color: #7b6b9e;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    #googleSignIn {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .user-menu {
+      position: relative;
+      display: inline-block;
+    }
+
+    .user-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 15px;
+      padding: 1rem;
+      min-width: 200px;
+      box-shadow: 0 8px 32px rgba(218, 165, 32, 0.2);
+      border: 1px solid rgba(218, 165, 32, 0.2);
+      z-index: 1001;
+    }
+
+    .user-dropdown.active {
+      display: block;
+    }
+
+    .user-dropdown p {
+      margin-bottom: 0.5rem;
+      color: #6b5b95;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .user-dropdown .vip-badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+    }
+
+    .vip-free {
+      background: rgba(200, 200, 200, 0.3);
+      color: #666;
+    }
+
+    .vip-gold {
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      color: white;
+    }
+
+    .vip-platinum {
+      background: linear-gradient(135deg, #e6d5f5, #c8b8e0);
+      color: white;
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      background: rgba(107, 91, 149, 0.1);
+      border: 1px solid rgba(107, 91, 149, 0.3);
+      border-radius: 50px;
+      color: #6b5b95;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(107, 91, 149, 0.2);
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .hero {
@@ -512,7 +791,7 @@
       }
 
       .hero h1 {
-        font-size: 2.5rem;
+        font-size: 1.8rem;
         letter-spacing: 4px;
       }
 
@@ -521,13 +800,45 @@
       }
 
       nav {
-        padding: 1rem 1.5rem;
+        padding: 0.8rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: flex-end;
       }
 
       .nav-links a {
-        margin-left: 1rem;
+        margin-left: 0.8rem;
         font-size: 0.85rem;
       }
+
+      .nav-mode-switch {
+        margin-left: 0.8rem;
+        order: 10;
+      }
+
+      .nav-mode-tab {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.7rem;
+      }
+
+      .nav-bundles-cta {
+        display: none;
+      }
+
+      .auth-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+      }
+    }
+
+    /* Smooth scroll */
+    html {
+      scroll-behavior: smooth;
     }
   </style>
 </head>
@@ -535,64 +846,111 @@
 
   <!-- Navigation -->
   <nav>
-    <a href="/" class="logo">PSYCHE ∞ AI</a>
+    <a href="/" class="logo">Psyche AI</a>
     <div class="nav-links">
       <a href="/">Home</a>
-      <a href="/metaphors">Metaphors</a>
+      <a href="/metaphors">Library</a>
       <a href="/#products">Apps</a>
-      <button class="auth-btn" onclick="alert('Auth coming soon')">Sign In</button>
+
+      <!-- Mode Switch in Navbar -->
+      <div class="nav-mode-switch" role="tablist" aria-label="Library Mode">
+        <button class="nav-mode-tab active" id="tabMetaphor" onclick="setMode('metaphor')" aria-selected="true">
+          Metaphors
+        </button>
+        <button class="nav-mode-tab" id="tabVideo" onclick="setMode('video')" aria-selected="false">
+          Frequencies
+        </button>
+      </div>
+
+      <a href="#bundles-section" class="nav-bundles-cta">Unlock Bundles →</a>
+
+      <div class="user-menu">
+        <button class="auth-btn" id="authBtn" onclick="handleAuthClick()">Sign In</button>
+        <div class="user-dropdown" id="userDropdown">
+          <p id="userEmail"></p>
+          <span class="vip-badge" id="vipBadge">FREE</span>
+          <button class="logout-btn" onclick="AuthManager.logout()">Sign Out</button>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero Section (unchanged in both modes) -->
   <section class="hero">
     <h1>REALITY, EXPLAINED THROUGH LENSES</h1>
-    <p class="subtitle">One Law. Infinite Reflections.</p>
+    <p class="subtitle">One Law. Infinite Reflections. ∞</p>
     <p>These are playful models—not the truth.<br>They help you feel the law, faster.</p>
   </section>
 
-  <!-- Core Lenses Section -->
-  <section id="core-lenses">
-    <div class="section-header">
-      <h2 class="section-title">CORE LENSES</h2>
-      <p class="section-subtitle">The foundational mirrors</p>
-    </div>
-    <div class="metaphor-grid" id="coreGrid">
-      <!-- Cards will be loaded dynamically -->
-    </div>
-  </section>
+  <!-- METAPHOR MODE (cards) -->
+  <div id="metaphorMode">
+    <!-- Core Lenses Section -->
+    <section id="core-lenses">
+      <div class="section-header">
+        <h2 class="section-title">CORE LENSES</h2>
+        <p class="section-subtitle">The foundational mirrors</p>
+      </div>
+      <div class="metaphor-grid" id="coreGrid">
+        <!-- Cards will be loaded dynamically -->
+      </div>
+    </section>
 
-  <!-- More Lenses Section -->
-  <div class="expand-section">
-    <button class="expand-btn" id="expandBtn" onclick="toggleMoreLenses()">MORE LENSES</button>
+    <!-- More Lenses Section -->
+    <div class="expand-section">
+      <button class="expand-btn" id="expandBtn" onclick="toggleMoreLenses()">MORE LENSES</button>
+    </div>
+
+    <section id="more-lenses" style="display: none;">
+      <div class="metaphor-grid" id="moreGrid">
+        <!-- More cards will be loaded dynamically -->
+      </div>
+    </section>
+
+    <!-- Expanding Library Section -->
+    <section id="expanding-library">
+      <div class="section-header">
+        <h2 class="section-title">EXPANDING LIBRARY</h2>
+        <p class="section-subtitle">Coming soon</p>
+      </div>
+      <div class="metaphor-grid" id="expandingGrid">
+        <!-- Coming soon cards will be loaded dynamically -->
+      </div>
+    </section>
+
+    <!-- Suggest Metaphor Section -->
+    <section class="suggest-section">
+      <div class="suggest-content">
+        <div class="suggest-symbol">✦</div>
+        <div class="suggest-text">
+          <h3>SUGGEST A METAPHOR</h3>
+          <p>Help us expand the library · Community · Co-creation</p>
+        </div>
+        <button class="btn btn-unlock" onclick="openSuggestionModal()">Share Your Idea →</button>
+      </div>
+    </section>
   </div>
 
-  <section id="more-lenses" style="display: none;">
-    <div class="metaphor-grid" id="moreGrid">
-      <!-- More cards will be loaded dynamically -->
-    </div>
-  </section>
-
-  <!-- Expanding Library Section -->
-  <section id="expanding-library">
-    <div class="section-header">
-      <h2 class="section-title">EXPANDING LIBRARY</h2>
-      <p class="section-subtitle">Coming soon</p>
-    </div>
-    <div class="metaphor-grid" id="expandingGrid">
-      <!-- Coming soon cards will be loaded dynamically -->
-    </div>
-  </section>
-
-  <!-- Suggest Metaphor Section -->
-  <section class="suggest-section">
-    <div class="suggest-content">
-      <div class="suggest-symbol">✦</div>
-      <div class="suggest-text">
-        <h3>SUGGEST A METAPHOR</h3>
-        <p>Help us expand the library · Community · Co-creation</p>
+  <!-- VIDEO MODE (frequencies) -->
+  <div id="videoMode" style="display:none;">
+    <section id="frequency-vault">
+      <div class="section-header">
+        <h2 class="section-title">FREQUENCY VAULT</h2>
+        <p class="section-subtitle">High-frequency visual sessions for clarity and calm</p>
       </div>
-      <button class="btn btn-unlock" onclick="openSuggestionModal()">Share Your Idea →</button>
+      <div class="metaphor-grid" id="frequencyGrid">
+        <!-- Video cards will be loaded dynamically -->
+      </div>
+    </section>
+  </div>
+
+  <!-- Bundle Section (always visible) -->
+  <section id="bundles-section" style="padding: 2.5rem 2rem;">
+    <div class="section-header">
+      <h2 class="section-title">UNLOCK BUNDLES</h2>
+      <p class="section-subtitle">Save with bundle offers</p>
+    </div>
+    <div class="metaphor-grid" id="bundlesGrid">
+      <!-- Bundle cards will be loaded dynamically -->
     </div>
   </section>
 
@@ -626,167 +984,169 @@
     </div>
   </div>
 
+  <!-- Auth Modal -->
+  <div id="authModal" class="modal">
+    <div class="modal-content auth-modal-content">
+      <span class="modal-close" onclick="closeAuthModal()">&times;</span>
+      <h2>Welcome</h2>
+      <p class="modal-keywords">Sign in to continue</p>
+      <div class="divider">Sign in with Google</div>
+      <div id="googleSignIn"></div>
+    </div>
+  </div>
+
+  <script src="/views/js/auth.js"></script>
+  <script src="/views/js/metaphor-catalog.js"></script>
+  <script src="/views/js/metaphor-ui.js"></script>
+  <script src="/views/js/suggestions.js"></script>
   <script>
-    // Frontend content catalog (easy to update)
-    const METAPHOR_CATALOG = [
+    // ========================================
+    // MODE SWITCH FUNCTIONALITY
+    // ========================================
+
+    // Frequency video catalog (placeholder data)
+    const FREQUENCY_CATALOG = [
       {
-        id: "poker",
-        title: "Poker",
-        symbol: "♠",
-        keywords: ["Uncertainty", "State", "Mastery"],
-        doctrine: "Trust without proof.",
-        preview_content: "Poker is one of the cleanest metaphors for the Psyche concept, because it mirrors how the universe works in 3D life: uncertainty by design, incomplete information, and emotional triggers. You don't control the cards—you control the self.",
-        full_content: "[Full Poker metaphor content - all 6 sections will go here]",
-        price: 5.00,
-        status: "available",
-        order_index: 1
+        id: "528hz-clarity",
+        title: "528Hz · Clarity Session",
+        subtitle: "DNA repair frequency · Inner peace",
+        duration: "15:00",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        status: "available"
       },
       {
-        id: "chess",
-        title: "Chess",
-        symbol: "♟",
-        keywords: ["Clarity", "Intention", "Strategy"],
-        doctrine: "Mastery inside.",
-        preview_content: "Chess represents perfect information and strategic thinking. Every piece visible, every move calculated. It teaches clarity of intention and the power of foresight.",
-        full_content: "[Full Chess metaphor content will go here]",
-        price: 5.00,
-        status: "available",
-        order_index: 2
+        id: "432hz-calm",
+        title: "432Hz · Deep Calm",
+        subtitle: "Natural harmony · Grounding",
+        duration: "20:00",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        status: "available"
       },
       {
-        id: "choir",
-        title: "Choir",
-        symbol: "♫",
-        keywords: ["Resonance", "Unity", "Harmony"],
-        doctrine: "Many voices, one tone.",
-        preview_content: "A choir demonstrates how individual voices create collective beauty. Each voice unique, yet harmonizing into something greater than the sum of its parts.",
-        full_content: "[Full Choir metaphor content will go here]",
-        price: 5.00,
-        status: "available",
-        order_index: 3
+        id: "639hz-connection",
+        title: "639Hz · Heart Opening",
+        subtitle: "Connection frequency · Love",
+        duration: "18:00",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        status: "available"
       },
       {
-        id: "orchestra",
-        title: "Orchestra",
-        symbol: "🎻",
-        keywords: ["Structure", "Timing", "Flow"],
-        doctrine: "Order becomes music.",
-        preview_content: "An orchestra shows how structure and timing create harmony. Different instruments, different roles, unified by rhythm and intention.",
-        full_content: "[Full Orchestra metaphor content will go here]",
-        price: 5.00,
-        status: "coming_soon",
-        order_index: 4
+        id: "741hz-awakening",
+        title: "741Hz · Awakening",
+        subtitle: "Intuition expansion · Clarity",
+        duration: "12:00",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        status: "coming_soon"
       },
       {
-        id: "zodiac",
-        title: "Zodiac",
-        symbol: "✶",
-        keywords: ["Cycles", "Archetypes", "Timing"],
-        doctrine: "Timing reveals law.",
-        preview_content: "The zodiac represents cyclical patterns and archetypal energies. Twelve faces of one truth, moving through time in eternal rhythm.",
-        full_content: "[Full Zodiac metaphor content will go here]",
-        price: 5.00,
-        status: "coming_soon",
-        order_index: 5
+        id: "852hz-spiritual",
+        title: "852Hz · Third Eye",
+        subtitle: "Spiritual activation · Vision",
+        duration: "25:00",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        status: "coming_soon"
+      },
+      {
+        id: "963hz-divine",
+        title: "963Hz · Divine Connection",
+        subtitle: "Crown chakra · Oneness",
+        duration: "30:00",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        status: "coming_soon"
       }
     ];
 
-    let metaphors = METAPHOR_CATALOG.slice();
-    let userPurchases = [];
+    function setMode(mode) {
+      const metaphorMode = document.getElementById('metaphorMode');
+      const videoMode = document.getElementById('videoMode');
+      const tabMetaphor = document.getElementById('tabMetaphor');
+      const tabVideo = document.getElementById('tabVideo');
 
-    // Load metaphors on page load
-    async function loadMetaphors() {
-      try {
-        // Use frontend catalog, ordered by order_index
-        metaphors = METAPHOR_CATALOG
-          .slice()
-          .sort((a, b) => (a.order_index ?? 9999) - (b.order_index ?? 9999));
+      const isVideo = mode === 'video';
 
-        // Fetch user purchases (temporary demo user)
-        const purchasesResponse = await fetch('/api/user/purchases', {
-          headers: { 'X-User-Id': 'demo_user' }
-        });
-        userPurchases = await purchasesResponse.json();
+      // Toggle content visibility
+      metaphorMode.style.display = isVideo ? 'none' : 'block';
+      videoMode.style.display = isVideo ? 'block' : 'none';
 
-        // Render cards
-        renderMetaphors();
-      } catch (error) {
-        console.error('Error loading metaphors:', error);
-        // Still render cards even if purchases endpoint fails
-        metaphors = METAPHOR_CATALOG
-          .slice()
-          .sort((a, b) => (a.order_index ?? 9999) - (b.order_index ?? 9999));
-        userPurchases = [];
-        renderMetaphors();
+      // Toggle tab active states
+      tabMetaphor.classList.toggle('active', !isVideo);
+      tabVideo.classList.toggle('active', isVideo);
+      tabMetaphor.setAttribute('aria-selected', String(!isVideo));
+      tabVideo.setAttribute('aria-selected', String(isVideo));
+
+      // Update URL hash
+      history.replaceState(null, '', isVideo ? '#vault' : '#metaphors');
+
+      // Load frequency videos if switching to video mode
+      if (isVideo) {
+        renderFrequencyVideos();
       }
     }
 
-    function renderMetaphors() {
-      const coreGrid = document.getElementById('coreGrid');
-      const moreGrid = document.getElementById('moreGrid');
-      const expandingGrid = document.getElementById('expandingGrid');
+    function renderFrequencyVideos() {
+      const grid = document.getElementById('frequencyGrid');
+      if (!grid) return;
 
-      // Clear grids
-      coreGrid.innerHTML = '';
-      moreGrid.innerHTML = '';
-      expandingGrid.innerHTML = '';
+      grid.innerHTML = '';
 
-      // Separate metaphors by status and order
-      const available = metaphors.filter(m => m.status === 'available');
-      const comingSoon = metaphors.filter(m => m.status === 'coming_soon');
+      FREQUENCY_CATALOG.forEach(video => {
+        const isComingSoon = video.status === 'coming_soon';
 
-      // Core lenses (first 3 available)
-      available.slice(0, 3).forEach(m => {
-        coreGrid.innerHTML += createMetaphorCard(m);
-      });
+        const card = document.createElement('div');
+        card.className = 'video-card';
 
-      // More lenses (remaining available)
-      available.slice(3).forEach(m => {
-        moreGrid.innerHTML += createMetaphorCard(m);
-      });
-
-      // Expanding library (coming soon)
-      comingSoon.forEach(m => {
-        expandingGrid.innerHTML += createMetaphorCard(m);
-      });
-
-      // Don't add suggest card to grid anymore - it's now a separate section
-    }
-
-    function createMetaphorCard(metaphor) {
-      const isPurchased = userPurchases.includes(metaphor.id);
-      const isComingSoon = metaphor.status === 'coming_soon';
-      const keywords = metaphor.keywords ? metaphor.keywords.join(' · ') : '';
-
-      let actions = '';
-      if (isComingSoon) {
-        actions = '<span class="status-badge status-coming-soon">Coming Soon</span>';
-      } else if (isPurchased) {
-        actions = `<button class="btn btn-read" onclick="readFull('${metaphor.id}')">Read Full →</button>`;
-      } else {
-        actions = `
-          <button class="btn btn-preview" onclick="showPreview('${metaphor.id}')">Preview →</button>
-          <button class="btn btn-unlock" onclick="unlockMetaphor('${metaphor.id}')">Unlock $${metaphor.price}</button>
+        card.innerHTML = `
+          <div class="video-card-poster">
+            <span class="play-badge">${isComingSoon ? '◇' : '▶'}</span>
+          </div>
+          <div class="video-card-info">
+            <h3>${video.title}</h3>
+            <p>${video.subtitle}</p>
+            ${isComingSoon
+              ? '<span class="status-badge status-coming-soon">Coming Soon</span>'
+              : `<span class="video-card-duration">${video.duration}</span>
+                 <div class="video-card-actions">
+                   <button class="btn btn-preview" onclick="openVideoPreview('${video.title}', '${video.videoUrl}')">Preview →</button>
+                   <a href="#bundles-section" class="btn btn-unlock">Unlock</a>
+                 </div>`
+            }
+          </div>
         `;
-      }
 
-      return `
-        <div class="metaphor-card">
-          <div class="metaphor-symbol">${metaphor.symbol || '✦'}</div>
-          <h3>${metaphor.title}</h3>
-          <div class="metaphor-keywords">${keywords}</div>
-          <div class="metaphor-doctrine">${metaphor.doctrine || ''}</div>
-          <div class="metaphor-actions">${actions}</div>
+        grid.appendChild(card);
+      });
+    }
+
+    function openVideoPreview(title, embedUrl) {
+      const modalContent = document.getElementById('modalContent');
+
+      modalContent.innerHTML = `
+        <h2>${title}</h2>
+        <p class="modal-keywords">High-frequency visual session</p>
+        <div class="modal-video-container">
+          <iframe
+            src="${embedUrl}?autoplay=0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div class="modal-actions">
+          <a href="#bundles-section" class="btn btn-unlock" onclick="closeModal()">Unlock All Videos →</a>
+          <button class="btn btn-preview" onclick="closeModal()">Close</button>
         </div>
       `;
+
+      document.getElementById('previewModal').classList.add('active');
     }
 
-    // Remove createSuggestCard function - no longer needed
+    // ========================================
+    // EXISTING FUNCTIONS
+    // ========================================
 
     function toggleMoreLenses() {
       const section = document.getElementById('more-lenses');
       const btn = document.getElementById('expandBtn');
-      
+
       if (section.style.display === 'none') {
         section.style.display = 'block';
         btn.classList.add('expanded');
@@ -796,52 +1156,14 @@
       }
     }
 
-    function showPreview(metaphorId) {
-      const metaphor = metaphors.find(m => m.id === metaphorId);
-      if (!metaphor) return;
-
-      const keywords = metaphor.keywords ? metaphor.keywords.join(' · ') : '';
-      const modalContent = `
-        <div class="modal-symbol">${metaphor.symbol || '✦'}</div>
-        <h2>${metaphor.title}</h2>
-        <div class="modal-keywords">${keywords}</div>
-        <div class="modal-preview">${metaphor.preview_content || 'Preview content coming soon...'}</div>
-        <div class="modal-actions">
-          <button class="btn btn-unlock" onclick="unlockMetaphor('${metaphor.id}')">Unlock for $${metaphor.price}</button>
-          <button class="btn btn-preview" onclick="closeModal()">Back to Library</button>
-        </div>
-      `;
-
-      document.getElementById('modalContent').innerHTML = modalContent;
-      document.getElementById('previewModal').classList.add('active');
-    }
-
     function closeModal() {
-      document.getElementById('previewModal').classList.remove('active');
-    }
-
-    function readFull(metaphorId) {
-      const metaphor = metaphors.find(m => m.id === metaphorId);
-      if (!metaphor) return;
-
-      const keywords = metaphor.keywords ? metaphor.keywords.join(' · ') : '';
-      const modalContent = `
-        <div class="modal-symbol">${metaphor.symbol || '✦'}</div>
-        <h2>${metaphor.title}</h2>
-        <div class="modal-keywords">${keywords}</div>
-        <div class="modal-preview">${metaphor.full_content || 'Full content coming soon...'}</div>
-        <div class="modal-actions">
-          <button class="btn btn-preview" onclick="closeModal()">Back to Library</button>
-        </div>
-      `;
-
-      document.getElementById('modalContent').innerHTML = modalContent;
-      document.getElementById('previewModal').classList.add('active');
-    }
-
-    function unlockMetaphor(metaphorId) {
-      // TODO: Implement Stripe checkout
-      alert(`Stripe checkout for ${metaphorId} coming soon!`);
+      const modal = document.getElementById('previewModal');
+      modal.classList.remove('active');
+      // Stop video playback when closing
+      const iframe = modal.querySelector('iframe');
+      if (iframe) {
+        iframe.src = iframe.src;
+      }
     }
 
     function openSuggestionModal() {
@@ -852,10 +1174,47 @@
       document.getElementById('suggestionModal').classList.remove('active');
     }
 
+    function openAuthModal() {
+      document.getElementById('authModal').classList.add('active');
+      if (typeof initGoogleSignIn === 'function') {
+        initGoogleSignIn();
+      }
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('active');
+    }
+
+    function handleAuthClick() {
+      if (typeof AuthManager !== 'undefined' && AuthManager.isLoggedIn()) {
+        toggleUserDropdown();
+      } else {
+        openAuthModal();
+      }
+    }
+
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('userDropdown');
+      dropdown.classList.toggle('active');
+    }
+
+    function closeUserDropdown() {
+      const dropdown = document.getElementById('userDropdown');
+      dropdown.classList.remove('active');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const userMenu = document.querySelector('.user-menu');
+      if (userMenu && !userMenu.contains(e.target)) {
+        closeUserDropdown();
+      }
+    });
+
     async function submitSuggestion(e) {
       e.preventDefault();
       const formData = new FormData(e.target);
-      
+
       try {
         const response = await fetch('/api/metaphor-suggestions', {
           method: 'POST',
@@ -869,7 +1228,7 @@
         });
 
         const data = await response.json();
-        
+
         if (response.ok) {
           alert('Thank you for your suggestion! We will review it soon.');
           closeSuggestionModal();
@@ -882,8 +1241,32 @@
       }
     }
 
-    // Load metaphors on page load
-    window.addEventListener('load', loadMetaphors);
+    // ========================================
+    // INITIALIZATION
+    // ========================================
+
+    window.addEventListener('load', () => {
+      // Initialize auth UI if AuthManager exists
+      if (typeof AuthManager !== 'undefined') {
+        AuthManager.updateUI();
+        if (AuthManager.isLoggedIn()) {
+          AuthManager.refreshUser();
+        }
+      }
+
+      // Load metaphors if function exists
+      if (typeof loadMetaphors === 'function') {
+        loadMetaphors();
+      }
+
+      // Set initial mode from URL hash
+      const hash = location.hash;
+      if (hash === '#vault') {
+        setMode('video');
+      } else {
+        setMode('metaphor');
+      }
+    });
   </script>
 
 </body>
