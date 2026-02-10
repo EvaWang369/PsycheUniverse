@@ -57,6 +57,11 @@
       width: auto;
     }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
     .nav-links a {
       margin-left: 1.5rem;
       text-decoration: none;
@@ -93,6 +98,77 @@
     .auth-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 12px 35px rgba(218, 165, 32, 0.4);
+    }
+
+    /* User Menu */
+    .user-menu {
+      position: relative;
+    }
+
+    .user-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(218, 165, 32, 0.3);
+      border-radius: 15px;
+      padding: 1rem;
+      min-width: 200px;
+      box-shadow: 0 8px 30px rgba(218, 165, 32, 0.2);
+      z-index: 1001;
+    }
+
+    .user-dropdown.active {
+      display: block;
+    }
+
+    .user-dropdown p {
+      margin: 0 0 0.5rem 0;
+      font-size: 0.9rem;
+      color: #6b5b95;
+    }
+
+    .vip-badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+
+    .vip-free {
+      background: rgba(139, 139, 139, 0.2);
+      color: #8b8b8b;
+    }
+
+    .vip-gold {
+      background: rgba(218, 165, 32, 0.2);
+      color: #daa520;
+    }
+
+    .vip-platinum {
+      background: rgba(230, 213, 245, 0.3);
+      color: #6b5b95;
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 0.6rem;
+      background: rgba(218, 165, 32, 0.1);
+      border: 1px solid rgba(218, 165, 32, 0.3);
+      border-radius: 10px;
+      color: #6b5b95;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(218, 165, 32, 0.2);
+      border-color: rgba(218, 165, 32, 0.5);
     }
 
     /* Hero Section */
@@ -682,7 +758,14 @@
       <a href="#products">Products</a>
       <a href="#pricing">Pricing</a>
       <a href="#subscribe">Subscribe</a>
-      <button class="auth-btn" onclick="openAuthModal()">Sign In</button>
+      <div class="user-menu">
+        <button class="auth-btn" id="authBtn" onclick="handleAuthClick()">Sign In</button>
+        <div class="user-dropdown" id="userDropdown">
+          <p id="userEmail"></p>
+          <span class="vip-badge" id="vipBadge">FREE</span>
+          <button class="logout-btn" onclick="AuthManager.logout()">Sign Out</button>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -843,19 +926,14 @@
 
   <!-- Auth Modal -->
   <div id="authModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content auth-modal-content">
       <span class="modal-close" onclick="closeAuthModal()">&times;</span>
       <h2>Welcome</h2>
-      <form onsubmit="handleEmailAuth(event)">
-        <input type="email" placeholder="Email" required>
-        <input type="password" placeholder="Password" required>
-        <button type="submit">Sign In / Sign Up</button>
-      </form>
-      <div class="divider">— or —</div>
       <div id="googleSignIn"></div>
     </div>
   </div>
 
+  <script src="/views/js/auth.js"></script>
   <script>
     // Music Player
     const bgMusic = document.getElementById('bgMusic');
@@ -887,24 +965,53 @@
         pauseIcon.style.display = 'block';
         musicPlayer.classList.add('playing');
       }
+      
+      // Initialize auth UI if AuthManager exists
+      if (typeof AuthManager !== 'undefined') {
+        AuthManager.updateUI();
+        if (AuthManager.isLoggedIn()) {
+          AuthManager.refreshUser();
+        }
+      }
     });
 
     // Auth Modal
     function openAuthModal() {
       document.getElementById('authModal').classList.add('active');
-      initGoogleSignIn();
+      if (typeof initGoogleSignIn === 'function') {
+        initGoogleSignIn();
+      }
     }
 
     function closeAuthModal() {
       document.getElementById('authModal').classList.remove('active');
     }
 
-    // Email Auth
-    function handleEmailAuth(e) {
-      e.preventDefault();
-      alert('Authentication successful! Welcome to Psyche.');
-      closeAuthModal();
+    function handleAuthClick() {
+      if (typeof AuthManager !== 'undefined' && AuthManager.isLoggedIn()) {
+        toggleUserDropdown();
+      } else {
+        openAuthModal();
+      }
     }
+
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('userDropdown');
+      dropdown.classList.toggle('active');
+    }
+
+    function closeUserDropdown() {
+      const dropdown = document.getElementById('userDropdown');
+      dropdown.classList.remove('active');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const userMenu = document.querySelector('.user-menu');
+      if (userMenu && !userMenu.contains(e.target)) {
+        closeUserDropdown();
+      }
+    });
 
     // Subscribe
     async function handleSubscribe(e) {
@@ -929,26 +1036,6 @@
       } catch (error) {
         alert('Network error. Please try again later.');
       }
-    }
-
-    // Google Sign In
-    function initGoogleSignIn() {
-      if (window.google) {
-        google.accounts.id.initialize({
-          client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
-          callback: handleGoogleSignIn
-        });
-        google.accounts.id.renderButton(
-          document.getElementById('googleSignIn'),
-          { theme: 'outline', size: 'large', text: 'signin_with', shape: 'pill' }
-        );
-      }
-    }
-
-    function handleGoogleSignIn(response) {
-      console.log('Google Sign In:', response);
-      alert('Google Sign In successful! Welcome to Psyche.');
-      closeAuthModal();
     }
 
     // Smooth Scroll

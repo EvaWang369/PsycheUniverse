@@ -5,6 +5,7 @@ const GOOGLE_CLIENT_ID = '699830957144-oe51ctmnhtt2bfv866jd4pjjpul43kjh.apps.goo
 const AuthManager = {
   SESSION_KEY: 'psyche_session',
   USER_KEY: 'psyche_user',
+  GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
 
   getSession() {
     const data = localStorage.getItem(this.SESSION_KEY);
