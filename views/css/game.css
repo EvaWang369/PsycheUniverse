@@ -989,3 +989,83 @@ section {
 html {
   scroll-behavior: smooth;
 }
+
+
+/* Bundle Cards - Luxury Gift Checkout Style */
+.bundle-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(254, 249, 247, 0.95));
+  border: 1px solid rgba(218, 165, 32, 0.15);
+  box-shadow: 0 4px 20px rgba(218, 165, 32, 0.08);
+}
+
+.bundle-card:hover {
+  border-color: rgba(218, 165, 32, 0.3);
+  box-shadow: 0 8px 32px rgba(218, 165, 32, 0.15);
+}
+
+.bundle-icon {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  filter: drop-shadow(0 2px 8px rgba(218, 165, 32, 0.2));
+}
+
+.bundle-title {
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 1px !important;
+  color: #6b5b95 !important;
+  margin-bottom: 0.6rem !important;
+  text-transform: none !important;
+}
+
+.bundle-description {
+  font-size: 0.85rem;
+  color: #8b7ba8;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  font-family: 'Helvetica Neue', sans-serif;
+  min-height: 36px;
+}
+
+.bundle-pricing {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.original-price {
+  font-size: 0.85rem;
+  color: #aaa;
+  text-decoration: line-through;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.bundle-price {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #daa520;
+  letter-spacing: 0.5px;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.bundle-savings {
+  font-size: 0.75rem;
+  color: #daa520;
+  background: rgba(218, 165, 32, 0.1);
+  padding: 0.25rem 0.8rem;
+  border-radius: 50px;
+  display: inline-block;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.bundle-btn {
+  width: 100%;
+  margin-top: auto;
+  font-size: 0.85rem !important;
+  padding: 0.7rem 1.5rem !important;
+  letter-spacing: 1px;
+}

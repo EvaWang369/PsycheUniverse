@@ -15,7 +15,7 @@ const METAPHOR_CATALOG = [
   {
     id: "chess",
     title: "Chess",
-    symbol: "♟",
+    symbol: "♛",
     keywords: ["Clarity", "Intention", "Strategy"],
     doctrine: "Mastery inside.",
     preview_content: "Chess represents perfect information and strategic thinking. Every piece visible, every move calculated. It teaches clarity of intention and the power of foresight.",

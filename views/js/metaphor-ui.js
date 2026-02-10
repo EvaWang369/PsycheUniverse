@@ -168,25 +168,32 @@ function renderBundles(bundles) {
   }
 
   bundlesGrid.innerHTML = bundles.map(bundle => {
-    const originalPrice = bundle.metaphor_ids.reduce((sum, id) => {
+    const isSubscription = bundle.metaphor_ids.length === 0;
+    const originalPrice = isSubscription ? 0 : bundle.metaphor_ids.reduce((sum, id) => {
       const m = metaphors.find(meta => meta.id === id);
       return sum + (m ? m.price : 0);
     }, 0);
-    const savings = originalPrice - bundle.price;
+
+    // Extract emoji and clean name
+    const nameMatch = bundle.name.match(/^([📚🎵])\.s*(.+)/);
+    const emoji = nameMatch ? nameMatch[1] : '✦';
+    const cleanName = nameMatch ? nameMatch[2] : bundle.name;
 
     return `
-      <div class="metaphor-card">
-        <div class="metaphor-symbol">🎁</div>
-        <h3>${bundle.name}</h3>
-        <div class="metaphor-keywords">${bundle.metaphor_ids.length} Metaphors · Save ${bundle.discount_percent}%</div>
-        <div class="metaphor-doctrine">${bundle.description}</div>
-        <div style="margin: 1rem 0; color: #8b7ba8; font-size: 0.9rem;">
-          <span style="text-decoration: line-through;">$${originalPrice.toFixed(2)}</span>
-          <span style="color: #daa520; font-size: 1.2rem; font-weight: bold; margin-left: 0.5rem;">$${bundle.price.toFixed(2)}</span>
+      <div class="metaphor-card bundle-card">
+        <div class="bundle-icon">${emoji}</div>
+        <h3 class="bundle-title">${cleanName}</h3>
+        <div class="bundle-description">${bundle.description}</div>
+        <div class="bundle-pricing">
+          ${!isSubscription && originalPrice > bundle.price ? 
+            `<span class="original-price">$${originalPrice.toFixed(2)}</span>` : ''}
+          <span class="bundle-price">$${bundle.price.toFixed(2)}${isSubscription ? '/mo' : ''}</span>
         </div>
-        <div class="metaphor-actions">
-          <button class="btn btn-unlock" onclick="unlockBundle('${bundle.id}')">Unlock Bundle</button>
-        </div>
+        ${bundle.discount_percent > 0 ? 
+          `<div class="bundle-savings">Save ${bundle.discount_percent}%</div>` : ''}
+        <button class="btn btn-unlock bundle-btn" onclick="unlockBundle('${bundle.id}')">
+          ${isSubscription ? 'Subscribe' : 'Purchase'}
+        </button>
       </div>
     `;
   }).join('');
