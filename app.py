@@ -8,6 +8,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 import os
 import secrets
+import uuid
 
 load_dotenv()
 
@@ -132,7 +133,7 @@ def health():
 
 @app.route('/api/auth/google', methods=['POST'])
 def auth_google():
-    """Handle Google Sign-In - uses user_purchases table for user storage"""
+    """Handle Google Sign-In - uses users table for user storage"""
     data = request.get_json()
     id_token_str = data.get('idToken')
 
@@ -144,8 +145,8 @@ def auth_google():
         return jsonify({'error': 'Invalid Google token'}), 401
 
     try:
-        # Check if user exists by google_id in user_purchases
-        existing = supabase.table('user_purchases')\
+        # Check if user exists by google_id in users table
+        existing = supabase.table('users')\
             .select('*')\
             .eq('google_id', google_user['google_id'])\
             .limit(1)\
@@ -153,34 +154,32 @@ def auth_google():
 
         if existing.data and len(existing.data) > 0:
             user = existing.data[0]
+            user_id = user['id']
             # Update existing user info
-            supabase.table('user_purchases').update({
-                'name': google_user['name'],
-                'avatar_url': google_user['avatar_url']
+            supabase.table('users').update({
+                'name': google_user['name']
             }).eq('google_id', google_user['google_id']).execute()
         else:
-            # Create new user entry (no purchase yet, just user record)
-            result = supabase.table('user_purchases').insert({
-                'user_id': google_user['google_id'],
+            # Create new user entry
+            result = supabase.table('users').insert({
                 'email': google_user['email'],
                 'name': google_user['name'],
-                'google_id': google_user['google_id'],
-                'avatar_url': google_user['avatar_url'],
-                'vip_level': 'free',
-                'metaphor_id': '_user_record'
+                'provider': 'google',
+                'google_id': google_user['google_id']
             }).execute()
             user = result.data[0]
+            user_id = user['id']
 
-        # Create session using google_id as user identifier
-        session_token, expires_at = create_session(google_user['google_id'])
+        # Create session using user id as identifier
+        session_token, expires_at = create_session(user_id)
 
         return jsonify({
             'user': {
-                'id': google_user['google_id'],
+                'id': user_id,
                 'email': google_user['email'],
                 'name': google_user['name'],
                 'avatar_url': google_user['avatar_url'],
-                'vip_level': user.get('vip_level', 'free')
+                'vip_level': 'free'
             },
             'session': {
                 'token': session_token,
@@ -195,10 +194,10 @@ def auth_google():
 @app.route('/api/auth/me', methods=['GET'])
 @require_auth
 def get_current_user():
-    """Get current authenticated user from user_purchases"""
+    """Get current authenticated user from users table"""
     try:
-        result = supabase.table('user_purchases')\
-            .select('email, name, avatar_url, vip_level, google_id')\
+        result = supabase.table('users')\
+            .select('email, name, google_id')\
             .eq('google_id', request.user_id)\
             .limit(1)\
             .execute()
@@ -211,8 +210,7 @@ def get_current_user():
             'id': user['google_id'],
             'email': user['email'],
             'name': user['name'],
-            'avatar_url': user.get('avatar_url'),
-            'vip_level': user.get('vip_level', 'free')
+            'vip_level': 'free'
         }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
