@@ -5,12 +5,12 @@ let userPurchases = [];
 let firstUnlockRendered = false;
 const STRIPE_LINK_BASE = "https://buy.stripe.com/5kQdR125Y1uJfRk30e5gc00";
 
-function getStripeLink() {
-  // Append user ID if logged in, so webhook knows who paid
+function getStripeLink(metaphorId) {
+  // Append user ID and metaphor ID, so webhook knows who paid and for what
   if (typeof AuthManager !== 'undefined' && AuthManager.isLoggedIn()) {
     const user = AuthManager.getUser();
-    if (user && user.id) {
-      return `${STRIPE_LINK_BASE}?client_reference_id=${user.id}`;
+    if (user && user.id && metaphorId) {
+      return `${STRIPE_LINK_BASE}?client_reference_id=${user.id}_${metaphorId}`;
     }
   }
   return STRIPE_LINK_BASE;
@@ -97,7 +97,7 @@ function createMetaphorCard(metaphor) {
       firstUnlockRendered = true;
       actions = `
         <button class="btn btn-preview" onclick="showPreview('${metaphor.id}')">Preview →</button>
-        <a href="${getStripeLink()}" target="_blank" rel="noopener noreferrer" class="btn btn-unlock">Unlock $5</a>
+        <a href="${getStripeLink(metaphor.id)}" target="_blank" rel="noopener noreferrer" class="btn btn-unlock">Unlock $5</a>
       `;
     } else {
       actions = `

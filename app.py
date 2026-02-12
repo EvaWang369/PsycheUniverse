@@ -503,13 +503,50 @@ def stripe_webhook():
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
 
-        # Get user ID from client_reference_id (passed in Stripe link)
-        user_id = session.get('client_reference_id')
+        # Get user ID and metaphor ID from client_reference_id (format: "userId_metaphorId")
+        client_reference_id = session.get('client_reference_id')
         customer_email = session.get('customer_details', {}).get('email')
 
-        print(f"Payment completed - user_id: {user_id}, email: {customer_email}")
+        print(f"Payment completed - client_reference_id: {client_reference_id}, email: {customer_email}")
 
-        # TODO: Implement access granting logic
+        if client_reference_id and '_' in client_reference_id:
+            try:
+                user_id, metaphor_id = client_reference_id.split('_', 1)
+
+                # Look up user by id
+                user_result = supabase.table('users')\
+                    .select('*')\
+                    .eq('id', user_id)\
+                    .single()\
+                    .execute()
+
+                if user_result.data:
+                    user = user_result.data
+
+                    # Check if already purchased
+                    existing = supabase.table('user_purchases')\
+                        .select('id')\
+                        .eq('google_id', user['google_id'])\
+                        .eq('metaphor_id', metaphor_id)\
+                        .execute()
+
+                    if not existing.data:
+                        # Insert purchase record
+                        supabase.table('user_purchases').insert({
+                            'user_id': str(user['id']),
+                            'metaphor_id': metaphor_id,
+                            'email': user['email'],
+                            'name': user['name'],
+                            'google_id': user['google_id'],
+                            'price_paid': '5.00'
+                        }).execute()
+                        print(f"Purchase recorded: user={user['email']}, metaphor={metaphor_id}")
+                    else:
+                        print(f"Already purchased: user={user['email']}, metaphor={metaphor_id}")
+                else:
+                    print(f"User not found: {user_id}")
+            except Exception as e:
+                print(f"Error processing payment: {e}")
 
     return jsonify({'received': True}), 200
 
