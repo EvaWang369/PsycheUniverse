@@ -9,6 +9,7 @@ from google.auth.transport import requests as google_requests
 import os
 import secrets
 import uuid
+import json
 import stripe
 
 load_dotenv()
@@ -494,14 +495,22 @@ def stripe_webhook():
     payload = request.get_data()
     sig_header = request.headers.get('Stripe-Signature')
 
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_WEBHOOK_SECRET
-        )
-    except ValueError:
-        return jsonify({'error': 'Invalid payload'}), 400
-    except stripe.error.SignatureVerificationError:
-        return jsonify({'error': 'Invalid signature'}), 400
+    # Skip signature verification in debug mode (local testing only)
+    if app.debug:
+        try:
+            event = json.loads(payload)
+            print("DEBUG MODE: Skipping Stripe signature verification")
+        except json.JSONDecodeError:
+            return jsonify({'error': 'Invalid JSON payload'}), 400
+    else:
+        try:
+            event = stripe.Webhook.construct_event(
+                payload, sig_header, STRIPE_WEBHOOK_SECRET
+            )
+        except ValueError:
+            return jsonify({'error': 'Invalid payload'}), 400
+        except stripe.error.SignatureVerificationError:
+            return jsonify({'error': 'Invalid signature'}), 400
 
     # Handle checkout.session.completed event
     if event['type'] == 'checkout.session.completed':

@@ -2,7 +2,6 @@
 
 let metaphors = METAPHOR_CATALOG.slice();
 let userPurchases = [];
-let firstUnlockRendered = false;
 const STRIPE_LINK_BASE = "https://buy.stripe.com/5kQdR125Y1uJfRk30e5gc00";
 
 function getStripeLink(metaphorId) {
@@ -63,7 +62,6 @@ function renderMetaphors() {
   coreGrid.innerHTML = '';
   moreGrid.innerHTML = '';
   expandingGrid.innerHTML = '';
-  firstUnlockRendered = false;
 
   const available = metaphors.filter(m => m.status === 'available');
   const comingSoon = metaphors.filter(m => m.status === 'coming_soon');
@@ -92,19 +90,10 @@ function createMetaphorCard(metaphor) {
   } else if (isPurchased) {
     actions = `<button class="btn btn-read" onclick="readFull('${metaphor.id}')">Read Full →</button>`;
   } else {
-    if (!firstUnlockRendered) {
-      // First unlock button uses Stripe link for testing
-      firstUnlockRendered = true;
-      actions = `
-        <button class="btn btn-preview" onclick="showPreview('${metaphor.id}')">Preview →</button>
-        <a href="${getStripeLink(metaphor.id)}" target="_blank" rel="noopener noreferrer" class="btn btn-unlock">Unlock $5</a>
-      `;
-    } else {
-      actions = `
-        <button class="btn btn-preview" onclick="showPreview('${metaphor.id}')">Preview →</button>
-        <button class="btn btn-unlock" onclick="unlockMetaphor('${metaphor.id}')">Unlock $${metaphor.price}</button>
-      `;
-    }
+    actions = `
+      <button class="btn btn-preview" onclick="showPreview('${metaphor.id}')">Preview →</button>
+      <a href="${getStripeLink(metaphor.id)}" target="_blank" rel="noopener noreferrer" class="btn btn-unlock">Unlock $5</a>
+    `;
   }
 
   return `
