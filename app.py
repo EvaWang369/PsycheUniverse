@@ -9,6 +9,7 @@ from google.auth.transport import requests as google_requests
 import os
 import secrets
 import uuid
+import stripe
 
 load_dotenv()
 
@@ -22,6 +23,10 @@ supabase = create_client(
 
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 SESSION_DURATION_DAYS = 30
+
+# Stripe configuration
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 
 # --- Authentication Helpers ---
 
@@ -53,7 +58,7 @@ def create_session(user_id):
     expires_at = datetime.utcnow() + timedelta(days=SESSION_DURATION_DAYS)
 
     supabase.table('sessions').insert({
-        'user_id': str(user_id),
+        'user_uuid': str(user_id),
         'token': token,
         'expires_at': expires_at.isoformat()
     }).execute()
@@ -64,7 +69,7 @@ def verify_session(token):
     """Verify session token and return user_id if valid"""
     try:
         result = supabase.table('sessions')\
-            .select('user_id, expires_at')\
+            .select('user_uuid, expires_at')\
             .eq('token', token)\
             .execute()
 
@@ -72,7 +77,7 @@ def verify_session(token):
             session = result.data[0]
             expires_at = datetime.fromisoformat(session['expires_at'].replace('Z', '+00:00'))
             if expires_at > datetime.now(expires_at.tzinfo):
-                return session['user_id']
+                return session['user_uuid']
     except Exception as e:
         print(f"Session verification failed: {e}")
     return None
@@ -170,8 +175,8 @@ def auth_google():
             user = result.data[0]
             user_id = user['id']
 
-        # Create session using user id as identifier
-        session_token, expires_at = create_session(user_id)
+        # Create session using user uuid as identifier
+        session_token, expires_at = create_session(user['uuid'])
 
         return jsonify({
             'user': {
@@ -198,7 +203,7 @@ def get_current_user():
     try:
         result = supabase.table('users')\
             .select('email, name, google_id')\
-            .eq('google_id', request.user_id)\
+            .eq('uuid', request.user_id)\
             .limit(1)\
             .execute()
 
@@ -249,7 +254,7 @@ def subscribe():
 
 @app.route('/api/metaphors', methods=['GET'])
 def get_metaphors():
-    """Get all metaphors"""
+    """Get all metaphors from database"""
     try:
         result = supabase.table('metaphors')\
             .select('*')\
@@ -261,7 +266,7 @@ def get_metaphors():
 
 @app.route('/api/metaphors/<metaphor_id>', methods=['GET'])
 def get_metaphor(metaphor_id):
-    """Get single metaphor by ID"""
+    """Get single metaphor by ID from database"""
     try:
         result = supabase.table('metaphors')\
             .select('*')\
@@ -279,12 +284,81 @@ def get_user_purchases():
     try:
         result = supabase.table('user_purchases')\
             .select('metaphor_id')\
-            .eq('google_id', request.user_id)\
-            .neq('metaphor_id', '_user_record')\
+            .eq('user_uuid', request.user_id)\
             .execute()
 
         purchased_ids = [p['metaphor_id'] for p in result.data]
         return jsonify(purchased_ids), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/metaphors/<metaphor_id>/content', methods=['GET'])
+@require_auth
+def get_metaphor_content(metaphor_id):
+    """Get metaphor content from database - full if purchased, preview if not"""
+    try:
+        # Check if user has purchased this metaphor
+        purchase_check = supabase.table('user_purchases')\
+            .select('*')\
+            .eq('user_id', request.user_id)\
+            .eq('metaphor_id', metaphor_id)\
+            .execute()
+
+        has_purchased = len(purchase_check.data) > 0
+
+        # Get metaphor data from database
+        metaphor = supabase.table('metaphors')\
+            .select('*')\
+            .eq('id', metaphor_id)\
+            .single()\
+            .execute()
+
+        if not metaphor.data:
+            return jsonify({'error': 'Metaphor not found'}), 404
+        
+        return jsonify({
+            'id': metaphor_id,
+            'title': metaphor.data['title'],
+            'content': metaphor.data['full_content'] if has_purchased else metaphor.data['preview_content'],
+            'has_access': has_purchased,
+            'is_preview': not has_purchased
+        }), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/purchase/<metaphor_id>', methods=['POST'])
+@require_auth
+def purchase_metaphor(metaphor_id):
+    """Purchase a metaphor for the current user"""
+    try:
+        # Check if already purchased
+        existing = supabase.table('user_purchases')\
+            .select('*')\
+            .eq('user_id', request.user_id)\
+            .eq('metaphor_id', metaphor_id)\
+            .execute()
+
+        if existing.data and len(existing.data) > 0:
+            return jsonify({'error': 'Already purchased'}), 400
+
+        # Get user info for the purchase record
+        user = supabase.table('users')\
+            .select('email, name, google_id')\
+            .eq('google_id', request.user_id)\
+            .single()\
+            .execute()
+
+        # Insert purchase record
+        supabase.table('user_purchases').insert({
+            'user_id': request.user_id,
+            'email': user.data['email'],
+            'name': user.data['name'],
+            'metaphor_id': metaphor_id,
+            'google_id': user.data['google_id']
+        }).execute()
+
+        return jsonify({'message': 'Purchase successful'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -295,11 +369,69 @@ def check_purchase(metaphor_id):
     try:
         result = supabase.table('user_purchases')\
             .select('*')\
-            .eq('google_id', request.user_id)\
+            .eq('user_id', request.user_id)\
             .eq('metaphor_id', metaphor_id)\
             .execute()
 
         return jsonify({'purchased': len(result.data) > 0}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/purchase/bundle/<bundle_id>', methods=['POST'])
+@require_auth
+def purchase_bundle(bundle_id):
+    """Purchase a bundle - grants access to all metaphors in bundle"""
+    try:
+        # Get bundle info
+        bundle = supabase.table('bundles')\
+            .select('*')\
+            .eq('id', bundle_id)\
+            .single()\
+            .execute()
+        
+        if not bundle.data:
+            return jsonify({'error': 'Bundle not found'}), 404
+        
+        # Get user info
+        user = supabase.table('users')\
+            .select('email, name, google_id')\
+            .eq('google_id', request.user_id)\
+            .single()\
+            .execute()
+        
+        # Check what user already owns
+        existing = supabase.table('user_purchases')\
+            .select('metaphor_id')\
+            .eq('user_id', request.user_id)\
+            .in_('metaphor_id', bundle.data['metaphor_ids'])\
+            .execute()
+        
+        already_owned = [p['metaphor_id'] for p in existing.data]
+        new_metaphors = [m for m in bundle.data['metaphor_ids'] if m not in already_owned]
+        
+        # Insert new purchases
+        if new_metaphors:
+            purchases = []
+            for metaphor_id in new_metaphors:
+                purchases.append({
+                    'user_id': request.user_id,
+                    'email': user.data['email'],
+                    'name': user.data['name'],
+                    'metaphor_id': metaphor_id,
+                    'google_id': user.data['google_id']
+                })
+            
+            supabase.table('user_purchases').insert(purchases).execute()
+        
+        return jsonify({
+            'bundle_id': bundle_id,
+            'bundle_name': bundle.data['name'],
+            'granted_metaphors': new_metaphors,
+            'already_owned': already_owned,
+            'total_metaphors': len(bundle.data['metaphor_ids']),
+            'new_access_count': len(new_metaphors)
+        }), 200
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -349,6 +481,37 @@ def get_bundle(bundle_id):
         return jsonify(result.data), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 404
+
+# --- Stripe Webhook ---
+
+@app.route('/api/stripe/webhook', methods=['POST'])
+def stripe_webhook():
+    """Handle Stripe webhook events"""
+    payload = request.get_data()
+    sig_header = request.headers.get('Stripe-Signature')
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, STRIPE_WEBHOOK_SECRET
+        )
+    except ValueError:
+        return jsonify({'error': 'Invalid payload'}), 400
+    except stripe.error.SignatureVerificationError:
+        return jsonify({'error': 'Invalid signature'}), 400
+
+    # Handle checkout.session.completed event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+
+        # Get user ID from client_reference_id (passed in Stripe link)
+        user_id = session.get('client_reference_id')
+        customer_email = session.get('customer_details', {}).get('email')
+
+        print(f"Payment completed - user_id: {user_id}, email: {customer_email}")
+
+        # TODO: Implement access granting logic
+
+    return jsonify({'received': True}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, host='127.0.0.1', port=8080)
