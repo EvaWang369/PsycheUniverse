@@ -52,16 +52,20 @@ def verify_google_token(token):
         print(f"Google token verification failed: {e}")
         return None
 
-def create_session(user_id):
+def create_session(user_uuid, google_id=None):
     """Create a new session token for user"""
     token = secrets.token_urlsafe(64)
     expires_at = datetime.utcnow() + timedelta(days=SESSION_DURATION_DAYS)
 
-    supabase.table('sessions').insert({
-        'user_uuid': str(user_id),
+    session_data = {
+        'user_uuid': str(user_uuid),
         'token': token,
         'expires_at': expires_at.isoformat()
-    }).execute()
+    }
+    if google_id:
+        session_data['google_id'] = google_id
+
+    supabase.table('sessions').insert(session_data).execute()
 
     return token, expires_at
 
@@ -176,11 +180,11 @@ def auth_google():
             user_id = user['id']
 
         # Create session using user uuid as identifier
-        session_token, expires_at = create_session(user['uuid'])
+        session_token, expires_at = create_session(user['uuid'], google_user['google_id'])
 
         return jsonify({
             'user': {
-                'id': user_id,
+                'id': user['uuid'],
                 'email': google_user['email'],
                 'name': google_user['name'],
                 'avatar_url': google_user['avatar_url'],
@@ -202,7 +206,7 @@ def get_current_user():
     """Get current authenticated user from users table"""
     try:
         result = supabase.table('users')\
-            .select('email, name, google_id')\
+            .select('uuid, email, name')\
             .eq('uuid', request.user_id)\
             .limit(1)\
             .execute()
@@ -212,7 +216,7 @@ def get_current_user():
 
         user = result.data[0]
         return jsonify({
-            'id': user['google_id'],
+            'id': user['uuid'],
             'email': user['email'],
             'name': user['name'],
             'vip_level': 'free'
@@ -300,7 +304,7 @@ def get_metaphor_content(metaphor_id):
         # Check if user has purchased this metaphor
         purchase_check = supabase.table('user_purchases')\
             .select('*')\
-            .eq('user_id', request.user_id)\
+            .eq('user_uuid', request.user_id)\
             .eq('metaphor_id', metaphor_id)\
             .execute()
 
@@ -335,7 +339,7 @@ def purchase_metaphor(metaphor_id):
         # Check if already purchased
         existing = supabase.table('user_purchases')\
             .select('*')\
-            .eq('user_id', request.user_id)\
+            .eq('user_uuid', request.user_id)\
             .eq('metaphor_id', metaphor_id)\
             .execute()
 
@@ -344,18 +348,18 @@ def purchase_metaphor(metaphor_id):
 
         # Get user info for the purchase record
         user = supabase.table('users')\
-            .select('email, name, google_id')\
-            .eq('google_id', request.user_id)\
+            .select('email, name')\
+            .eq('uuid', request.user_id)\
             .single()\
             .execute()
 
         # Insert purchase record
         supabase.table('user_purchases').insert({
-            'user_id': request.user_id,
+            'user_uuid': request.user_id,
             'email': user.data['email'],
             'name': user.data['name'],
             'metaphor_id': metaphor_id,
-            'google_id': user.data['google_id']
+            'price_paid': '5.00'
         }).execute()
 
         return jsonify({'message': 'Purchase successful'}), 200
@@ -369,7 +373,7 @@ def check_purchase(metaphor_id):
     try:
         result = supabase.table('user_purchases')\
             .select('*')\
-            .eq('user_id', request.user_id)\
+            .eq('user_uuid', request.user_id)\
             .eq('metaphor_id', metaphor_id)\
             .execute()
 
@@ -388,41 +392,41 @@ def purchase_bundle(bundle_id):
             .eq('id', bundle_id)\
             .single()\
             .execute()
-        
+
         if not bundle.data:
             return jsonify({'error': 'Bundle not found'}), 404
-        
+
         # Get user info
         user = supabase.table('users')\
-            .select('email, name, google_id')\
-            .eq('google_id', request.user_id)\
+            .select('email, name')\
+            .eq('uuid', request.user_id)\
             .single()\
             .execute()
-        
+
         # Check what user already owns
         existing = supabase.table('user_purchases')\
             .select('metaphor_id')\
-            .eq('user_id', request.user_id)\
+            .eq('user_uuid', request.user_id)\
             .in_('metaphor_id', bundle.data['metaphor_ids'])\
             .execute()
-        
+
         already_owned = [p['metaphor_id'] for p in existing.data]
         new_metaphors = [m for m in bundle.data['metaphor_ids'] if m not in already_owned]
-        
+
         # Insert new purchases
         if new_metaphors:
             purchases = []
             for metaphor_id in new_metaphors:
                 purchases.append({
-                    'user_id': request.user_id,
+                    'user_uuid': request.user_id,
                     'email': user.data['email'],
                     'name': user.data['name'],
                     'metaphor_id': metaphor_id,
-                    'google_id': user.data['google_id']
+                    'price_paid': '5.00'
                 })
-            
+
             supabase.table('user_purchases').insert(purchases).execute()
-        
+
         return jsonify({
             'bundle_id': bundle_id,
             'bundle_name': bundle.data['name'],
@@ -431,7 +435,7 @@ def purchase_bundle(bundle_id):
             'total_metaphors': len(bundle.data['metaphor_ids']),
             'new_access_count': len(new_metaphors)
         }), 200
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -511,12 +515,12 @@ def stripe_webhook():
 
         if client_reference_id and '_' in client_reference_id:
             try:
-                user_id, metaphor_id = client_reference_id.split('_', 1)
+                user_uuid, metaphor_id = client_reference_id.split('_', 1)
 
-                # Look up user by id
+                # Look up user by uuid
                 user_result = supabase.table('users')\
-                    .select('*')\
-                    .eq('id', user_id)\
+                    .select('uuid, email, name')\
+                    .eq('uuid', user_uuid)\
                     .single()\
                     .execute()
 
@@ -526,25 +530,24 @@ def stripe_webhook():
                     # Check if already purchased
                     existing = supabase.table('user_purchases')\
                         .select('id')\
-                        .eq('google_id', user['google_id'])\
+                        .eq('user_uuid', user['uuid'])\
                         .eq('metaphor_id', metaphor_id)\
                         .execute()
 
                     if not existing.data:
                         # Insert purchase record
                         supabase.table('user_purchases').insert({
-                            'user_id': str(user['id']),
+                            'user_uuid': user['uuid'],
                             'metaphor_id': metaphor_id,
                             'email': user['email'],
                             'name': user['name'],
-                            'google_id': user['google_id'],
                             'price_paid': '5.00'
                         }).execute()
                         print(f"Purchase recorded: user={user['email']}, metaphor={metaphor_id}")
                     else:
                         print(f"Already purchased: user={user['email']}, metaphor={metaphor_id}")
                 else:
-                    print(f"User not found: {user_id}")
+                    print(f"User not found: {user_uuid}")
             except Exception as e:
                 print(f"Error processing payment: {e}")
 
