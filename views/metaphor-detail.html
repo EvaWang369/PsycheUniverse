@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metaphor Detail - Psyche</title>
+  <link rel="stylesheet" href="/views/css/game.css">
+  <style>
+    .metaphor-detail {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    
+    .metaphor-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .metaphor-symbol {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+    
+    .metaphor-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #D4AF37;
+    }
+    
+    .metaphor-keywords {
+      color: #888;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .metaphor-doctrine {
+      font-style: italic;
+      color: #ccc;
+      font-size: 1.2rem;
+    }
+    
+    .metaphor-content {
+      font-size: 1.1rem;
+      color: #ddd;
+    }
+    
+    .metaphor-content h2 {
+      color: #fff;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .metaphor-content h3 {
+      color: #ccc;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .metaphor-content p {
+      margin-bottom: 1rem;
+    }
+    
+    .back-button {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .loading {
+      text-align: center;
+      color: #888;
+      padding: 4rem;
+    }
+    
+    .error {
+      text-align: center;
+      color: #ff6b6b;
+      padding: 4rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="/metaphors" class="back-button">← Back to Library</a>
+  
+  <div class="metaphor-detail">
+    <div id="loading" class="loading">
+      <p>Loading metaphor...</p>
+    </div>
+    
+    <div id="error" class="error" style="display: none;">
+      <p>Failed to load metaphor content.</p>
+    </div>
+    
+    <div id="content" style="display: none;">
+      <div class="metaphor-header">
+        <div class="metaphor-symbol" id="symbol">✦</div>
+        <h1 class="metaphor-title" id="title">Loading...</h1>
+        <div class="metaphor-keywords" id="keywords"></div>
+        <div class="metaphor-doctrine" id="doctrine"></div>
+      </div>
+      
+      <div class="metaphor-content" id="metaphor-content">
+        <!-- Content will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/views/js/auth.js"></script>
+  <script>
+    async function loadMetaphorDetail() {
+      const pathParts = window.location.pathname.split('/');
+      const metaphorId = pathParts[pathParts.length - 1];
+      
+      if (!metaphorId || metaphorId === 'metaphors') {
+        showError('Invalid metaphor ID');
+        return;
+      }
+      
+      try {
+        // Get metaphor basic info
+        const metaphorResponse = await fetch(`/api/metaphors/${metaphorId}`);
+        if (!metaphorResponse.ok) {
+          throw new Error('Metaphor not found');
+        }
+        const metaphor = await metaphorResponse.json();
+        
+        // Get metaphor content (requires auth)
+        let content = '';
+        let hasAccess = false;
+        
+        if (AuthManager.isLoggedIn()) {
+          try {
+            const contentResponse = await fetch(`/api/metaphors/${metaphorId}/content`, {
+              headers: AuthManager.getAuthHeaders()
+            });
+            if (contentResponse.ok) {
+              const contentData = await contentResponse.json();
+              content = contentData.content;
+              hasAccess = contentData.has_access;
+            }
+          } catch (e) {
+            console.log('Content fetch failed, showing preview');
+          }
+        }
+        
+        // If no content or not logged in, show preview
+        if (!content) {
+          content = metaphor.preview_content || 'Preview content not available.';
+        }
+        
+        // Display the metaphor
+        displayMetaphor(metaphor, content, hasAccess);
+        
+      } catch (error) {
+        console.error('Error loading metaphor:', error);
+        showError('Failed to load metaphor content.');
+      }
+    }
+    
+    function displayMetaphor(metaphor, content, hasAccess) {
+      document.getElementById('symbol').textContent = metaphor.symbol || '✦';
+      document.getElementById('title').textContent = metaphor.title;
+      document.getElementById('keywords').textContent = metaphor.keywords ? metaphor.keywords.join(' · ') : '';
+      document.getElementById('doctrine').textContent = metaphor.doctrine || '';
+      document.getElementById('metaphor-content').innerHTML = formatContent(content);
+      
+      // Add purchase prompt if no access
+      if (!hasAccess && AuthManager.isLoggedIn()) {
+        const purchasePrompt = `
+          <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 8px; text-align: center;">
+            <p>This is a preview. <a href="/metaphors" style="color: #4CAF50;">Purchase to read the full content →</a></p>
+          </div>
+        `;
+        document.getElementById('metaphor-content').innerHTML += purchasePrompt;
+      } else if (!hasAccess && !AuthManager.isLoggedIn()) {
+        const loginPrompt = `
+          <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 8px; text-align: center;">
+            <p>This is a preview. <a href="/metaphors" style="color: #4CAF50;">Sign in to purchase full access →</a></p>
+          </div>
+        `;
+        document.getElementById('metaphor-content').innerHTML += loginPrompt;
+      }
+      
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+    }
+    
+    function formatContent(content) {
+      // Simple formatting - convert line breaks to paragraphs
+      return content.split('\n\n').map(paragraph => 
+        paragraph.trim() ? `<p>${paragraph.trim()}</p>` : ''
+      ).join('');
+    }
+    
+    function showError(message) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('error').innerHTML = `<p>${message}</p>`;
+    }
+    
+    // Load content when page loads
+    window.addEventListener('load', loadMetaphorDetail);
+  </script>
+</body>
+</html>

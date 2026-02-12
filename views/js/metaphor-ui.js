@@ -125,7 +125,7 @@ function showPreview(metaphorId) {
 }
 
 function readFull(metaphorId) {
-  fetchMetaphorContent(metaphorId, true);
+  window.location.href = `/metaphors/${metaphorId}`;
 }
 
 async function fetchMetaphorContent(metaphorId, isFullAccess) {

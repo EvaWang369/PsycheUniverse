@@ -121,7 +121,7 @@ def metaphors():
 
 @app.route('/metaphors/<metaphor_id>')
 def metaphor_detail(metaphor_id):
-    return send_from_directory('views', 'game.html')
+    return send_from_directory('views', 'metaphor-detail.html')
 
 @app.route('/views/<path:filename>')
 def views_static(filename):
