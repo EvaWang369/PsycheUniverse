@@ -6,6 +6,14 @@
   <title>Metaphor Detail - Psyche</title>
   <link rel="stylesheet" href="/views/css/game.css">
   <style>
+    body {
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      background: linear-gradient(135deg, #fdfbfb 0%, #fef9f7 25%, #fef5f9 50%, #f9f5fc 75%, #fdfbfb 100%);
+      color: #4a4a4a;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    
     .metaphor-detail {
       max-width: 800px;
       margin: 0 auto;
@@ -17,73 +25,124 @@
       text-align: center;
       margin-bottom: 3rem;
       padding-bottom: 2rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(218, 165, 32, 0.2);
     }
     
     .metaphor-symbol {
       font-size: 4rem;
       margin-bottom: 1rem;
+      filter: drop-shadow(0 0 15px rgba(218, 165, 32, 0.3));
     }
     
     .metaphor-title {
       font-size: 2.5rem;
       margin-bottom: 1rem;
       color: #D4AF37;
+      background: linear-gradient(135deg, #daa520, #f4e4c1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     
     .metaphor-keywords {
-      color: #888;
+      color: #8b7ba8;
       font-size: 1.1rem;
       margin-bottom: 1rem;
+      font-family: 'Helvetica Neue', sans-serif;
     }
     
     .metaphor-doctrine {
       font-style: italic;
-      color: #ccc;
+      color: #6b5b95;
       font-size: 1.2rem;
     }
     
     .metaphor-content {
       font-size: 1.1rem;
-      color: #ddd;
+      color: #7b6b9e;
+      font-family: 'Helvetica Neue', sans-serif;
     }
     
     .metaphor-content h2 {
-      color: #fff;
+      color: #D4AF37;
       margin-top: 2rem;
       margin-bottom: 1rem;
+      font-family: 'Cormorant Garamond', serif;
     }
     
     .metaphor-content h3 {
-      color: #ccc;
+      color: #6b5b95;
       margin-top: 1.5rem;
       margin-bottom: 0.5rem;
+      font-family: 'Cormorant Garamond', serif;
     }
     
     .metaphor-content p {
       margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    
+    /* --- Bullet lists: fix alignment + spacing (game.css likely resets ul/li) --- */
+    .metaphor-content ul {
+      list-style: disc;
+      margin: 0.75rem 0 1.25rem 1.4rem;   /* indent from left */
+      padding-left: 1.2rem;              /* ensures bullet + text spacing */
+    }
+    
+    .metaphor-content li {
+      margin: 0.35rem 0;
+      line-height: 1.55;
+    }
+    
+    /* Prevent bullets from becoming "more left than title" */
+    .metaphor-content ul,
+    .metaphor-content ol {
+      box-sizing: border-box;
+    }
+    
+    /* --- Suit card internal spacing so content doesn't look condensed --- */
+    .suit-body h4 {
+      margin: 0 0 0.35rem 0;
+      color: #6b5b95;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+    }
+    
+    .suit-body .metaphor-keywords {
+      margin: 0 0 0.35rem 0;
+    }
+    
+    .suit-content p {
+      margin-bottom: 0.75rem;
+    }
+    
+    .suit-content ul {
+      margin: 0.5rem 0 0.75rem 1.2rem;
+      padding-left: 1.1rem;
     }
     
     .back-button {
       position: fixed;
       top: 2rem;
       left: 2rem;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #fff;
+      background: rgba(218, 165, 32, 0.1);
+      border: 1px solid rgba(218, 165, 32, 0.3);
+      color: #6b5b95;
       padding: 0.5rem 1rem;
-      border-radius: 4px;
+      border-radius: 50px;
       text-decoration: none;
       transition: all 0.3s ease;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.9rem;
     }
     
     .back-button:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(218, 165, 32, 0.2);
+      transform: translateY(-2px);
     }
     
     .loading {
       text-align: center;
-      color: #888;
+      color: #8b7ba8;
       padding: 4rem;
     }
     
@@ -91,6 +150,163 @@
       text-align: center;
       color: #ff6b6b;
       padding: 4rem;
+    }
+    
+    .content-section {
+      margin: 2rem 0;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid rgba(218, 165, 32, 0.1);
+    }
+    
+    .content-section:last-child {
+      border-bottom: none;
+    }
+    
+    .suits-section {
+      margin: 3rem 0;
+    }
+    
+    /* ============================= */
+    /* SUITS SECTION ONLY            */
+    /* ============================= */
+    
+    .suits-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2.25rem;              /* more space between cards */
+      margin-top: 2.5rem;
+    
+      width: min(980px, calc(100vw - 4rem));  /* wider than main */
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .suit-card {
+      width: 100%;
+      padding: 2.25rem 3rem;
+      text-align: left;          /* main content aligns left */
+    
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(218, 165, 32, 0.26);
+      border-radius: 26px;
+    
+      box-shadow: 0 14px 48px rgba(218, 165, 32, 0.14);
+      transition: all 0.35s ease;
+    }
+    
+    .suit-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 70px rgba(218, 165, 32, 0.2);
+      border-color: rgba(218, 165, 32, 0.45);
+    }
+    
+    /* ---- Top 3 lines: centered ---- */
+    .suit-top {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+    
+    .suit-symbol {
+      display: block;
+      font-size: 2rem;        /* smaller + elegant */
+      line-height: 1;
+      margin: 0 0 0.65rem 0;
+      filter: drop-shadow(0 0 12px rgba(218, 165, 32, 0.3));
+    }
+    
+    .suit-title {
+      font-size: 1.5rem;       /* smaller, classic */
+      margin: 0 0 0.35rem 0;
+      color: #6b5b95;
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 0.2px;
+    }
+    
+    .suit-keyword {
+      font-style: italic;
+      color: #D4AF37;
+      font-size: 1rem;
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    
+    /* ---- Body: left aligned ---- */
+    .suit-content {
+      max-width: 760px;
+      margin: 0 auto;           /* keeps clean reading column */
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: #7b6b9e;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+    
+    /* Paragraph spacing */
+    .suit-content p {
+      margin: 0 0 1rem 0;
+    }
+    
+    /* Bullet alignment: inside content column */
+    .suit-content ul {
+      list-style: disc;
+      margin: 0.75rem 0 1.25rem 1.25rem; /* NOT too left */
+      padding: 0;
+    }
+    
+    .suit-content li {
+      margin: 0.4rem 0;
+      line-height: 1.65;
+    }
+    
+    .pieces-grid, .voices-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .piece-card, .voice-card {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(218, 165, 32, 0.2);
+      border-radius: 20px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(218, 165, 32, 0.1);
+    }
+    
+    .piece-card:hover, .voice-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(218, 165, 32, 0.2);
+      border-color: rgba(218, 165, 32, 0.4);
+    }
+    
+    .piece-symbol, .voice-symbol {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 0 10px rgba(218, 165, 32, 0.3));
+    }
+    
+    .suit-meaning, .piece-meaning, .voice-meaning {
+      color: #D4AF37;
+      font-style: italic;
+      margin-bottom: 1rem;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    
+    .content-conclusion {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: linear-gradient(135deg, rgba(218, 165, 32, 0.1), rgba(230, 213, 245, 0.1));
+      border-radius: 20px;
+      border: 2px solid rgba(218, 165, 32, 0.3);
+      box-shadow: 0 8px 32px rgba(218, 165, 32, 0.1);
+    }
+    
+    .content-conclusion h3 {
+      color: #D4AF37;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
@@ -125,12 +341,12 @@
     async function loadMetaphorDetail() {
       const pathParts = window.location.pathname.split('/');
       const metaphorId = pathParts[pathParts.length - 1];
-      
+
       if (!metaphorId || metaphorId === 'metaphors') {
         showError('Invalid metaphor ID');
         return;
       }
-      
+
       try {
         // Get metaphor basic info
         const metaphorResponse = await fetch(`/api/metaphors/${metaphorId}`);
@@ -138,73 +354,295 @@
           throw new Error('Metaphor not found');
         }
         const metaphor = await metaphorResponse.json();
-        
-        // Get metaphor content (requires auth)
-        let content = '';
-        let hasAccess = false;
-        
-        if (AuthManager.isLoggedIn()) {
+
+        // Fetch full/preview payload (content endpoint returns structured flags)
+        let contentPayload = null;
+
+        if (typeof AuthManager !== 'undefined' && AuthManager.isLoggedIn()) {
           try {
             const contentResponse = await fetch(`/api/metaphors/${metaphorId}/content`, {
               headers: AuthManager.getAuthHeaders()
             });
+
             if (contentResponse.ok) {
-              const contentData = await contentResponse.json();
-              content = contentData.content;
-              hasAccess = contentData.has_access;
+              // Expected: { id, title, content, has_access, is_preview }
+              contentPayload = await contentResponse.json();
             }
           } catch (e) {
-            console.log('Content fetch failed, showing preview');
+            console.log('Content fetch failed, falling back to preview_content');
           }
         }
-        
-        // If no content or not logged in, show preview
-        if (!content) {
-          content = metaphor.preview_content || 'Preview content not available.';
+
+        // Fallback: show preview_content when not logged in or content endpoint fails
+        if (!contentPayload) {
+          contentPayload = {
+            id: metaphor.id,
+            title: metaphor.title,
+            content: metaphor.preview_content || 'Preview content not available.',
+            has_access: false,
+            is_preview: true
+          };
         }
-        
-        // Display the metaphor
-        displayMetaphor(metaphor, content, hasAccess);
-        
+
+        // Display using new signature
+        displayMetaphor(metaphor, contentPayload);
+
       } catch (error) {
         console.error('Error loading metaphor:', error);
         showError('Failed to load metaphor content.');
       }
     }
     
-    function displayMetaphor(metaphor, content, hasAccess) {
+    function hasProbablyJson(value) {
+      if (!value) return false;
+      if (typeof value === 'object') return true;
+      if (typeof value !== 'string') return false;
+      const t = value.trim();
+      return (t.startsWith('{') && t.endsWith('}')) || (t.startsWith('[') && t.endsWith(']'));
+    }
+    
+    function normalizeContentPayload(payload) {
+      // If old call passes content string
+      if (typeof payload === 'string') {
+        return { content: payload, has_access: false, is_preview: true };
+      }
+      // If payload missing, safe default
+      if (!payload || typeof payload !== 'object') {
+        return { content: '', has_access: false, is_preview: true };
+      }
+
+      // If payload is object like {content, has_access, is_preview}
+      return {
+        content: payload.content || '',
+        has_access: !!payload.has_access,
+        is_preview: payload.is_preview === undefined ? !payload.has_access : !!payload.is_preview
+      };
+    }
+    
+    function displayMetaphor(metaphor, contentPayload) {
+      // contentPayload can be either:
+      // - { content, has_access, is_preview } from /api/metaphors/:id/content
+      // - OR a fallback string (older call). We normalize here.
+      const normalized = normalizeContentPayload(contentPayload);
+
       document.getElementById('symbol').textContent = metaphor.symbol || '✦';
       document.getElementById('title').textContent = metaphor.title;
       document.getElementById('keywords').textContent = metaphor.keywords ? metaphor.keywords.join(' · ') : '';
       document.getElementById('doctrine').textContent = metaphor.doctrine || '';
-      document.getElementById('metaphor-content').innerHTML = formatContent(content);
-      
-      // Add purchase prompt if no access
-      if (!hasAccess && AuthManager.isLoggedIn()) {
-        const purchasePrompt = `
-          <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 8px; text-align: center;">
-            <p>This is a preview. <a href="/metaphors" style="color: #4CAF50;">Purchase to read the full content →</a></p>
-          </div>
-        `;
-        document.getElementById('metaphor-content').innerHTML += purchasePrompt;
-      } else if (!hasAccess && !AuthManager.isLoggedIn()) {
-        const loginPrompt = `
-          <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 8px; text-align: center;">
-            <p>This is a preview. <a href="/metaphors" style="color: #4CAF50;">Sign in to purchase full access →</a></p>
-          </div>
-        `;
-        document.getElementById('metaphor-content').innerHTML += loginPrompt;
+
+      const content = normalized.content || '';
+      const hasAccess = !!normalized.has_access;
+      const isPreview = !!normalized.is_preview;
+
+      // Structured rendering must come from metaphor.content_json (DB), not from contentPayload.content
+      const hasStructured = hasAccess && metaphor.content_json;
+
+      if (hasStructured) {
+        document.getElementById('metaphor-content').innerHTML = formatJsonContent(metaphor.content_json);
+      } else {
+        document.getElementById('metaphor-content').innerHTML = formatContent(content);
       }
-      
+
+      // Prompts: show only if the backend says it's preview
+      if (isPreview) {
+        if (typeof AuthManager !== 'undefined' && AuthManager.isLoggedIn()) {
+          const purchasePrompt = `
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px; text-align: center;">
+              <p>This is a preview. <a href="/metaphors" style="color: #D4AF37;">Purchase to read the full content →</a></p>
+            </div>
+          `;
+          document.getElementById('metaphor-content').innerHTML += purchasePrompt;
+        } else {
+          const loginPrompt = `
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px; text-align: center;">
+              <p>This is a preview. <a href="/metaphors" style="color: #D4AF37;">Sign in to purchase full access →</a></p>
+            </div>
+          `;
+          document.getElementById('metaphor-content').innerHTML += loginPrompt;
+        }
+      }
+
       document.getElementById('loading').style.display = 'none';
       document.getElementById('content').style.display = 'block';
     }
     
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+    
+    function formatJsonContent(contentJson) {
+      try {
+        const data = typeof contentJson === 'string' ? JSON.parse(contentJson) : contentJson;
+        let html = '';
+
+        // Overview
+        if (data.overview) {
+          html += `<div class="content-overview">`;
+          if (data.overview.title) html += `<h2>${escapeHtml(data.overview.title)}</h2>`;
+          if (data.overview.intro) html += `<div class="intro">${formatText(data.overview.intro)}</div>`;
+          html += `</div>`;
+        }
+
+        // Main sections
+        if (Array.isArray(data.sections)) {
+          data.sections.forEach(section => {
+            html += `<div class="content-section">`;
+            const sid = section.id !== undefined && section.id !== null ? `${escapeHtml(String(section.id))}. ` : '';
+            html += `<h3>${sid}${escapeHtml(section.title || '')}</h3>`;
+            html += `<div class="section-content">${formatText(section.content || '')}</div>`;
+            html += `</div>`;
+          });
+        }
+
+        // Core doctrine (new schema)
+        if (data.core_doctrine) {
+          html += `<div class="content-conclusion">`;
+          if (data.core_doctrine.title) html += `<h3>${escapeHtml(data.core_doctrine.title)}</h3>`;
+          html += `<div class="conclusion-content">${formatText(data.core_doctrine.content || '')}</div>`;
+          html += `</div>`;
+        }
+
+        // Special section
+        if (data.special_section) {
+          const special = data.special_section;
+          html += `<div class="special-section ${escapeHtml(special.type || '')}-section">`;
+          if (special.title) html += `<h2>${escapeHtml(special.title)}</h2>`;
+          if (special.intro) html += `<div class="intro">${formatText(special.intro)}</div>`;
+
+          // Suits (wide one-per-row)
+          if (special.type === 'suits') {
+            html += `<div class="suits-grid">`;
+            Object.values(special.items || {}).forEach(item => {
+              html += `
+                <div class="suit-card">
+                  <div class="suit-top">
+                    <span class="suit-symbol">${escapeHtml(item.symbol || '')}</span>
+                    <div class="suit-title">${escapeHtml(item.title || '')}</div>
+                    ${item.keyword ? `<div class="suit-keyword">Key word: ${escapeHtml(item.keyword)}</div>` : ''}
+                  </div>
+                  <div class="suit-content">${formatText(item.content || '')}</div>
+                </div>
+              `;
+            });
+            html += `</div>`;
+          }
+
+          // Pieces
+          else if (special.type === 'pieces') {
+            html += `<div class="pieces-grid">`;
+            Object.values(special.items || {}).forEach(item => {
+              html += `<div class="piece-card">`;
+              html += `<div class="piece-symbol">${escapeHtml(item.symbol || '')}</div>`;
+              html += `<h4>${escapeHtml(item.title || '')}</h4>`;
+              if (item.meaning) html += `<p class="piece-meaning">${escapeHtml(item.meaning)}</p>`;
+              html += `<div class="piece-content">${formatText(item.content || '')}</div>`;
+              html += `</div>`;
+            });
+            html += `</div>`;
+          }
+
+          // Voices
+          else if (special.type === 'voices') {
+            html += `<div class="voices-grid">`;
+            Object.values(special.items || {}).forEach(item => {
+              html += `<div class="voice-card">`;
+              html += `<div class="voice-symbol">${escapeHtml(item.symbol || '')}</div>`;
+              html += `<h4>${escapeHtml(item.title || '')}</h4>`;
+              if (item.meaning) html += `<p class="voice-meaning">${escapeHtml(item.meaning)}</p>`;
+              html += `<div class="voice-content">${formatText(item.content || '')}</div>`;
+              html += `</div>`;
+            });
+            html += `</div>`;
+          }
+
+          html += `</div>`;
+        }
+
+        // Closing (new schema)
+        if (data.closing) {
+          html += `<div class="content-conclusion">`;
+          if (data.closing.title) html += `<h3>${escapeHtml(data.closing.title)}</h3>`;
+          html += `<div class="conclusion-content">${formatText(data.closing.content || '')}</div>`;
+          html += `</div>`;
+        }
+
+        // Legacy conclusion support (old schema)
+        if (data.conclusion) {
+          html += `<div class="content-conclusion">`;
+          if (data.conclusion.title) html += `<h3>${escapeHtml(data.conclusion.title)}</h3>`;
+          html += `<div class="conclusion-content">${formatText(data.conclusion.content || '')}</div>`;
+          html += `</div>`;
+        }
+
+        return html;
+      } catch (e) {
+        console.error('Error parsing content JSON:', e);
+        return '<p>Error loading structured content.</p>';
+      }
+    }
+    
+    function formatText(text) {
+      if (!text) return '';
+
+      const lines = String(text).split('\n');
+      let html = '';
+      let paragraph = [];
+      let list = [];
+
+      const flushParagraph = () => {
+        const p = paragraph.join('\n').trim();
+        paragraph = [];
+        if (p) {
+          // preserve intentional single line breaks inside a paragraph
+          html += `<p>${escapeHtml(p).replaceAll('\n', '<br>')}</p>`;
+        }
+      };
+
+      const flushList = () => {
+        if (list.length) {
+          html += `<ul>${list.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>`;
+          list = [];
+        }
+      };
+
+      const isBullet = (line) =>
+        line.startsWith('•') || line.startsWith('- ') || line.startsWith('* ');
+
+      const stripBullet = (line) =>
+        line.startsWith('•') ? line.replace(/^•\s?/, '')
+          : (line.startsWith('- ') ? line.slice(2) : line.slice(2));
+
+      for (const raw of lines) {
+        const line = raw.trim();
+
+        if (!line) {
+          flushList();
+          flushParagraph();
+          continue;
+        }
+
+        if (isBullet(line)) {
+          flushParagraph();
+          list.push(stripBullet(line).trim());
+        } else {
+          flushList();
+          paragraph.push(raw);
+        }
+      }
+
+      flushList();
+      flushParagraph();
+      return html;
+    }
+    
     function formatContent(content) {
-      // Simple formatting - convert line breaks to paragraphs
-      return content.split('\n\n').map(paragraph => 
-        paragraph.trim() ? `<p>${paragraph.trim()}</p>` : ''
-      ).join('');
+      // Use the same parser as formatText so bullets work in plain text too
+      return formatText(content || '');
     }
     
     function showError(message) {
