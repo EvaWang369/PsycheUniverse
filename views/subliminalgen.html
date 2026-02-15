@@ -325,14 +325,14 @@
     }
 
     .pricing-card h3 {
-      font-size: 2rem;
+      font-size: 1.5rem;
       margin-bottom: 1rem;
       letter-spacing: 2px;
       color: #5b4a86;
     }
 
     .pricing-card .price {
-      font-size: 2.5rem;
+      font-size: 1.8rem;
       font-weight: 300;
       margin-bottom: 2rem;
       color: #5b4a86;
@@ -663,15 +663,18 @@
     </div>
   </section>
 
-  <!-- CTA Section -->
+  <!-- Feedback Section -->
   <section class="cta">
     <div class="cta-content">
-      <h2>Precision Audio Tool</h2>
+      <h2>Share Your Feedback</h2>
       <p>
-        Subliminal Gen combines conscious affirmation and subconscious reprogramming into a single, precise system. 
-        Whether you choose active repetition or subliminal reinforcement, the process always begins with your own voice and works from the inside out.
+        We value your thoughts and suggestions. <br> Help us improve SubliminalGen by sharing your feedback.
       </p>
-      <a href="/#subscribe" class="cta-button">Join Waitlist</a>
+      <form id="feedbackForm" class="subscribe-form" style="flex-direction: column; align-items: center; gap: 1rem;">
+        <input type="email" id="feedbackEmail" placeholder="your@email.com" required style="width: 100%; max-width: 350px; padding: 0.9rem 1.8rem; border: 2px solid rgba(166, 140, 89, 0.3); border-radius: 50px; background: rgba(255, 255, 255, 0.8); font-size: 1rem; outline: none; margin-bottom: 1.5rem;">
+        <textarea id="feedbackText" placeholder="Share your feedback..." required style="width: 100%; max-width: 400px; min-height: 120px; padding: 1rem 2rem; border: 2px solid rgba(166, 140, 89, 0.3); border-radius: 20px; background: rgba(255, 255, 255, 0.8); font-size: 1rem; outline: none; resize: vertical; font-family: 'Cormorant Garamond', 'Georgia', serif;"></textarea>
+        <button type="submit" class="pricing-btn btn-gold" style="margin: 0;">Submit Feedback</button>
+      </form>
     </div>
   </section>
 
@@ -680,6 +683,56 @@
     <p>Contact: info@psyche-ai.xyz</p>
     <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 1rem;">© 2026 Psyche. All rights reserved.</p>
   </footer>
+
+  <script>
+    // Check if user is logged in and pre-fill email
+    window.addEventListener('load', () => {
+      const user = JSON.parse(localStorage.getItem('psyche_user') || 'null');
+      const emailInput = document.getElementById('feedbackEmail');
+      
+      if (user && user.email) {
+        emailInput.value = user.email;
+        emailInput.readOnly = true;
+        emailInput.style.background = 'rgba(255, 255, 255, 0.5)';
+      }
+    });
+
+    // Handle feedback submission
+    document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('feedbackEmail').value;
+      const feedback = document.getElementById('feedbackText').value;
+      const session = JSON.parse(localStorage.getItem('psyche_session') || 'null');
+      
+      const headers = { 'Content-Type': 'application/json' };
+      if (session && session.token) {
+        headers['Authorization'] = `Bearer ${session.token}`;
+      }
+      
+      try {
+        const response = await fetch('/api/feedback', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({ email, feedback, source: 'subliminalgen' })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          alert('Thank you for your feedback!');
+          document.getElementById('feedbackText').value = '';
+          if (!session) {
+            document.getElementById('feedbackEmail').value = '';
+          }
+        } else {
+          alert(data.error || 'Failed to submit feedback. Please try again.');
+        }
+      } catch (error) {
+        alert('Network error. Please try again later.');
+      }
+    });
+  </script>
 
 </body>
 </html>
