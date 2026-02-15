@@ -258,6 +258,15 @@
       line-height: 1.65;
     }
     
+    /* Dark gold labels inside suit cards */
+    .suit-content p strong {
+      color: #D4AF37; /* same as Key word */
+      font-family: 'Cormorant Garamond', serif; /* match Key word font */
+      font-style: italic; /* same elegance */
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    
     .pieces-grid, .voices-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -598,8 +607,10 @@
         const p = paragraph.join('\n').trim();
         paragraph = [];
         if (p) {
-          // preserve intentional single line breaks inside a paragraph
-          html += `<p>${escapeHtml(p).replaceAll('\n', '<br>')}</p>`;
+          const formatted = escapeHtml(p)
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replaceAll('\n', '<br>');
+          html += `<p>${formatted}</p>`;
         }
       };
 

@@ -5,7 +5,7 @@ const METAPHOR_CATALOG = [
     title: "Poker",
     symbol: "♠",
     keywords: ["Uncertainty", "State", "Mastery"],
-    doctrine: "Trust without proof.",
+    doctrine: "Trust without proof. You are the proof.",
     preview_content: "Poker is one of the cleanest metaphors for the Psyche concept, because it mirrors how the universe works in 3D life: uncertainty by design, incomplete information, and emotional triggers. You don't control the cards—you control the self.",
     full_content: "[Full Poker metaphor content - all 6 sections will go here]",
     price: 5.00,
