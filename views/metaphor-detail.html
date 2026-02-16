@@ -6,9 +6,85 @@
   <title>Metaphor Detail - Psyche</title>
   <link rel="stylesheet" href="/views/css/game.css">
   <style>
+    /* ===== THEME VARIABLES ===== */
+    :root {
+      /* Default (Poker) theme */
+      --theme-primary: #D4AF37;
+      --theme-primary-rgb: 218, 165, 32;
+      --theme-secondary: #6b5b95;
+      --theme-text: #7b6b9e;
+      --theme-bg: linear-gradient(135deg, #fdfbfb 0%, #fef9f7 25%, #fef5f9 50%, #f9f5fc 75%, #fdfbfb 100%);
+      --theme-card-bg: rgba(255, 255, 255, 0.65);
+      --theme-glow: rgba(218, 165, 32, 0.3);
+    }
+
+    /* Chess theme - silver/blue/crystal */
+    .theme-chess {
+      --theme-primary: #7eb8da;
+      --theme-primary-rgb: 126, 184, 218;
+      --theme-secondary: #4a6fa5;
+      --theme-text: #5a7a9a;
+      --theme-bg: linear-gradient(135deg, #0a0a14 0%, #0d1520 25%, #101828 50%, #0d1520 75%, #0a0a14 100%);
+      --theme-card-bg: rgba(20, 35, 55, 0.85);
+      --theme-glow: rgba(126, 184, 218, 0.4);
+    }
+
+    .theme-chess body,
+    body.theme-chess {
+      background: var(--theme-bg);
+      color: #c0c8d0;
+    }
+
+    .theme-chess .metaphor-title {
+      background: linear-gradient(135deg, #7eb8da, #c0c0c0, #d4af37);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .theme-chess .metaphor-keywords,
+    .theme-chess .metaphor-doctrine {
+      color: #8a9ab0;
+    }
+
+    .theme-chess .metaphor-content,
+    .theme-chess .suit-content,
+    .theme-chess .piece-content {
+      color: #a0b0c0;
+    }
+
+    .theme-chess .content-section h3,
+    .theme-chess .suit-title,
+    .theme-chess .piece-card h4 {
+      color: #c0c8d0;
+    }
+
+    .theme-chess .suit-card,
+    .theme-chess .piece-card {
+      background: var(--theme-card-bg);
+      border-color: rgba(126, 184, 218, 0.3);
+      box-shadow: 0 14px 48px rgba(126, 184, 218, 0.15);
+    }
+
+    .theme-chess .suit-card:hover,
+    .theme-chess .piece-card:hover {
+      box-shadow: 0 20px 70px rgba(126, 184, 218, 0.25);
+      border-color: rgba(126, 184, 218, 0.5);
+    }
+
+    .theme-chess .back-button {
+      background: rgba(126, 184, 218, 0.1);
+      border-color: rgba(126, 184, 218, 0.3);
+      color: #a0b0c0;
+    }
+
+    .theme-chess .content-conclusion {
+      background: linear-gradient(135deg, rgba(126, 184, 218, 0.1), rgba(74, 111, 165, 0.1));
+      border-color: rgba(126, 184, 218, 0.3);
+    }
+
     body {
       font-family: 'Cormorant Garamond', 'Georgia', serif;
-      background: linear-gradient(135deg, #fdfbfb 0%, #fef9f7 25%, #fef5f9 50%, #f9f5fc 75%, #fdfbfb 100%);
+      background: var(--theme-bg);
       color: #4a4a4a;
       overflow-x: hidden;
       min-height: 100vh;
@@ -317,6 +393,214 @@
       color: #D4AF37;
       margin-bottom: 1rem;
     }
+
+    /* ===== HERO IMAGE ===== */
+    .hero-section {
+      position: relative;
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-bottom: 3rem;
+      overflow: hidden;
+    }
+
+    .hero-image {
+      width: 100%;
+      max-height: 60vh;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 3rem 2rem 2rem;
+      background: linear-gradient(to top, rgba(10, 10, 20, 0.9), transparent);
+    }
+
+    .theme-chess .hero-overlay {
+      background: linear-gradient(to top, rgba(10, 10, 20, 0.95), transparent);
+    }
+
+    /* ===== FULL-BLEED SECTION ===== */
+    .section-fullbleed {
+      position: relative;
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      padding: 4rem 2rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .section-fullbleed::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 20, 0.75);
+    }
+
+    .theme-chess .section-fullbleed::before {
+      background: rgba(10, 10, 20, 0.8);
+    }
+
+    .section-fullbleed-content {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    .section-fullbleed h3 {
+      color: #fff;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    }
+
+    .section-fullbleed .section-content {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* ===== PIECE CARDS (Full Width like Suits) ===== */
+    .pieces-grid-fullwidth {
+      display: flex;
+      flex-direction: column;
+      gap: 2.25rem;
+      margin-top: 2.5rem;
+      width: min(980px, calc(100vw - 4rem));
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .piece-card-full {
+      width: 100%;
+      padding: 2.25rem 3rem;
+      text-align: left;
+      background: var(--theme-card-bg);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(var(--theme-primary-rgb), 0.26);
+      border-radius: 26px;
+      box-shadow: 0 14px 48px rgba(var(--theme-primary-rgb), 0.14);
+      transition: all 0.35s ease;
+      overflow: hidden;
+    }
+
+    .piece-card-full:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 70px rgba(var(--theme-primary-rgb), 0.2);
+      border-color: rgba(var(--theme-primary-rgb), 0.45);
+    }
+
+    /* Piece card with image */
+    .piece-card-full.has-image {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .piece-card-full.has-image:nth-child(even) {
+      grid-template-columns: 280px 1fr;
+    }
+
+    .piece-card-full.has-image:nth-child(even) .piece-image-wrapper {
+      order: -1;
+    }
+
+    .piece-image-wrapper {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .piece-image {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .piece-card-full:hover .piece-image {
+      transform: scale(1.05);
+    }
+
+    .piece-top {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .piece-symbol-large {
+      display: block;
+      font-size: 2.5rem;
+      line-height: 1;
+      margin: 0 0 0.65rem 0;
+      filter: drop-shadow(0 0 12px var(--theme-glow));
+    }
+
+    .piece-title {
+      font-size: 1.5rem;
+      margin: 0 0 0.35rem 0;
+      color: var(--theme-secondary);
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 0.2px;
+    }
+
+    .theme-chess .piece-title {
+      color: #c0c8d0;
+    }
+
+    .piece-keyword {
+      font-style: italic;
+      color: var(--theme-primary);
+      font-size: 1rem;
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .piece-meaning {
+      color: var(--theme-primary);
+      font-style: italic;
+      margin: 0.5rem 0 1rem;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .piece-body {
+      max-width: 760px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--theme-text);
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .theme-chess .piece-body {
+      color: #a0b0c0;
+    }
+
+    /* Responsive for piece cards with images */
+    @media (max-width: 768px) {
+      .piece-card-full.has-image {
+        grid-template-columns: 1fr;
+      }
+
+      .piece-card-full.has-image:nth-child(even) {
+        grid-template-columns: 1fr;
+      }
+
+      .piece-card-full.has-image:nth-child(even) .piece-image-wrapper {
+        order: 0;
+      }
+
+      .piece-image {
+        height: 200px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -489,6 +773,21 @@
         const data = typeof contentJson === 'string' ? JSON.parse(contentJson) : contentJson;
         let html = '';
 
+        // Apply theme class to body
+        if (data.theme) {
+          document.body.classList.add(`theme-${data.theme}`);
+        }
+
+        // Hero image
+        if (data.hero_image) {
+          html += `
+            <div class="hero-section">
+              <img src="${escapeHtml(data.hero_image)}" alt="Hero" class="hero-image">
+              <div class="hero-overlay"></div>
+            </div>
+          `;
+        }
+
         // Overview
         if (data.overview) {
           html += `<div class="content-overview">`;
@@ -500,11 +799,23 @@
         // Main sections
         if (Array.isArray(data.sections)) {
           data.sections.forEach(section => {
-            html += `<div class="content-section">`;
-            const sid = section.id !== undefined && section.id !== null ? `${escapeHtml(String(section.id))}. ` : '';
-            html += `<h3>${sid}${escapeHtml(section.title || '')}</h3>`;
-            html += `<div class="section-content">${formatText(section.content || '')}</div>`;
-            html += `</div>`;
+            // Check if section has full-bleed background image
+            if (section.background_image) {
+              html += `
+                <div class="section-fullbleed" style="background-image: url('${escapeHtml(section.background_image)}');">
+                  <div class="section-fullbleed-content">
+                    <h3>${section.id ? escapeHtml(String(section.id)) + '. ' : ''}${escapeHtml(section.title || '')}</h3>
+                    <div class="section-content">${formatText(section.content || '')}</div>
+                  </div>
+                </div>
+              `;
+            } else {
+              html += `<div class="content-section">`;
+              const sid = section.id !== undefined && section.id !== null ? `${escapeHtml(String(section.id))}. ` : '';
+              html += `<h3>${sid}${escapeHtml(section.title || '')}</h3>`;
+              html += `<div class="section-content">${formatText(section.content || '')}</div>`;
+              html += `</div>`;
+            }
           });
         }
 
@@ -541,15 +852,33 @@
             html += `</div>`;
           }
 
-          // Pieces
+          // Pieces (full-width rows with optional images)
           else if (special.type === 'pieces') {
-            html += `<div class="pieces-grid">`;
+            html += `<div class="pieces-grid-fullwidth">`;
             Object.values(special.items || {}).forEach(item => {
-              html += `<div class="piece-card">`;
-              html += `<div class="piece-symbol">${escapeHtml(item.symbol || '')}</div>`;
-              html += `<h4>${escapeHtml(item.title || '')}</h4>`;
+              const hasImage = !!item.image;
+              html += `<div class="piece-card-full${hasImage ? ' has-image' : ''}">`;
+
+              // Content section
+              html += `<div class="piece-content-wrapper">`;
+              html += `<div class="piece-top">`;
+              html += `<span class="piece-symbol-large">${escapeHtml(item.symbol || '')}</span>`;
+              html += `<div class="piece-title">${escapeHtml(item.title || '')}</div>`;
+              if (item.keyword) html += `<div class="piece-keyword">Key word: ${escapeHtml(item.keyword)}</div>`;
+              html += `</div>`;
               if (item.meaning) html += `<p class="piece-meaning">${escapeHtml(item.meaning)}</p>`;
-              html += `<div class="piece-content">${formatText(item.content || '')}</div>`;
+              html += `<div class="piece-body">${formatText(item.content || '')}</div>`;
+              html += `</div>`;
+
+              // Image section (if exists)
+              if (hasImage) {
+                html += `
+                  <div class="piece-image-wrapper">
+                    <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title || '')}" class="piece-image">
+                  </div>
+                `;
+              }
+
               html += `</div>`;
             });
             html += `</div>`;

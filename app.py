@@ -131,6 +131,10 @@ def views_static(filename):
 def logos_static(filename):
     return send_from_directory('logos', filename)
 
+@app.route('/images/<path:filename>')
+def images_static(filename):
+    return send_from_directory('images', filename)
+
 @app.route('/<path:path>')
 def static_files(path):
     return send_from_directory('.', path)
