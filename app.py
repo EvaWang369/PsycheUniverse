@@ -119,6 +119,10 @@ def pitch():
 def metaphors():
     return send_from_directory('views', 'game.html')
 
+@app.route('/manifestation-tool')
+def manifestation_tool():
+    return send_from_directory('views', 'manifestation-tool.html')
+
 @app.route('/metaphors/<metaphor_id>')
 def metaphor_detail(metaphor_id):
     return send_from_directory('views', 'metaphor-detail.html')

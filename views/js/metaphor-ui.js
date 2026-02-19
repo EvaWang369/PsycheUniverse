@@ -247,6 +247,10 @@ function renderBundles(bundles) {
     const emoji = nameMatch ? nameMatch[1] : '✦';
     const cleanName = nameMatch ? nameMatch[2] : bundle.name;
 
+    // Determine if annual subscription
+    const isAnnual = bundle.name.toLowerCase().includes('annual');
+    const priceSuffix = isSubscription ? (isAnnual ? '/yr' : '/mo') : '';
+
     return `
       <div class="metaphor-card bundle-card">
         <div class="bundle-icon">${emoji}</div>
@@ -255,7 +259,7 @@ function renderBundles(bundles) {
         <div class="bundle-pricing">
           ${!isSubscription && originalPrice > parseFloat(bundle.price) ? 
             `<span class="original-price">$${originalPrice.toFixed(2)}</span>` : ''}
-          <span class="bundle-price">$${parseFloat(bundle.price).toFixed(2)}${isSubscription ? '/mo' : ''}</span>
+          <span class="bundle-price">$${parseFloat(bundle.price).toFixed(2)}${priceSuffix}</span>
         </div>
         ${bundle.discount_percent > 0 ? 
           `<div class="bundle-savings">Save ${bundle.discount_percent}%</div>` : ''}
