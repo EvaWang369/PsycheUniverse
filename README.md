@@ -9,6 +9,10 @@ A unified platform for grounding & centering your energy, strengthening your sen
 - Supabase account
 - Google OAuth Client ID
 
+### Deployment
+Vercel
+https://vercel.com/evawang369s-projects
+
 ### Installation
 
 1. Install dependencies:
