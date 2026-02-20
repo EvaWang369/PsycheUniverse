@@ -103,8 +103,19 @@ def require_auth(f):
         return f(*args, **kwargs)
     return decorated_function
 
+# TEMPORARY: Original homepage (uncomment after Apple approval)
+# @app.route('/')
+# def index():
+#     return send_from_directory('views', 'index.html')
+
+# TEMPORARY: Professional page for Apple review
 @app.route('/')
 def index():
+    return send_from_directory('views', 'apple-home.html')
+
+# Original creative homepage (accessible during Apple review period)
+@app.route('/product')
+def product_page():
     return send_from_directory('views', 'index.html')
 
 @app.route('/subliminalgen')
