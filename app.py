@@ -127,6 +127,18 @@ def manifestation_tool():
 def interview_round_1():
     return send_from_directory('views', 'questionnaire.html')
 
+@app.route('/home')
+def home():
+    return send_from_directory('views', 'apple-home.html')
+
+@app.route('/privacy')
+def privacy():
+    return send_from_directory('views', 'privacy.html')
+
+@app.route('/terms')
+def terms():
+    return send_from_directory('views', 'terms.html')
+
 @app.route('/metaphors/<metaphor_id>')
 def metaphor_detail(metaphor_id):
     return send_from_directory('views', 'metaphor-detail.html')

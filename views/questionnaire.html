@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Psyche AI – First Round Assessment</title>
+  <title>Psyche AI – Candidate Assessment</title>
   <style>
     * {
       margin: 0;
@@ -13,22 +13,29 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: #ffffff;
+      background: #f6f7f9;
       color: #1a1a1a;
       line-height: 1.6;
       font-size: 15px;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+      min-height: 100vh;
     }
 
     .container {
       max-width: 900px;
-      margin: 0 auto;
-      padding: 60px 40px;
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #e6e8eb;
+      border-radius: 12px;
+      padding: 50px 40px;
     }
 
     header {
       margin-bottom: 50px;
       padding-bottom: 30px;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e6e8eb;
     }
 
     header h1 {
@@ -39,8 +46,9 @@
     }
 
     .instructions {
-      background: #f9f9f9;
-      border: 1px solid #e0e0e0;
+      background: #f9fafb;
+      border: 1px solid #e6e8eb;
+      border-radius: 8px;
       padding: 20px 24px;
       font-size: 14px;
       color: #444;
@@ -54,10 +62,61 @@
       margin-bottom: 0;
     }
 
+    .about-collapsible {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .about-collapsible summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #1a1a1a;
+      outline: none;
+      list-style: none;
+    }
+
+    .about-collapsible summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .about-collapsible summary::after {
+      content: "▾";
+      float: right;
+      color: #666;
+    }
+
+    .about-collapsible[open] summary::after {
+      content: "▴";
+    }
+
+    .about-content {
+      margin-top: 12px;
+      color: #444;
+      font-size: 14px;
+    }
+
+    .about-content p {
+      margin-bottom: 10px;
+    }
+
+    .about-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-content ul {
+      margin: 0 0 10px 20px;
+      padding: 0;
+    }
+
+    .about-content li {
+      margin-bottom: 4px;
+    }
+
     section {
       margin-bottom: 50px;
       padding-bottom: 40px;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e6e8eb;
     }
 
     section:last-of-type {
@@ -69,8 +128,8 @@
       font-weight: 600;
       color: #1a1a1a;
       margin-bottom: 30px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #1a1a1a;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e6e8eb;
       display: inline-block;
     }
 
@@ -117,7 +176,8 @@
       width: 100%;
       min-height: 100px;
       padding: 12px 14px;
-      border: 1px solid #ccc;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
       font-family: inherit;
       font-size: 14px;
       line-height: 1.5;
@@ -127,7 +187,7 @@
 
     textarea:focus {
       outline: none;
-      border-color: #666;
+      border-color: #111827;
     }
 
     textarea.large {
@@ -138,7 +198,8 @@
       width: 100%;
       max-width: 400px;
       padding: 10px 14px;
-      border: 1px solid #ccc;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
       font-family: inherit;
       font-size: 14px;
       background: #fff;
@@ -146,14 +207,15 @@
 
     input[type="text"]:focus {
       outline: none;
-      border-color: #666;
+      border-color: #111827;
     }
 
     .checkbox-block {
       margin: 40px 0 30px;
       padding: 20px;
-      background: #f9f9f9;
-      border: 1px solid #e0e0e0;
+      background: #f9fafb;
+      border: 1px solid #e6e8eb;
+      border-radius: 8px;
     }
 
     .checkbox-block label {
@@ -178,9 +240,10 @@
 
     button[type="submit"] {
       padding: 14px 40px;
-      background: #1a1a1a;
+      background: #111827;
       color: #fff;
       border: none;
+      border-radius: 8px;
       font-size: 15px;
       font-weight: 500;
       cursor: pointer;
@@ -188,7 +251,7 @@
     }
 
     button[type="submit"]:hover {
-      background: #333;
+      background: #0b1220;
     }
 
     button[type="submit"]:disabled {
@@ -206,6 +269,7 @@
     .success-message {
       background: #f0f7f0;
       border: 1px solid #c0dcc0;
+      border-radius: 8px;
       padding: 20px;
       margin-top: 30px;
       font-size: 15px;
@@ -227,7 +291,8 @@
 
     .json-output pre {
       background: #f5f5f5;
-      border: 1px solid #e0e0e0;
+      border: 1px solid #e6e8eb;
+      border-radius: 8px;
       padding: 20px;
       font-size: 13px;
       overflow-x: auto;
@@ -241,8 +306,9 @@
       margin-top: 15px;
       padding: 10px 24px;
       background: #fff;
-      color: #1a1a1a;
-      border: 1px solid #1a1a1a;
+      color: #111827;
+      border: 1px solid #111827;
+      border-radius: 8px;
       font-size: 14px;
       cursor: pointer;
       font-family: inherit;
@@ -260,8 +326,12 @@
     }
 
     @media (max-width: 600px) {
+      body {
+        padding: 20px 12px;
+      }
+
       .container {
-        padding: 40px 20px;
+        padding: 30px 20px;
       }
 
       header h1 {
@@ -277,11 +347,36 @@
 <body>
   <div class="container">
     <header>
-      <h1>Psyche AI – First Round Questionnaire</h1>
+      <h1>Psyche AI – Candidate Assessment</h1>
+
       <div class="instructions">
-        <p>You may use AI tools to help structure your answers. Please keep responses clear, simple, and authentic.</p>
-        <p>Section "Cognitive Science & Design" has a maximum of 200 words per question.</p>
-        <p>All other questions: 2–3 sentences are sufficient.</p>
+        <p><strong>Thank you for taking the time to interview with Psyche AI.</strong> <br> This assessment helps us understand how you think and how you would approach our product.</p>
+        <p>You may use AI tools to help structure your answers. Please keep responses clear, grounded, and reflective of your own reasoning.</p>
+        <p>All questions are optional. If you prefer to skip a question, please write “N/A”.</p>
+        <p><strong>Word limit:</strong> Part 3 has a maximum of 200 words per question. All other responses should be concise.</p>
+
+        <details class="about-collapsible">
+          <summary>About Psyche AI</summary>
+          <div class="about-content">
+            <p>Psyche AI builds tools that support people in living from their authentic self — their true identity — in the present moment, fully and passionately.</p>
+            <p>Our work revolves around helping users:</p>
+            <ul>
+              <li>Center energy</li>
+              <li>Live fully in the present</li>
+              <li>Clarify intention before taking action</li>
+              <li>Work on what they are passionate about</li>
+              <li>Act from their authentic self</li>
+              <li>Follow inner guidance</li>
+              <li>Observe their thoughts without being controlled and reduce mental noise</li>
+              <li>Fully experience emotions and allow them to complete naturally</li>
+              <li>Feel light, steady, and refreshed</li>
+            </ul>
+            <p>We believe internal alignment shapes external behavior. Attention shapes perception. Intention shapes direction.</p>
+            <p>We're exploring how technology can support people in reclaiming authorship over their internal state — especially in a world that constantly pulls their attention outward.</p>
+            <p>We are refining how these principles translate into structured, intuitive product systems.</p>
+            <p><strong>The goal of this role:</strong> help Psyche AI translate internal-state philosophy into structured, intuitive product experiences while building a calm, scalable UX foundation that supports long-term growth.</p>
+          </div>
+        </details>
       </div>
     </header>
 
@@ -295,7 +390,6 @@
             <span class="question-number">1.</span>When do you feel most aligned with yourself?
           </label>
           <textarea id="q1" name="q1" required></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
 
         <div class="question-block">
@@ -303,7 +397,6 @@
             <span class="question-number">2.</span>What kind of work makes you lose track of time?
           </label>
           <textarea id="q2" name="q2" required></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
       </section>
 
@@ -316,7 +409,6 @@
             <span class="question-number">3.</span>If you could build any product that helps people live with clarity, intention, and purpose, what would it look like?
           </label>
           <textarea id="q3" name="q3" required></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
 
         <div class="question-block">
@@ -324,7 +416,6 @@
             <span class="question-number">4.</span>How do you encourage consistency without using addictive design patterns?
           </label>
           <textarea id="q4" name="q4" required></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
 
         <div class="question-block">
@@ -332,7 +423,6 @@
             <span class="question-number">5.</span>How would you measure whether Psyche AI is actually helping users?
           </label>
           <textarea id="q5" name="q5" required></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
       </section>
 
@@ -367,7 +457,6 @@
             <span class="question-number">8.</span>If you were not restricted to this role, what else would you want to work on?
           </label>
           <textarea id="q8" name="q8" required></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
 
         <div class="question-block">
@@ -375,7 +464,6 @@
             <span class="question-number">9.</span>What kind of full-time roles are you aiming for after graduation?
           </label>
           <textarea id="q9" name="q9" required></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
 
         <div class="question-block">
@@ -383,7 +471,6 @@
             <span class="question-number">10.</span>How does this internship fit into your short-term or longer-term goals?
           </label>
           <textarea id="q10" name="q10" required></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
       </section>
 
@@ -395,7 +482,7 @@
           <label class="question-label" for="q11">
             <span class="question-number">11.</span>How many hours per week can you commit? (Please provide a range.)
           </label>
-          <input type="text" id="q11" name="q11" placeholder="e.g., 0 –40 hours" required>
+          <input type="text" id="q11" name="q11" placeholder="e.g., 0–40 hours" required>
         </div>
 
         <div class="question-block">
@@ -410,7 +497,6 @@
             <span class="question-number">13.</span>This role may involve mentoring 2–4 junior designers. What is the maximum team size you feel you could effectively mentor on a single project? How would you structure guidance and quality control within a small team?
           </label>
           <textarea id="q13" name="q13" required></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
       </section>
 
@@ -420,18 +506,16 @@
 
         <div class="question-block">
           <label class="question-label" for="q14">
-            <span class="question-number">14.</span>What confused you about our concept or website?<span class="optional-label">(Optional)</span>
+            <span class="question-number">14.</span>What confused you about our concept or website?<span class="optional-label"></span>
           </label>
           <textarea id="q14" name="q14"></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
 
         <div class="question-block">
           <label class="question-label" for="q15">
-            <span class="question-number">15.</span>What questions or concerns do you have about Psyche AI or the role?<span class="optional-label">(Optional)</span>
+            <span class="question-number">15.</span>What questions or concerns do you have about Psyche AI or the role?<span class="optional-label"></span>
           </label>
           <textarea id="q15" name="q15"></textarea>
-          <p class="helper-text">2–3 sentences recommended</p>
         </div>
       </section>
 

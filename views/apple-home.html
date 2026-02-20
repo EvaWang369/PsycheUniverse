@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Psyche AI LLC – Consciousness Technology Platform</title>
+  <meta name="description" content="Psyche AI LLC builds technology that supports intentional living, mental clarity, and authentic self-expression.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>✨</text></svg>">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* Header */
+    header {
+      padding: 20px 40px;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .logo span {
+      font-weight: 400;
+      color: #666;
+    }
+
+    nav a {
+      margin-left: 30px;
+      text-decoration: none;
+      color: #555;
+      font-size: 15px;
+    }
+
+    nav a:hover {
+      color: #1a1a1a;
+    }
+
+    /* Hero */
+    .hero {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: #1a1a1a;
+    }
+
+    .hero p {
+      font-size: 19px;
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+
+    /* About Section */
+    .about {
+      background: #f9f9f9;
+      padding: 80px 40px;
+    }
+
+    .about-content {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .about h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: #1a1a1a;
+    }
+
+    .about p {
+      font-size: 17px;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    /* Products Section */
+    .products {
+      padding: 80px 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .products h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #1a1a1a;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .product-card {
+      padding: 30px;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .product-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+    }
+
+    .product-card p {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .product-card .status {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 6px 12px;
+      background: #f0f0f0;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .product-card .status.live {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    /* Contact Section */
+    .contact {
+      background: #f9f9f9;
+      padding: 80px 40px;
+    }
+
+    .contact-content {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .contact h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #1a1a1a;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+    }
+
+    .contact-item h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #1a1a1a;
+    }
+
+    .contact-item p {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .contact-item a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    .contact-item a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px;
+      border-top: 1px solid #e5e5e5;
+      text-align: center;
+    }
+
+    .footer-links {
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      margin: 0 20px;
+      text-decoration: none;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      color: #1a1a1a;
+    }
+
+    .copyright {
+      font-size: 14px;
+      color: #888;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+
+      nav a {
+        margin: 0 15px;
+      }
+
+      .hero {
+        padding: 60px 24px;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .about, .products, .contact {
+        padding: 60px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Psyche AI <span>LLC</span></div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#products">Products</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Technology for Intentional Living</h1>
+    <p>Psyche AI LLC develops software that helps people live with clarity, presence, and authentic self-expression. We build tools that support mental wellness and intentional decision-making.</p>
+  </section>
+
+  <section class="about" id="about">
+    <div class="about-content">
+      <h2>About Psyche AI LLC</h2>
+      <p>Psyche AI LLC is a technology company focused on building software applications that support mental clarity, emotional wellness, and intentional living.</p>
+      <p>Our mission is to help people reconnect with their authentic selves through thoughtfully designed digital tools. We believe technology should support human flourishing—helping users find clarity, reduce mental noise, and make decisions aligned with their values.</p>
+      <p>Founded with a commitment to ethical design, we prioritize user wellbeing over engagement metrics. Our products are designed to be calming, non-addictive, and genuinely helpful.</p>
+    </div>
+  </section>
+
+  <section class="products" id="products">
+    <h2>Our Products</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <h3>SubliminalGen</h3>
+        <p>An audio tool for subconscious and conscious reprogramming. Users create personalized subliminal tracks using their own voice recordings layered with music and frequencies.</p>
+        <span class="status live">Launch soon</span>
+      </div>
+      <div class="product-card">
+        <h3>Essence</h3>
+        <p>An AI-powered companion for identity clarity and authentic self-alignment. Supports users through intentional conversation and guided reflection.</p>
+        <span class="status">In Development</span>
+      </div>
+      <div class="product-card">
+        <h3>Composer</h3>
+        <p>A music creation tool for meditation, emotional expression, and focused work. Create soundscapes that support presence and calm.</p>
+        <span class="status">In Development</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="contact-content">
+      <h2>Contact Information</h2>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <h3>Business Inquiries</h3>
+          <p><a href="mailto:info@psyche-ai.xyz">info@psyche-ai.xyz</a></p>
+        </div>
+        <div class="contact-item">
+          <h3>Company</h3>
+          <p>Psyche AI LLC<br>
+          30 N Gould St Ste R<br>
+          Sheridan, WY 82801<br>
+          United States</p>
+        </div>
+        <div class="contact-item">
+          <h3>Website</h3>
+          <p><a href="/home">psyche-ai.xyz</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="mailto:info@psyche-ai.xyz">Contact</a>
+    </div>
+    <p class="copyright">&copy; Psyche AI LLC. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
