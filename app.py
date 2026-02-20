@@ -473,24 +473,26 @@ def submit_feedback():
     """Submit user feedback"""
     data = request.get_json()
     email = data.get('email')
+    title = data.get('title')
     feedback = data.get('feedback')
     source = data.get('source', 'unknown')
-    
+
     if not email or not feedback:
         return jsonify({'error': 'Email and feedback are required'}), 400
-    
+
     # Check if user is authenticated
     token = request.headers.get('Authorization', '').replace('Bearer ', '')
     user_id = verify_session(token) if token else None
-    
+
     try:
         supabase.table('feedback').insert({
             'email': email,
+            'title': title,
             'feedback': feedback,
             'source': source,
             'user_id': user_id
         }).execute()
-        
+
         return jsonify({'message': 'Thank you for your feedback!'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500

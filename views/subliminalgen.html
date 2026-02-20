@@ -543,7 +543,7 @@
         <h3>Affirmation Mode</h3>
         <h4 style="color: #6a5c90;">— Conscious Alignment</h4>
           <br>
-        <p>Affirmation mode works through awareness, intention, and repetition.</p>
+        <p>Affirmation mode works through awareness, intention, and repetition. <br> Meditation mode supports centered presence, allowing emotions to complete their natural rhythm and your energy field to settle into clarity. </p>
           <br>
         <ul style="list-style: none; padding: 0; color: #6a5c90; margin: 1rem 0;">
           <li style="color: #6a5c90; margin-bottom: 0.5rem;">♥ Focused repetition strengthens cognitive awareness</li>
@@ -669,20 +669,34 @@
         <a href="https://link.com/" class="pricing-btn btn-platinum">Subscribe</a>
       </div>
 
+      <div class="pricing-card" style="border-color: rgba(166, 140, 89, 0.3); box-shadow: 0 8px 35px rgba(166, 140, 89, 0.15); background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(166, 140, 89, 0.1));">
+        <h3>Custom</h3>
+        <div class="price">Tailored</div>
+        <ul>
+          <li>✦ Personalized feature set</li>
+          <li>✦ Dedicated support</li>
+          <li>✦ Custom integrations</li>
+          <li>✦ Flexible terms</li>
+          <li>✦ Priority access</li>
+        </ul>
+        <a href="#feedback?title=custom" class="pricing-btn btn-gold" onclick="setCustomTitle()">Contact Us</a>
+      </div>
+
     </div>
   </section>
 
   <!-- Feedback Section -->
-  <section class="cta">
+  <section class="cta" id="feedback">
     <div class="cta-content">
       <h2>Share Your Feedback</h2>
       <p>
         We value your thoughts and suggestions. <br> Help us improve SubliminalGen by sharing your feedback.
       </p>
-      <form id="feedbackForm" class="subscribe-form" style="flex-direction: column; align-items: center; gap: 1rem;">
-        <input type="email" id="feedbackEmail" placeholder="your@email.com" required style="width: 100%; max-width: 350px; padding: 0.9rem 1.8rem; border: 2px solid rgba(166, 140, 89, 0.3); border-radius: 50px; background: rgba(255, 255, 255, 0.8); font-size: 1rem; outline: none; margin-bottom: 1.5rem;">
-        <textarea id="feedbackText" placeholder="Share your feedback..." required style="width: 100%; max-width: 400px; min-height: 120px; padding: 1rem 2rem; border: 2px solid rgba(166, 140, 89, 0.3); border-radius: 20px; background: rgba(255, 255, 255, 0.8); font-size: 1rem; outline: none; resize: vertical; font-family: 'Cormorant Garamond', 'Georgia', serif;"></textarea>
-        <button type="submit" class="pricing-btn btn-gold" style="margin: 0;">Submit Feedback</button>
+      <form id="feedbackForm" class="subscribe-form" style="flex-direction: column; align-items: center; gap: 0.5rem;">
+        <input type="email" id="feedbackEmail" placeholder="your@email.com" required style="width: 100%; max-width: 250px; padding: 0.6rem 1.2rem; border: 1px solid rgba(166, 140, 89, 0.3); border-radius: 50px; background: rgba(255, 255, 255, 0.8); font-size: 0.9rem; outline: none; margin-bottom: 0.5rem;">
+        <input type="text" id="feedbackTitle" placeholder="Subject" required style="width: 100%; max-width: 400px; padding: 0.6rem 1.2rem; border: 1px solid rgba(166, 140, 89, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.8); font-size: 0.9rem; outline: none; margin-bottom: 0.5rem;">
+        <textarea id="feedbackText" placeholder="Share your feedback..." required style="width: 100%; max-width: 400px; min-height: 120px; padding: 1rem 1.2rem; border: 1px solid rgba(166, 140, 89, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.8); font-size: 1rem; outline: none; resize: vertical; font-family: 'Cormorant Garamond', 'Georgia', serif;"></textarea>
+        <button type="submit" class="pricing-btn btn-gold" style="margin-top: 0.5rem;">Submit Feedback</button>
       </form>
     </div>
   </section>
@@ -694,11 +708,19 @@
   </footer>
 
   <script>
+    // Set custom title when clicking Contact Us from custom pricing card
+    function setCustomTitle() {
+      const titleInput = document.getElementById('feedbackTitle');
+      titleInput.value = 'Custom Tailored Experience';
+      titleInput.readOnly = true;
+      titleInput.style.background = 'rgba(255, 255, 255, 0.5)';
+    }
+
     // Check if user is logged in and pre-fill email
     window.addEventListener('load', () => {
       const user = JSON.parse(localStorage.getItem('psyche_user') || 'null');
       const emailInput = document.getElementById('feedbackEmail');
-      
+
       if (user && user.email) {
         emailInput.value = user.email;
         emailInput.readOnly = true;
@@ -709,27 +731,29 @@
     // Handle feedback submission
     document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const email = document.getElementById('feedbackEmail').value;
+      const title = document.getElementById('feedbackTitle').value;
       const feedback = document.getElementById('feedbackText').value;
       const session = JSON.parse(localStorage.getItem('psyche_session') || 'null');
-      
+
       const headers = { 'Content-Type': 'application/json' };
       if (session && session.token) {
         headers['Authorization'] = `Bearer ${session.token}`;
       }
-      
+
       try {
         const response = await fetch('/api/feedback', {
           method: 'POST',
           headers: headers,
-          body: JSON.stringify({ email, feedback, source: 'subliminalgen' })
+          body: JSON.stringify({ email, title, feedback, source: 'subliminalgen' })
         });
-        
+
         const data = await response.json();
-        
+
         if (response.ok) {
           alert('Thank you for your feedback!');
+          document.getElementById('feedbackTitle').value = '';
           document.getElementById('feedbackText').value = '';
           if (!session) {
             document.getElementById('feedbackEmail').value = '';
