@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Psyche AI – First Round Assessment</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 40px;
+    }
+
+    header {
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
+
+    .instructions {
+      background: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      padding: 20px 24px;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .instructions p {
+      margin-bottom: 10px;
+    }
+
+    .instructions p:last-child {
+      margin-bottom: 0;
+    }
+
+    section {
+      margin-bottom: 50px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 30px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #1a1a1a;
+      display: inline-block;
+    }
+
+    .question-block {
+      margin-bottom: 30px;
+    }
+
+    .question-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .question-label {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+
+    .question-number {
+      color: #666;
+      margin-right: 8px;
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: #888;
+      margin-top: 6px;
+    }
+
+    .word-counter {
+      font-size: 12px;
+      color: #666;
+      margin-top: 6px;
+      text-align: right;
+    }
+
+    .word-counter.exceeded {
+      color: #c00;
+      font-weight: 500;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.5;
+      resize: vertical;
+      background: #fff;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #666;
+    }
+
+    textarea.large {
+      min-height: 150px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px 14px;
+      border: 1px solid #ccc;
+      font-family: inherit;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #666;
+    }
+
+    .checkbox-block {
+      margin: 40px 0 30px;
+      padding: 20px;
+      background: #f9f9f9;
+      border: 1px solid #e0e0e0;
+    }
+
+    .checkbox-block label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .checkbox-block input[type="checkbox"] {
+      margin-top: 3px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .submit-section {
+      margin-top: 40px;
+    }
+
+    button[type="submit"] {
+      padding: 14px 40px;
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    button[type="submit"]:hover {
+      background: #333;
+    }
+
+    button[type="submit"]:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+    .error-message {
+      color: #c00;
+      font-size: 14px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .success-message {
+      background: #f0f7f0;
+      border: 1px solid #c0dcc0;
+      padding: 20px;
+      margin-top: 30px;
+      font-size: 15px;
+      color: #2a5a2a;
+      display: none;
+    }
+
+    .json-output {
+      margin-top: 30px;
+      display: none;
+    }
+
+    .json-output h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #1a1a1a;
+    }
+
+    .json-output pre {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      padding: 20px;
+      font-size: 13px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .download-btn {
+      margin-top: 15px;
+      padding: 10px 24px;
+      background: #fff;
+      color: #1a1a1a;
+      border: 1px solid #1a1a1a;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .download-btn:hover {
+      background: #f5f5f5;
+    }
+
+    .optional-label {
+      font-size: 12px;
+      color: #888;
+      font-weight: 400;
+      margin-left: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 40px 20px;
+      }
+
+      header h1 {
+        font-size: 20px;
+      }
+
+      input[type="text"] {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Psyche AI – First Round Questionnaire</h1>
+      <div class="instructions">
+        <p>You may use AI tools to help structure your answers. Please keep responses clear, simple, and authentic.</p>
+        <p>Section "Cognitive Science & Design" has a maximum of 200 words per question.</p>
+        <p>All other questions: 2–3 sentences are sufficient.</p>
+      </div>
+    </header>
+
+    <form id="questionnaireForm">
+      <!-- Part 1: Personal Reflection -->
+      <section>
+        <h2 class="section-title">Part 1: Personal Reflection</h2>
+
+        <div class="question-block">
+          <label class="question-label" for="q1">
+            <span class="question-number">1.</span>When do you feel most aligned with yourself?
+          </label>
+          <textarea id="q1" name="q1" required></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label" for="q2">
+            <span class="question-number">2.</span>What kind of work makes you lose track of time?
+          </label>
+          <textarea id="q2" name="q2" required></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+      </section>
+
+      <!-- Part 2: Product Thinking -->
+      <section>
+        <h2 class="section-title">Part 2: Product Thinking</h2>
+
+        <div class="question-block">
+          <label class="question-label" for="q3">
+            <span class="question-number">3.</span>If you could build any product that helps people live with clarity, intention, and purpose, what would it look like?
+          </label>
+          <textarea id="q3" name="q3" required></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label" for="q4">
+            <span class="question-number">4.</span>How do you encourage consistency without using addictive design patterns?
+          </label>
+          <textarea id="q4" name="q4" required></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label" for="q5">
+            <span class="question-number">5.</span>How would you measure whether Psyche AI is actually helping users?
+          </label>
+          <textarea id="q5" name="q5" required></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+      </section>
+
+      <!-- Part 3: Cognitive Science & Design -->
+      <section>
+        <h2 class="section-title">Part 3: Cognitive Science & Design</h2>
+        <p style="font-size: 13px; color: #666; margin-bottom: 25px; margin-top: -15px;">Maximum 200 words per question in this section.</p>
+
+        <div class="question-block">
+          <label class="question-label" for="q6">
+            <span class="question-number">6.</span>Psyche AI is built around the idea that internal identity and belief systems influence behavior and decision-making. From a cognitive science perspective, how do identity and core beliefs shape everyday actions?
+          </label>
+          <textarea id="q6" name="q6" class="large word-limited" data-max-words="200" required></textarea>
+          <p class="word-counter" id="q6-counter">0 / 200 words</p>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label" for="q7">
+            <span class="question-number">7.</span>Our product focuses on internal states such as centering, intention clarity, authenticity, and inner guidance — which are abstract and invisible experiences. How would you translate concepts like that into simple and intuitive interface design? How do you communicate abstract value (clarity, authenticity, presence) clearly to new users?
+          </label>
+          <textarea id="q7" name="q7" class="large word-limited" data-max-words="200" required></textarea>
+          <p class="word-counter" id="q7-counter">0 / 200 words</p>
+        </div>
+      </section>
+
+      <!-- Part 4: Career Direction & Interests -->
+      <section>
+        <h2 class="section-title">Part 4: Career Direction & Interests</h2>
+
+        <div class="question-block">
+          <label class="question-label" for="q8">
+            <span class="question-number">8.</span>If you were not restricted to this role, what else would you want to work on?
+          </label>
+          <textarea id="q8" name="q8" required></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label" for="q9">
+            <span class="question-number">9.</span>What kind of full-time roles are you aiming for after graduation?
+          </label>
+          <textarea id="q9" name="q9" required></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label" for="q10">
+            <span class="question-number">10.</span>How does this internship fit into your short-term or longer-term goals?
+          </label>
+          <textarea id="q10" name="q10" required></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+      </section>
+
+      <!-- Part 5: Availability & Leadership -->
+      <section>
+        <h2 class="section-title">Part 5: Availability & Leadership</h2>
+
+        <div class="question-block">
+          <label class="question-label" for="q11">
+            <span class="question-number">11.</span>How many hours per week can you commit? (Please provide a range.)
+          </label>
+          <input type="text" id="q11" name="q11" placeholder="e.g., 0 –40 hours" required>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label" for="q12">
+            <span class="question-number">12.</span>What are your salary expectations?
+          </label>
+          <input type="text" id="q12" name="q12" placeholder="e.g., $xx/hour or $xx/month" required>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label" for="q13">
+            <span class="question-number">13.</span>This role may involve mentoring 2–4 junior designers. What is the maximum team size you feel you could effectively mentor on a single project? How would you structure guidance and quality control within a small team?
+          </label>
+          <textarea id="q13" name="q13" required></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+      </section>
+
+      <!-- Part 6: Feedback & Questions -->
+      <section>
+        <h2 class="section-title">Feedback & Questions</h2>
+
+        <div class="question-block">
+          <label class="question-label" for="q14">
+            <span class="question-number">14.</span>What confused you about our concept or website?<span class="optional-label">(Optional)</span>
+          </label>
+          <textarea id="q14" name="q14"></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label" for="q15">
+            <span class="question-number">15.</span>What questions or concerns do you have about Psyche AI or the role?<span class="optional-label">(Optional)</span>
+          </label>
+          <textarea id="q15" name="q15"></textarea>
+          <p class="helper-text">2–3 sentences recommended</p>
+        </div>
+      </section>
+
+      <!-- Confirmation Checkbox -->
+      <div class="checkbox-block">
+        <label>
+          <input type="checkbox" id="confirmCheckbox" required>
+          <span>I confirm that my responses are concise and reflect my own thinking.</span>
+        </label>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-section">
+        <button type="submit" id="submitBtn">Submit</button>
+        <p class="error-message" id="errorMessage"></p>
+      </div>
+
+      <div class="success-message" id="successMessage">
+        Your questionnaire has been submitted successfully. Thank you for your responses.
+      </div>
+
+      <div class="json-output" id="jsonOutput">
+        <h3>Submitted Responses</h3>
+        <pre id="jsonContent"></pre>
+        <button type="button" class="download-btn" id="downloadBtn">Download JSON</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Word counter for Cognitive Science & Design section
+    const wordLimitedFields = document.querySelectorAll('.word-limited');
+
+    wordLimitedFields.forEach(field => {
+      const maxWords = parseInt(field.dataset.maxWords);
+      const counterId = field.id + '-counter';
+      const counter = document.getElementById(counterId);
+
+      field.addEventListener('input', () => {
+        const words = field.value.trim().split(/\s+/).filter(w => w.length > 0);
+        const wordCount = words.length;
+
+        counter.textContent = `${wordCount} / ${maxWords} words`;
+
+        if (wordCount > maxWords) {
+          counter.classList.add('exceeded');
+        } else {
+          counter.classList.remove('exceeded');
+        }
+      });
+    });
+
+    // Form submission
+    const form = document.getElementById('questionnaireForm');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const jsonOutput = document.getElementById('jsonOutput');
+    const jsonContent = document.getElementById('jsonContent');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Check word limits
+      let wordLimitExceeded = false;
+      wordLimitedFields.forEach(field => {
+        const maxWords = parseInt(field.dataset.maxWords);
+        const words = field.value.trim().split(/\s+/).filter(w => w.length > 0);
+        if (words.length > maxWords) {
+          wordLimitExceeded = true;
+        }
+      });
+
+      if (wordLimitExceeded) {
+        errorMessage.textContent = 'Please ensure all responses in "Cognitive Science & Design" are within the 200-word limit.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+
+      // Check confirmation checkbox
+      const confirmCheckbox = document.getElementById('confirmCheckbox');
+      if (!confirmCheckbox.checked) {
+        errorMessage.textContent = 'Please confirm that your responses are concise and reflect your own thinking.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+
+      // Collect form data
+      const formData = {
+        submission_date: new Date().toISOString(),
+        responses: {
+          part1_personal_reflection: {
+            q1_most_aligned: document.getElementById('q1').value.trim(),
+            q2_lose_track_of_time: document.getElementById('q2').value.trim()
+          },
+          part2_product_thinking: {
+            q3_dream_product: document.getElementById('q3').value.trim(),
+            q4_consistency_without_addiction: document.getElementById('q4').value.trim(),
+            q5_measure_success: document.getElementById('q5').value.trim()
+          },
+          part3_cognitive_science_design: {
+            q6_identity_beliefs_actions: document.getElementById('q6').value.trim(),
+            q7_abstract_to_interface: document.getElementById('q7').value.trim()
+          },
+          part4_career_direction: {
+            q8_other_work: document.getElementById('q8').value.trim(),
+            q9_fulltime_roles: document.getElementById('q9').value.trim(),
+            q10_internship_goals: document.getElementById('q10').value.trim()
+          },
+          part5_availability_leadership: {
+            q11_hours_per_week: document.getElementById('q11').value.trim(),
+            q12_salary_expectations: document.getElementById('q12').value.trim(),
+            q13_mentoring_team: document.getElementById('q13').value.trim()
+          },
+          part6_feedback_questions: {
+            q14_confusion: document.getElementById('q14').value.trim() || null,
+            q15_questions_concerns: document.getElementById('q15').value.trim() || null
+          }
+        }
+      };
+
+      // Hide error, show success
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'block';
+
+      // Display JSON
+      jsonContent.textContent = JSON.stringify(formData, null, 2);
+      jsonOutput.style.display = 'block';
+
+      // Disable form
+      const inputs = form.querySelectorAll('input, textarea, button[type="submit"]');
+      inputs.forEach(input => input.disabled = true);
+
+      // Scroll to success message
+      successMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Download JSON
+    downloadBtn.addEventListener('click', () => {
+      const dataStr = jsonContent.textContent;
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'psyche-ai-questionnaire-response.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>

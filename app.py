@@ -123,6 +123,10 @@ def metaphors():
 def manifestation_tool():
     return send_from_directory('views', 'manifestation-tool.html')
 
+@app.route('/interview-round-1')
+def interview_round_1():
+    return send_from_directory('views', 'questionnaire.html')
+
 @app.route('/metaphors/<metaphor_id>')
 def metaphor_detail(metaphor_id):
     return send_from_directory('views', 'metaphor-detail.html')
