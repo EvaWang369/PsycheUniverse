@@ -269,8 +269,8 @@ def create_interview_invite():
         # Generate unique token
         token = secrets.token_urlsafe(32)
 
-        # Set expiration (7 days from now)
-        expires_at = (datetime.utcnow() + timedelta(days=7)).isoformat()
+        # Set expiration (14 days from now)
+        expires_at = (datetime.utcnow() + timedelta(days=14)).isoformat()
 
         # Create invite
         result = supabase.table('interview_invites').insert({
