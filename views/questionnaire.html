@@ -380,7 +380,22 @@
       </div>
     </header>
 
-    <form id="questionnaireForm">
+    <!-- Invalid Token Message (hidden by default) -->
+    <div id="invalidToken" style="display: none; text-align: center; padding: 60px 20px;">
+      <h2 style="font-size: 24px; margin-bottom: 16px; color: #1a1a1a;">Invalid or Expired Link</h2>
+      <p style="color: #666;">This interview link is invalid, has expired, or has already been submitted.</p>
+      <p style="color: #666; margin-top: 12px;">Please contact <a href="mailto:info@psyche-ai.xyz" style="color: #0066cc;">info@psyche-ai.xyz</a> if you need assistance.</p>
+    </div>
+
+    <!-- Candidate Info Bar -->
+    <div id="candidateInfo" style="display: none; background: #f0f7ff; border: 1px solid #cce0ff; border-radius: 8px; padding: 16px 20px; margin-bottom: 30px;">
+      <p style="margin: 0; font-size: 14px; color: #333;">
+        <strong>Candidate:</strong> <span id="candidateName">—</span> &nbsp;|&nbsp;
+        <strong>Email:</strong> <span id="candidateEmail">—</span>
+      </p>
+    </div>
+
+    <form id="questionnaireForm" style="display: none;">
       <!-- Part 1: Personal Reflection -->
       <section>
         <h2 class="section-title">Part 1: Personal Reflection</h2>
@@ -546,6 +561,47 @@
   </div>
 
   <script>
+    // Get token from URL
+    const pathParts = window.location.pathname.split('/');
+    const token = pathParts[pathParts.length - 1];
+    const isTokenPage = pathParts.includes('interview') && token && token !== 'interview-round-1';
+
+    // Elements
+    const form = document.getElementById('questionnaireForm');
+    const invalidTokenDiv = document.getElementById('invalidToken');
+    const candidateInfoDiv = document.getElementById('candidateInfo');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const jsonOutput = document.getElementById('jsonOutput');
+    const jsonContent = document.getElementById('jsonContent');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    // Validate token on page load
+    window.addEventListener('load', async () => {
+      if (isTokenPage) {
+        try {
+          const response = await fetch(`/api/interview/validate/${token}`);
+          const data = await response.json();
+
+          if (data.valid) {
+            // Show form with candidate info
+            document.getElementById('candidateName').textContent = data.candidate_name || 'Not provided';
+            document.getElementById('candidateEmail').textContent = data.candidate_email;
+            candidateInfoDiv.style.display = 'block';
+            form.style.display = 'block';
+          } else {
+            // Show invalid token message
+            invalidTokenDiv.style.display = 'block';
+          }
+        } catch (error) {
+          invalidTokenDiv.style.display = 'block';
+        }
+      } else {
+        // Public access (no token) - show form directly
+        form.style.display = 'block';
+      }
+    });
+
     // Word counter for Cognitive Science & Design section
     const wordLimitedFields = document.querySelectorAll('.word-limited');
 
@@ -569,14 +625,7 @@
     });
 
     // Form submission
-    const form = document.getElementById('questionnaireForm');
-    const errorMessage = document.getElementById('errorMessage');
-    const successMessage = document.getElementById('successMessage');
-    const jsonOutput = document.getElementById('jsonOutput');
-    const jsonContent = document.getElementById('jsonContent');
-    const downloadBtn = document.getElementById('downloadBtn');
-
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       // Check word limits
@@ -604,53 +653,84 @@
       }
 
       // Collect form data
-      const formData = {
+      const responses = {
         submission_date: new Date().toISOString(),
-        responses: {
-          part1_personal_reflection: {
-            q1_most_aligned: document.getElementById('q1').value.trim(),
-            q2_lose_track_of_time: document.getElementById('q2').value.trim()
-          },
-          part2_product_thinking: {
-            q3_dream_product: document.getElementById('q3').value.trim(),
-            q4_consistency_without_addiction: document.getElementById('q4').value.trim(),
-            q5_measure_success: document.getElementById('q5').value.trim()
-          },
-          part3_cognitive_science_design: {
-            q6_identity_beliefs_actions: document.getElementById('q6').value.trim(),
-            q7_abstract_to_interface: document.getElementById('q7').value.trim()
-          },
-          part4_career_direction: {
-            q8_other_work: document.getElementById('q8').value.trim(),
-            q9_fulltime_roles: document.getElementById('q9').value.trim(),
-            q10_internship_goals: document.getElementById('q10').value.trim()
-          },
-          part5_availability_leadership: {
-            q11_hours_per_week: document.getElementById('q11').value.trim(),
-            q12_salary_expectations: document.getElementById('q12').value.trim(),
-            q13_mentoring_team: document.getElementById('q13').value.trim()
-          },
-          part6_feedback_questions: {
-            q14_confusion: document.getElementById('q14').value.trim() || null,
-            q15_questions_concerns: document.getElementById('q15').value.trim() || null
-          }
+        part1_personal_reflection: {
+          q1_most_aligned: document.getElementById('q1').value.trim(),
+          q2_lose_track_of_time: document.getElementById('q2').value.trim()
+        },
+        part2_product_thinking: {
+          q3_dream_product: document.getElementById('q3').value.trim(),
+          q4_consistency_without_addiction: document.getElementById('q4').value.trim(),
+          q5_measure_success: document.getElementById('q5').value.trim()
+        },
+        part3_cognitive_science_design: {
+          q6_identity_beliefs_actions: document.getElementById('q6').value.trim(),
+          q7_abstract_to_interface: document.getElementById('q7').value.trim()
+        },
+        part4_career_direction: {
+          q8_other_work: document.getElementById('q8').value.trim(),
+          q9_fulltime_roles: document.getElementById('q9').value.trim(),
+          q10_internship_goals: document.getElementById('q10').value.trim()
+        },
+        part5_availability_leadership: {
+          q11_hours_per_week: document.getElementById('q11').value.trim(),
+          q12_salary_expectations: document.getElementById('q12').value.trim(),
+          q13_mentoring_team: document.getElementById('q13').value.trim()
+        },
+        part6_feedback_questions: {
+          q14_confusion: document.getElementById('q14').value.trim() || null,
+          q15_questions_concerns: document.getElementById('q15').value.trim() || null
         }
       };
 
-      // Hide error, show success
-      errorMessage.style.display = 'none';
-      successMessage.style.display = 'block';
+      // Submit to backend if using token
+      if (isTokenPage) {
+        try {
+          const submitBtn = document.getElementById('submitBtn');
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Submitting...';
 
-      // Display JSON
-      jsonContent.textContent = JSON.stringify(formData, null, 2);
-      jsonOutput.style.display = 'block';
+          const response = await fetch('/api/interview/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, responses })
+          });
 
-      // Disable form
-      const inputs = form.querySelectorAll('input, textarea, button[type="submit"]');
-      inputs.forEach(input => input.disabled = true);
+          const data = await response.json();
 
-      // Scroll to success message
-      successMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (response.ok) {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'block';
+
+            // Disable form
+            const inputs = form.querySelectorAll('input, textarea, button[type="submit"]');
+            inputs.forEach(input => input.disabled = true);
+
+            successMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else {
+            errorMessage.textContent = data.error || 'Submission failed. Please try again.';
+            errorMessage.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit';
+          }
+        } catch (error) {
+          errorMessage.textContent = 'Network error. Please try again.';
+          errorMessage.style.display = 'block';
+          document.getElementById('submitBtn').disabled = false;
+          document.getElementById('submitBtn').textContent = 'Submit';
+        }
+      } else {
+        // Public mode - just show JSON (for testing)
+        errorMessage.style.display = 'none';
+        successMessage.style.display = 'block';
+        jsonContent.textContent = JSON.stringify({ responses }, null, 2);
+        jsonOutput.style.display = 'block';
+
+        const inputs = form.querySelectorAll('input, textarea, button[type="submit"]');
+        inputs.forEach(input => input.disabled = true);
+        successMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
 
     // Download JSON

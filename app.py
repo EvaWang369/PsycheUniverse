@@ -136,7 +136,162 @@ def manifestation_tool():
 
 @app.route('/interview-round-1')
 def interview_round_1():
+    # Public access (no token) - redirect or show error
     return send_from_directory('views', 'questionnaire.html')
+
+@app.route('/interview/<token>')
+def interview_with_token(token):
+    """Serve interview page for valid token"""
+    try:
+        # Validate token
+        result = supabase.table('interview_invites')\
+            .select('*')\
+            .eq('token', token)\
+            .single()\
+            .execute()
+
+        if not result.data:
+            return "Invalid or expired interview link.", 404
+
+        invite = result.data
+
+        # Check if already completed
+        if invite['status'] == 'completed':
+            return "This interview has already been submitted.", 400
+
+        # Check if expired
+        if invite['expires_at']:
+            from datetime import datetime
+            expires = datetime.fromisoformat(invite['expires_at'].replace('Z', '+00:00'))
+            if datetime.now(expires.tzinfo) > expires:
+                return "This interview link has expired.", 400
+
+        # Mark as started if first time
+        if invite['status'] == 'pending':
+            supabase.table('interview_invites')\
+                .update({'status': 'started', 'started_at': datetime.utcnow().isoformat()})\
+                .eq('token', token)\
+                .execute()
+
+        return send_from_directory('views', 'questionnaire.html')
+
+    except Exception as e:
+        print(f"Interview token error: {e}")
+        return "Invalid interview link.", 404
+
+@app.route('/api/interview/validate/<token>', methods=['GET'])
+def validate_interview_token(token):
+    """Validate token and return candidate info"""
+    try:
+        result = supabase.table('interview_invites')\
+            .select('*')\
+            .eq('token', token)\
+            .single()\
+            .execute()
+
+        if not result.data:
+            return jsonify({'valid': False, 'error': 'Invalid token'}), 404
+
+        invite = result.data
+
+        if invite['status'] == 'completed':
+            return jsonify({'valid': False, 'error': 'Already submitted'}), 400
+
+        return jsonify({
+            'valid': True,
+            'candidate_email': invite['candidate_email'],
+            'candidate_name': invite['candidate_name'],
+            'position': invite['position']
+        }), 200
+
+    except Exception as e:
+        return jsonify({'valid': False, 'error': str(e)}), 500
+
+@app.route('/api/interview/submit', methods=['POST'])
+def submit_interview():
+    """Submit interview responses"""
+    data = request.get_json()
+    token = data.get('token')
+    responses = data.get('responses')
+
+    if not token or not responses:
+        return jsonify({'error': 'Token and responses required'}), 400
+
+    try:
+        # Validate token
+        invite_result = supabase.table('interview_invites')\
+            .select('*')\
+            .eq('token', token)\
+            .single()\
+            .execute()
+
+        if not invite_result.data:
+            return jsonify({'error': 'Invalid token'}), 404
+
+        invite = invite_result.data
+
+        if invite['status'] == 'completed':
+            return jsonify({'error': 'Already submitted'}), 400
+
+        # Save responses
+        supabase.table('interview_responses').insert({
+            'invite_id': invite['id'],
+            'token': token,
+            'candidate_email': invite['candidate_email'],
+            'candidate_name': invite['candidate_name'],
+            'responses': responses
+        }).execute()
+
+        # Mark invite as completed
+        supabase.table('interview_invites')\
+            .update({'status': 'completed', 'completed_at': datetime.utcnow().isoformat()})\
+            .eq('token', token)\
+            .execute()
+
+        return jsonify({'success': True, 'message': 'Interview submitted successfully'}), 200
+
+    except Exception as e:
+        print(f"Interview submit error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/interview/create', methods=['POST'])
+def create_interview_invite():
+    """Create a new interview invite (admin use)"""
+    data = request.get_json()
+    candidate_email = data.get('email')
+    candidate_name = data.get('name')
+    position = data.get('position', 'Design Intern')
+
+    if not candidate_email:
+        return jsonify({'error': 'Email required'}), 400
+
+    try:
+        # Generate unique token
+        token = secrets.token_urlsafe(32)
+
+        # Set expiration (7 days from now)
+        expires_at = (datetime.utcnow() + timedelta(days=7)).isoformat()
+
+        # Create invite
+        result = supabase.table('interview_invites').insert({
+            'token': token,
+            'candidate_email': candidate_email,
+            'candidate_name': candidate_name,
+            'position': position,
+            'expires_at': expires_at
+        }).execute()
+
+        interview_url = f"https://psyche-ai.xyz/interview/{token}"
+
+        return jsonify({
+            'success': True,
+            'token': token,
+            'url': interview_url,
+            'expires_at': expires_at
+        }), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/home')
 def home():
