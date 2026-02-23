@@ -269,8 +269,8 @@ def create_interview_invite():
         # Generate unique token
         token = secrets.token_urlsafe(32)
 
-        # Set expiration (14 days from now)
-        expires_at = (datetime.utcnow() + timedelta(days=14)).isoformat()
+        # Set expiration (end of day, 14 days from now)
+        expires_at = (datetime.utcnow() + timedelta(days=14)).replace(hour=23, minute=59, second=59).isoformat()
 
         # Create invite
         result = supabase.table('interview_invites').insert({
@@ -300,6 +300,10 @@ def home():
 @app.route('/privacy')
 def privacy():
     return send_from_directory('views', 'privacy.html')
+
+@app.route('/app-privacy')
+def app_privacy():
+    return send_from_directory('views', 'app-privacy.html')
 
 @app.route('/terms')
 def terms():
