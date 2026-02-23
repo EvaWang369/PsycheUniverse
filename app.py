@@ -309,6 +309,10 @@ def app_privacy():
 def terms():
     return send_from_directory('views', 'terms.html')
 
+@app.route('/app-terms')
+def app_terms():
+    return send_from_directory('views', 'app-terms.html')
+
 @app.route('/metaphors/<metaphor_id>')
 def metaphor_detail(metaphor_id):
     return send_from_directory('views', 'metaphor-detail.html')
