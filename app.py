@@ -313,6 +313,10 @@ def terms():
 def app_terms():
     return send_from_directory('views', 'app-terms.html')
 
+@app.route('/support')
+def support():
+    return send_from_directory('views', 'support.html')
+
 @app.route('/metaphors/<metaphor_id>')
 def metaphor_detail(metaphor_id):
     return send_from_directory('views', 'metaphor-detail.html')
