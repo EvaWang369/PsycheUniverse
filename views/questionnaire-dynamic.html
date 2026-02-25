@@ -364,7 +364,7 @@
 
         <div class="instructions">
           <div id="instructionsContent"></div>
-          <p><strong>Word limit:</strong> <span id="wordLimitNote">All responses should be concise.</span></p>
+          <p style="margin-top: 16px;"><strong>Word limit:</strong> <span id="wordLimitNote">All responses should be concise.</span></p>
 
           <details class="about-collapsible">
             <summary>About Psyche AI</summary>
@@ -578,7 +578,7 @@
         const questionsData = await questionsResponse.json();
 
         // Update UI
-        document.getElementById('assessmentTitle').textContent = `Psyche AI – ${questionsData.title}`;
+        document.getElementById('assessmentTitle').textContent = 'Psyche AI – Candidate Assessment';
         document.getElementById('positionBadge').textContent = position;
         document.getElementById('wordLimitNote').textContent = questionsData.word_limit_note || 'All responses should be concise.';
         document.getElementById('candidateName').textContent = validateData.candidate_name || 'Not provided';
