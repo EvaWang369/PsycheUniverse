@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Psyche AI – Candidate Assessment</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f6f7f9;
+      color: #1a1a1a;
+      line-height: 1.6;
+      font-size: 15px;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #e6e8eb;
+      border-radius: 12px;
+      padding: 50px 40px;
+    }
+
+    header {
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #e6e8eb;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
+
+    .position-badge {
+      display: inline-block;
+      background: #e8f4fd;
+      color: #1a73e8;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .instructions {
+      background: #f9fafb;
+      border: 1px solid #e6e8eb;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .instructions p {
+      margin-bottom: 10px;
+    }
+
+    .instructions p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-collapsible {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .about-collapsible summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #1a1a1a;
+      outline: none;
+      list-style: none;
+    }
+
+    .about-collapsible summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .about-collapsible summary::after {
+      content: "▾";
+      float: right;
+      color: #666;
+    }
+
+    .about-collapsible[open] summary::after {
+      content: "▴";
+    }
+
+    .about-content {
+      margin-top: 12px;
+      color: #444;
+      font-size: 14px;
+    }
+
+    .about-content p {
+      margin-bottom: 10px;
+    }
+
+    .about-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-content ul {
+      margin: 0 0 10px 20px;
+      padding: 0;
+    }
+
+    .about-content li {
+      margin-bottom: 4px;
+    }
+
+    section {
+      margin-bottom: 50px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e6e8eb;
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 30px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e6e8eb;
+      display: inline-block;
+    }
+
+    .section-note {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 25px;
+      margin-top: -15px;
+    }
+
+    .question-block {
+      margin-bottom: 30px;
+    }
+
+    .question-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .question-label {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+
+    .question-number {
+      color: #666;
+      margin-right: 8px;
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: #888;
+      margin-top: 6px;
+    }
+
+    .word-counter {
+      font-size: 12px;
+      color: #666;
+      margin-top: 6px;
+      text-align: right;
+    }
+
+    .word-counter.exceeded {
+      color: #c00;
+      font-weight: 500;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.5;
+      resize: vertical;
+      background: #fff;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #111827;
+    }
+
+    textarea.large {
+      min-height: 150px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #111827;
+    }
+
+    .checkbox-block {
+      margin: 40px 0 30px;
+      padding: 20px;
+      background: #f9fafb;
+      border: 1px solid #e6e8eb;
+      border-radius: 8px;
+    }
+
+    .checkbox-block label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .checkbox-block input[type="checkbox"] {
+      margin-top: 3px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .submit-section {
+      margin-top: 40px;
+    }
+
+    button[type="submit"] {
+      padding: 14px 40px;
+      background: #111827;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    button[type="submit"]:hover {
+      background: #0b1220;
+    }
+
+    button[type="submit"]:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+    .error-message {
+      color: #c00;
+      font-size: 14px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .success-message {
+      background: #f0f7f0;
+      border: 1px solid #c0dcc0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 30px;
+      font-size: 15px;
+      color: #2a5a2a;
+      display: none;
+    }
+
+    .optional-label {
+      font-size: 12px;
+      color: #888;
+      font-weight: 400;
+      margin-left: 8px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e6e8eb;
+      border-top-color: #111827;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 12px;
+      }
+
+      .container {
+        padding: 30px 20px;
+      }
+
+      header h1 {
+        font-size: 20px;
+      }
+
+      input[type="text"] {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Loading State -->
+    <div id="loadingState" class="loading">
+      <div class="loading-spinner"></div>
+      <p>Loading assessment...</p>
+    </div>
+
+    <!-- Invalid Token Message -->
+    <div id="invalidToken" style="display: none; text-align: center; padding: 60px 20px;">
+      <h2 style="font-size: 24px; margin-bottom: 16px; color: #1a1a1a;">Invalid or Expired Link</h2>
+      <p style="color: #666;">This interview link is invalid, has expired, or has already been submitted.</p>
+      <p style="color: #666; margin-top: 12px;">Please contact <a href="mailto:info@psyche-ai.xyz" style="color: #0066cc;">info@psyche-ai.xyz</a> if you need assistance.</p>
+    </div>
+
+    <!-- Main Content (hidden until loaded) -->
+    <div id="mainContent" style="display: none;">
+      <header>
+        <h1 id="assessmentTitle">Psyche AI – Candidate Assessment</h1>
+        <div class="position-badge" id="positionBadge"></div>
+
+        <div class="instructions">
+          <div id="instructionsContent"></div>
+          <p><strong>Word limit:</strong> <span id="wordLimitNote">All responses should be concise.</span></p>
+
+          <details class="about-collapsible">
+            <summary>About Psyche AI</summary>
+            <div class="about-content">
+              <p>Psyche AI builds tools that support people in living from their authentic self — their true identity — in the present moment, fully and passionately.</p>
+              <p>Our work revolves around helping users:</p>
+              <ul>
+                <li>Center energy</li>
+                <li>Live fully in the present</li>
+                <li>Clarify intention before taking action</li>
+                <li>Work on what they are passionate about</li>
+                <li>Act from their authentic self</li>
+                <li>Follow inner guidance</li>
+                <li>Observe their thoughts without being controlled and reduce mental noise</li>
+                <li>Fully experience emotions and allow them to complete naturally</li>
+                <li>Feel light, steady, and refreshed</li>
+              </ul>
+              <p>We believe internal alignment shapes external behavior. Attention shapes perception. Intention shapes direction.</p>
+            </div>
+          </details>
+        </div>
+      </header>
+
+      <!-- Candidate Info Bar -->
+      <div id="candidateInfo" style="display: none; background: #f0f7ff; border: 1px solid #cce0ff; border-radius: 8px; padding: 16px 20px; margin-bottom: 30px;">
+        <p style="margin: 0; font-size: 14px; color: #333;">
+          <strong>Candidate:</strong> <span id="candidateName">—</span> &nbsp;|&nbsp;
+          <strong>Email:</strong> <span id="candidateEmail">—</span> &nbsp;|&nbsp;
+          <strong>Position:</strong> <span id="candidatePosition">—</span>
+        </p>
+      </div>
+
+      <form id="questionnaireForm">
+        <!-- Questions will be dynamically inserted here -->
+        <div id="questionsContainer"></div>
+
+        <!-- Confirmation Checkbox -->
+        <div class="checkbox-block">
+          <label>
+            <input type="checkbox" id="confirmCheckbox" required>
+            <span>I confirm that my responses are concise and reflect my own thinking.</span>
+          </label>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-section">
+          <button type="submit" id="submitBtn">Submit</button>
+          <p class="error-message" id="errorMessage"></p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+          Your assessment has been submitted successfully. Thank you for your responses.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Get token from URL
+    const pathParts = window.location.pathname.split('/');
+    const token = pathParts[pathParts.length - 1];
+    const isTokenPage = pathParts.includes('interview') && token && token !== 'interview-round-1';
+
+    // Elements
+    const loadingState = document.getElementById('loadingState');
+    const mainContent = document.getElementById('mainContent');
+    const invalidTokenDiv = document.getElementById('invalidToken');
+    const candidateInfoDiv = document.getElementById('candidateInfo');
+    const questionsContainer = document.getElementById('questionsContainer');
+    const form = document.getElementById('questionnaireForm');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    let questionsConfig = null;
+    let questionNumber = 1;
+
+    // Render questions dynamically
+    function renderQuestions(config) {
+      questionsConfig = config;
+      questionsContainer.innerHTML = '';
+      questionNumber = 1;
+
+      config.sections.forEach((section, sectionIndex) => {
+        const sectionEl = document.createElement('section');
+
+        let sectionHTML = `<h2 class="section-title">${section.title}</h2>`;
+
+        if (section.note) {
+          sectionHTML += `<p class="section-note">${section.note}</p>`;
+        }
+
+        section.questions.forEach((q, qIndex) => {
+          const isOptional = q.optional === true;
+          const hasWordLimit = q.word_limit && q.word_limit > 0;
+
+          sectionHTML += `<div class="question-block">`;
+          sectionHTML += `<label class="question-label" for="${q.id}">`;
+          sectionHTML += `<span class="question-number">${questionNumber}.</span>${q.text}`;
+          if (isOptional) {
+            sectionHTML += `<span class="optional-label">(Optional)</span>`;
+          }
+          sectionHTML += `</label>`;
+
+          if (q.type === 'textarea') {
+            const largeClass = hasWordLimit ? 'large word-limited' : '';
+            const dataAttr = hasWordLimit ? `data-max-words="${q.word_limit}"` : '';
+            const required = isOptional ? '' : 'required';
+            sectionHTML += `<textarea id="${q.id}" name="${q.id}" class="${largeClass}" ${dataAttr} ${required}></textarea>`;
+
+            if (hasWordLimit) {
+              sectionHTML += `<p class="word-counter" id="${q.id}-counter">0 / ${q.word_limit} words</p>`;
+            }
+          } else if (q.type === 'text') {
+            const placeholder = q.placeholder ? `placeholder="${q.placeholder}"` : '';
+            const required = isOptional ? '' : 'required';
+            sectionHTML += `<input type="text" id="${q.id}" name="${q.id}" ${placeholder} ${required}>`;
+          }
+
+          sectionHTML += `</div>`;
+          questionNumber++;
+        });
+
+        sectionEl.innerHTML = sectionHTML;
+        questionsContainer.appendChild(sectionEl);
+      });
+
+      // Attach word counter listeners
+      attachWordCounters();
+    }
+
+    // Attach word counter event listeners
+    function attachWordCounters() {
+      const wordLimitedFields = document.querySelectorAll('.word-limited');
+
+      wordLimitedFields.forEach(field => {
+        const maxWords = parseInt(field.dataset.maxWords);
+        const counterId = field.id + '-counter';
+        const counter = document.getElementById(counterId);
+
+        if (counter) {
+          field.addEventListener('input', () => {
+            const words = field.value.trim().split(/\s+/).filter(w => w.length > 0);
+            const wordCount = words.length;
+
+            counter.textContent = `${wordCount} / ${maxWords} words`;
+
+            if (wordCount > maxWords) {
+              counter.classList.add('exceeded');
+            } else {
+              counter.classList.remove('exceeded');
+            }
+          });
+        }
+      });
+    }
+
+    // Collect form responses
+    function collectResponses() {
+      const responses = {
+        submission_date: new Date().toISOString(),
+        position: document.getElementById('positionBadge').textContent
+      };
+
+      questionsConfig.sections.forEach(section => {
+        const sectionKey = section.title.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+        responses[sectionKey] = {};
+
+        section.questions.forEach(q => {
+          const field = document.getElementById(q.id);
+          if (field) {
+            responses[sectionKey][q.id] = field.value.trim() || null;
+          }
+        });
+      });
+
+      return responses;
+    }
+
+    // Initialize page
+    window.addEventListener('load', async () => {
+      if (!isTokenPage) {
+        loadingState.style.display = 'none';
+        invalidTokenDiv.innerHTML = `
+          <h2 style="font-size: 24px; margin-bottom: 16px; color: #1a1a1a;">Direct Access Not Available</h2>
+          <p style="color: #666;">Please use the interview link sent to your email.</p>
+          <p style="color: #666; margin-top: 12px;">Contact <a href="mailto:info@psyche-ai.xyz" style="color: #0066cc;">info@psyche-ai.xyz</a> if you need assistance.</p>
+        `;
+        invalidTokenDiv.style.display = 'block';
+        return;
+      }
+
+      try {
+        // Validate token and get candidate info
+        const validateResponse = await fetch(`/api/interview/validate/${token}`);
+        const validateData = await validateResponse.json();
+
+        if (!validateData.valid) {
+          loadingState.style.display = 'none';
+          invalidTokenDiv.style.display = 'block';
+          return;
+        }
+
+        // Get questions for this position
+        const position = validateData.position || 'Design Intern';
+        const questionsResponse = await fetch(`/api/interview/questions/${encodeURIComponent(position)}`);
+
+        if (!questionsResponse.ok) {
+          throw new Error('Failed to load questions');
+        }
+
+        const questionsData = await questionsResponse.json();
+
+        // Update UI
+        document.getElementById('assessmentTitle').textContent = `Psyche AI – ${questionsData.title}`;
+        document.getElementById('positionBadge').textContent = position;
+        document.getElementById('wordLimitNote').textContent = questionsData.word_limit_note || 'All responses should be concise.';
+        document.getElementById('candidateName').textContent = validateData.candidate_name || 'Not provided';
+        document.getElementById('candidateEmail').textContent = validateData.candidate_email;
+        document.getElementById('candidatePosition').textContent = position;
+
+        // Render instructions from about_role (first line bold, rest as paragraphs)
+        const aboutRole = questionsData.about_role || '';
+        const paragraphs = aboutRole.split('\n\n').filter(p => p.trim());
+        let instructionsHTML = '';
+        paragraphs.forEach((para, index) => {
+          if (index === 0) {
+            instructionsHTML += `<p><strong>${para}</strong></p>`;
+          } else {
+            instructionsHTML += `<p>${para}</p>`;
+          }
+        });
+        document.getElementById('instructionsContent').innerHTML = instructionsHTML;
+
+        // Render questions
+        renderQuestions(questionsData);
+
+        // Show content
+        loadingState.style.display = 'none';
+        mainContent.style.display = 'block';
+        candidateInfoDiv.style.display = 'block';
+
+      } catch (error) {
+        console.error('Error loading assessment:', error);
+        loadingState.style.display = 'none';
+        invalidTokenDiv.style.display = 'block';
+      }
+    });
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Check word limits
+      const wordLimitedFields = document.querySelectorAll('.word-limited');
+      let wordLimitExceeded = false;
+
+      wordLimitedFields.forEach(field => {
+        const maxWords = parseInt(field.dataset.maxWords);
+        const words = field.value.trim().split(/\s+/).filter(w => w.length > 0);
+        if (words.length > maxWords) {
+          wordLimitExceeded = true;
+        }
+      });
+
+      if (wordLimitExceeded) {
+        errorMessage.textContent = 'Please ensure all responses are within the word limit.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+
+      // Check confirmation checkbox
+      const confirmCheckbox = document.getElementById('confirmCheckbox');
+      if (!confirmCheckbox.checked) {
+        errorMessage.textContent = 'Please confirm that your responses are concise and reflect your own thinking.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+
+      // Collect responses
+      const responses = collectResponses();
+
+      try {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        const response = await fetch('/api/interview/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, responses })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          errorMessage.style.display = 'none';
+          successMessage.style.display = 'block';
+
+          // Disable form
+          const inputs = form.querySelectorAll('input, textarea, button[type="submit"]');
+          inputs.forEach(input => input.disabled = true);
+
+          successMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          errorMessage.textContent = data.error || 'Submission failed. Please try again.';
+          errorMessage.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit';
+        }
+      } catch (error) {
+        errorMessage.textContent = 'Network error. Please try again.';
+        errorMessage.style.display = 'block';
+        document.getElementById('submitBtn').disabled = false;
+        document.getElementById('submitBtn').textContent = 'Submit';
+      }
+    });
+  </script>
+</body>
+</html>

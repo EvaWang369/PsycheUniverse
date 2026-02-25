@@ -1,0 +1,172 @@
+{
+  "Design Intern": {
+    "title": "Design Intern Assessment",
+    "about_role": "help Psyche AI translate internal-state philosophy into structured, intuitive product experiences while building a calm, scalable UX foundation that supports long-term growth.",
+    "word_limit_note": "Part 3 has a maximum of 200 words per question. All other responses should be concise.",
+    "sections": [
+      {
+        "title": "Part 1: Personal Reflection",
+        "questions": [
+          {"id": "q1", "text": "When do you feel most aligned with yourself?", "type": "textarea"},
+          {"id": "q2", "text": "What kind of work makes you lose track of time?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 2: Product Thinking",
+        "questions": [
+          {"id": "q3", "text": "If you could build any product that helps people live with clarity, intention, and purpose, what would it look like?", "type": "textarea"},
+          {"id": "q4", "text": "How do you encourage consistency without using addictive design patterns?", "type": "textarea"},
+          {"id": "q5", "text": "How would you measure whether Psyche AI is actually helping users?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 3: Cognitive Science & Design",
+        "note": "Maximum 200 words per question in this section.",
+        "questions": [
+          {"id": "q6", "text": "Psyche AI is built around the idea that internal identity and belief systems influence behavior and decision-making. From a cognitive science perspective, how do identity and core beliefs shape everyday actions?", "type": "textarea", "word_limit": 200},
+          {"id": "q7", "text": "Our product focuses on internal states such as centering, intention clarity, authenticity, and inner guidance — which are abstract and invisible experiences. How would you translate concepts like that into simple and intuitive interface design? How do you communicate abstract value (clarity, authenticity, presence) clearly to new users?", "type": "textarea", "word_limit": 200}
+        ]
+      },
+      {
+        "title": "Part 4: Career Direction & Interests",
+        "questions": [
+          {"id": "q8", "text": "If you were not restricted to this role, what else would you want to work on?", "type": "textarea"},
+          {"id": "q9", "text": "What kind of full-time roles are you aiming for after graduation?", "type": "textarea"},
+          {"id": "q10", "text": "How does this internship fit into your short-term or longer-term goals?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 5: Availability & Leadership",
+        "questions": [
+          {"id": "q11", "text": "How many hours per week can you commit? (Please provide a range.)", "type": "text", "placeholder": "e.g., 0–40 hours"},
+          {"id": "q12", "text": "What are your salary expectations?", "type": "text", "placeholder": "e.g., $xx/hour or $xx/month"},
+          {"id": "q13", "text": "This role may involve mentoring 2–4 junior designers. What is the maximum team size you feel you could effectively mentor on a single project? How would you structure guidance and quality control within a small team?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Feedback & Questions",
+        "questions": [
+          {"id": "q14", "text": "After reviewing Psyche AI, what confused you about our concept or website?", "type": "textarea", "optional": true},
+          {"id": "q15", "text": "What questions or concerns do you have about Psyche AI or the role?", "type": "textarea", "optional": true}
+        ]
+      }
+    ]
+  },
+  "Product UI/UX Designer": {
+    "title": "Product UI/UX Designer Assessment",
+    "about_role": "Thank you for taking the time to interview with Psyche AI.\n\nThis assessment helps us understand how you think and how you would approach our product.\n\nYou may use AI tools to help structure your answers. Please keep responses clear, grounded, and reflective of your own reasoning.\n\nAll questions are optional. If you prefer to skip a question, please write \"N/A\".",
+    "word_limit_note": "Part 3 has a maximum of 200 words per question. All other responses should be concise.",
+    "sections": [
+      {
+        "title": "Part 1: Personal Reflection",
+        "questions": [
+          {"id": "q1", "text": "When do you feel most aligned with yourself?", "type": "textarea"},
+          {"id": "q2", "text": "What kind of work makes you lose track of time?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 2: Product Thinking",
+        "questions": [
+          {"id": "q3", "text": "If you could build any product that helps people live with clarity, intention, and purpose, what would it look like?", "type": "textarea"},
+          {"id": "q4", "text": "How do you encourage consistency without using addictive design patterns?", "type": "textarea"},
+          {"id": "q5", "text": "How would you measure whether Psyche AI is actually helping users?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 3: Cognitive Science & Design",
+        "note": "Maximum 200 words per question in this section.",
+        "questions": [
+          {"id": "q6", "text": "Psyche AI is built around the idea that internal identity and belief systems influence behavior and decision-making. From a cognitive science perspective, how do identity and core beliefs shape everyday actions?", "type": "textarea", "word_limit": 200},
+          {"id": "q7", "text": "Our product focuses on internal states such as centering, intention clarity, authenticity, and inner guidance — which are abstract and invisible experiences. How would you translate concepts like that into simple and intuitive interface design? How do you communicate abstract value (clarity, authenticity, presence) clearly to new users?", "type": "textarea", "word_limit": 200}
+        ]
+      },
+      {
+        "title": "Part 4: Career Direction & Interests",
+        "questions": [
+          {"id": "q8", "text": "If you were not restricted to this role, what else would you want to work on?", "type": "textarea"},
+          {"id": "q9", "text": "What kind of full-time roles are you aiming for after graduation?", "type": "textarea"},
+          {"id": "q10", "text": "How does this internship fit into your short-term or longer-term goals?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 5: Availability & Leadership",
+        "questions": [
+          {"id": "q11", "text": "How many hours per week can you commit? (Please provide a range.)", "type": "text", "placeholder": "e.g., 0–40 hours"},
+          {"id": "q12", "text": "What are your salary expectations?", "type": "text", "placeholder": "e.g., $xx/hour or $xx/month"},
+          {"id": "q13", "text": "This role may involve mentoring 2–4 junior designers. What is the maximum team size you feel you could effectively mentor on a single project? How would you structure guidance and quality control within a small team?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Feedback & Questions",
+        "questions": [
+          {"id": "q14", "text": "After reviewing Psyche AI, what confused you about our concept or website?", "type": "textarea", "optional": true},
+          {"id": "q15", "text": "What questions or concerns do you have about Psyche AI or the role?", "type": "textarea", "optional": true}
+        ]
+      }
+    ]
+  },
+  "AI Growth & Digital Marketing Intern": {
+    "title": "AI Growth & Digital Marketing Intern Assessment",
+    "about_role": "Thank you for taking the time to interview with Psyche AI.\n\nThis assessment is designed to help us understand how you think about growth, discovery, experimentation, and decision-making.\n\nYou're welcome to use AI tools to help structure or refine your responses. Please keep your answers clear, practical, and reflective of your own reasoning and judgment.\n\nThere are no strictly \"right\" answers — we're interested in your perspective, thought process, and prioritization logic.\n\nAll questions are optional. If you prefer to skip a question, please write \"N/A.\"",
+    "word_limit_note": "All responses should be concise.",
+    "sections": [
+      {
+        "title": "Part 1: Personal Reflection",
+        "questions": [
+          {"id": "q1", "text": "When do you feel most aligned with yourself?", "type": "textarea"},
+          {"id": "q2", "text": "What kind of work makes you lose track of time?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 2: Growth & Discovery Mindset",
+        "questions": [
+          {"id": "q3", "text": "When you evaluate a product with low traction, where do you look first and why?", "type": "textarea"},
+          {"id": "q4", "text": "How do you distinguish between a visibility problem vs a conversion problem?", "type": "textarea"},
+          {"id": "q5", "text": "What signals tell you that positioning — not marketing execution — is the real issue?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 3: Search / AI Visibility",
+        "questions": [
+          {"id": "q6", "text": "Do you use AI-driven discovery (ChatGPT / AI search / GEO) for growth strategy? Provide examples if you do.", "type": "textarea"},
+          {"id": "q7", "text": "If Psyche AI wanted to dominate a niche query (e.g., \"manifestation tool\"), how would you approach it?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 4: Experimentation & Iteration",
+        "questions": [
+          {"id": "q8", "text": "How do you design experiments when traffic and data are limited?", "type": "textarea"},
+          {"id": "q9", "text": "Have you used AI tools to design or accelerate experiments? If yes, please share examples.", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 5: Early Traction Strategy",
+        "questions": [
+          {"id": "q10", "text": "If you joined Psyche AI today with zero users and minimal ad budget, what would you focus on in the first 60 days?", "type": "textarea"},
+          {"id": "q11", "text": "How would you approach user discovery for a product in the manifestation / subconscious / mental wellness space?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 6: AI & Tool Leverage",
+        "questions": [
+          {"id": "q12", "text": "How do you currently use AI tools in your workflow?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Part 7: Availability & Leadership",
+        "questions": [
+          {"id": "q13", "text": "How many hours per week can you commit? (Please provide a range.)", "type": "text", "placeholder": "e.g., 0–40 hours"},
+          {"id": "q14", "text": "What are your salary expectations?", "type": "text", "placeholder": "e.g., $xx/hour or $xx/month"},
+          {"id": "q15", "text": "This role may involve mentoring 2–4 junior team members. What is the maximum team size you feel you could effectively mentor on a single project? How would you structure guidance and quality control within a small team?", "type": "textarea"}
+        ]
+      },
+      {
+        "title": "Feedback & Questions",
+        "questions": [
+          {"id": "q16", "text": "After reviewing Psyche AI, what confused you about our concept or website?", "type": "textarea", "optional": true},
+          {"id": "q17", "text": "What questions or concerns do you have about Psyche AI or the role?", "type": "textarea", "optional": true}
+        ]
+      }
+    ]
+  }
+}

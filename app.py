@@ -29,6 +29,15 @@ SESSION_DURATION_DAYS = 30
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 
+# --- Interview Questions Config ---
+# Load questions from external JSON file
+def load_interview_questions():
+    questions_file = os.path.join(os.path.dirname(__file__), 'interview_questions.json')
+    with open(questions_file, 'r') as f:
+        return json.load(f)
+
+INTERVIEW_QUESTIONS = load_interview_questions()
+
 # --- Authentication Helpers ---
 
 def verify_google_token(token):
@@ -173,7 +182,8 @@ def interview_with_token(token):
                 .eq('token', token)\
                 .execute()
 
-        return send_from_directory('views', 'questionnaire.html')
+        # Serve dynamic questionnaire (fetches questions based on position)
+        return send_from_directory('views', 'questionnaire-dynamic.html')
 
     except Exception as e:
         print(f"Interview token error: {e}")
@@ -206,6 +216,22 @@ def validate_interview_token(token):
 
     except Exception as e:
         return jsonify({'valid': False, 'error': str(e)}), 500
+
+@app.route('/api/interview/questions/<position>', methods=['GET'])
+def get_interview_questions(position):
+    """Get interview questions for a specific position"""
+    # URL decode the position
+    from urllib.parse import unquote
+    position = unquote(position)
+
+    if position in INTERVIEW_QUESTIONS:
+        return jsonify(INTERVIEW_QUESTIONS[position]), 200
+    else:
+        # Return available positions if not found
+        return jsonify({
+            'error': 'Position not found',
+            'available_positions': list(INTERVIEW_QUESTIONS.keys())
+        }), 404
 
 @app.route('/api/interview/submit', methods=['POST'])
 def submit_interview():
