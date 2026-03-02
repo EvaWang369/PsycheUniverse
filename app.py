@@ -343,6 +343,10 @@ def app_terms():
 def support():
     return send_from_directory('views', 'support.html')
 
+@app.route('/confirmed')
+def email_confirmed():
+    return send_from_directory('views', 'confirmed.html')
+
 @app.route('/metaphors/<metaphor_id>')
 def metaphor_detail(metaphor_id):
     return send_from_directory('views', 'metaphor-detail.html')
