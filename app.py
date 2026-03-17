@@ -135,6 +135,10 @@ def subliminalgen():
 def pitch():
     return send_from_directory('views', 'pitch.html')
 
+@app.route('/investor')
+def investor():
+    return send_from_directory('views', 'speedrun.html')
+
 @app.route('/metaphors')
 def metaphors():
     return send_from_directory('views', 'game.html')

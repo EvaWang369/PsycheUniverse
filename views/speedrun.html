@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Psyche AI - AI Operating System for Decision-Making and Execution</title>
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>&#x2728;</text></svg>"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --dark: #0f172a;
+      --gray-900: #1e293b;
+      --gray-700: #334155;
+      --gray-500: #64748b;
+      --gray-300: #cbd5e1;
+      --gray-200: #e2e8f0;
+      --gray-100: #f1f5f9;
+      --white: #ffffff;
+      --green-bg: #f0fdf4;
+      --green-border: #bbf7d0;
+      --red-bg: #fef2f2;
+      --red-border: #fecaca;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--white);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section {
+      padding: 88px 0;
+    }
+
+    .section-alt {
+      background: var(--gray-100);
+    }
+
+    .section-dark {
+      background: var(--dark);
+      color: var(--white);
+    }
+
+    .section-header {
+      max-width: 760px;
+      margin: 0 auto 52px;
+      text-align: center;
+    }
+
+    .section-label {
+      display: inline-block;
+      margin-bottom: 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .section-dark .section-label {
+      color: #a5b4fc;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 3vw, 2.6rem);
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--gray-500);
+    }
+
+    .section-dark .section-subtitle {
+      color: #cbd5e1;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .nav-inner {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .nav-logo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--dark);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 12px;
+      padding: 13px 18px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 10px 24px rgba(99, 102, 241, 0.18);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      color: var(--dark);
+      border: 1px solid var(--gray-300);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-light {
+      background: var(--white);
+      color: var(--primary);
+    }
+
+    .btn-light:hover {
+      background: #eef2ff;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost-light {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-ghost-light:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+
+    .hero {
+      padding: 72px 0 52px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 52px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--primary);
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.7rem, 5vw, 4.35rem);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
+
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      max-width: 640px;
+      font-size: 1.16rem;
+      color: var(--gray-500);
+      margin-bottom: 28px;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+
+    .hero-proof {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .proof-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      color: var(--gray-700);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid var(--gray-200);
+      border-radius: 24px;
+      box-shadow: 0 30px 60px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+
+    .hero-card-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--gray-100);
+      background: rgba(248, 250, 252, 0.95);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gray-300);
+    }
+
+    .dot:nth-child(1) { background: #fca5a5; }
+    .dot:nth-child(2) { background: #fcd34d; }
+    .dot:nth-child(3) { background: #86efac; }
+
+    .hero-card-body {
+      padding: 24px;
+    }
+
+    .mock-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--gray-700);
+      margin-bottom: 18px;
+    }
+
+    .mock-module {
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--white);
+      border: 1px solid var(--gray-100);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+      margin-bottom: 14px;
+    }
+
+    .mock-module:last-child {
+      margin-bottom: 0;
+    }
+
+    .mock-module h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .mock-module p {
+      font-size: 0.92rem;
+      color: var(--gray-500);
+    }
+
+    .mock-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .flow-chip {
+      background: #eef2ff;
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .wedge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .status-live {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-build {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .card h3 {
+      font-size: 1.45rem;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      color: var(--gray-500);
+      margin-bottom: 18px;
+    }
+
+    .bullet-list {
+      list-style: none;
+      margin-bottom: 22px;
+    }
+
+    .bullet-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-700);
+      font-size: 0.96rem;
+    }
+
+    .bullet-list li:last-child {
+      border-bottom: none;
+    }
+
+    .bullet-list strong {
+      color: var(--dark);
+    }
+
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .capability-card {
+      background: var(--gray-100);
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid transparent;
+    }
+
+    .capability-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: var(--white);
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+    }
+
+    .capability-card h4 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .capability-card p {
+      font-size: 0.95rem;
+      color: var(--gray-500);
+    }
+
+    .loop-box {
+      margin-top: 36px;
+      padding: 22px;
+      border-radius: 20px;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loop-step {
+      padding: 11px 15px;
+      border-radius: 999px;
+      background: var(--gray-100);
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .loop-arrow {
+      color: var(--primary);
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .problem-solution-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .problem-box,
+    .solution-box {
+      border-radius: 22px;
+      padding: 28px;
+    }
+
+    .problem-box {
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+    }
+
+    .solution-box {
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+    }
+
+    .problem-box h3,
+    .solution-box h3 {
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .problem-box ul,
+    .solution-box ul {
+      list-style: none;
+    }
+
+    .problem-box li,
+    .solution-box li {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+      color: var(--gray-700);
+    }
+
+    .problem-box li:last-child,
+    .solution-box li:last-child {
+      border-bottom: none;
+    }
+
+    .why-now-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .why-card {
+      padding: 24px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .why-card h4 {
+      font-size: 1.06rem;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+
+    .why-card p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .vision-box {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .vision-text {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      line-height: 1.22;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .vision-subtext {
+      font-size: 1.06rem;
+      color: var(--gray-500);
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+    }
+
+    .team-card {
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      border-radius: 22px;
+      padding: 28px;
+    }
+
+    .team-kicker {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .team-card h3 {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .team-card p {
+      color: var(--gray-500);
+      margin-bottom: 16px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--gray-700);
+      font-size: 0.86rem;
+      font-weight: 700;
+      border: 1px solid var(--gray-200);
+    }
+
+    .cta {
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      color: var(--white);
+    }
+
+    .cta-inner {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 6px 0;
+    }
+
+    .cta h2 {
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+      margin-bottom: 14px;
+    }
+
+    .cta p {
+      font-size: 1.06rem;
+      color: rgba(255, 255, 255, 0.86);
+      margin-bottom: 26px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    footer {
+      padding: 28px 0 40px;
+      border-top: 1px solid var(--gray-100);
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 0.92rem;
+      color: var(--gray-500);
+      margin-bottom: 8px;
+    }
+
+    footer a {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .wedge-grid,
+      .capabilities-grid,
+      .problem-solution-grid,
+      .why-now-grid,
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 44px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 0 18px;
+      }
+
+      .section {
+        padding: 72px 0;
+      }
+
+      .hero-subtitle {
+        font-size: 1.04rem;
+      }
+
+      .card,
+      .problem-box,
+      .solution-box,
+      .team-card,
+      .capability-card,
+      .why-card {
+        padding: 22px;
+      }
+
+      .hero-proof {
+        gap: 10px;
+      }
+
+      .proof-pill {
+        font-size: 0.82rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">Psyche AI</a>
+      <div class="nav-links">
+        <a href="#product">Product</a>
+        <a href="#capabilities">Capabilities</a>
+        <a href="#solution">Solution</a>
+        <a href="#why-now">Why Now</a>
+        <a href="#team">Team</a>
+        <a href="#contact" class="btn btn-primary">Request Demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-badge">Live on iOS</div>
+        <h1>
+          AI Operating System for
+          <span class="gradient">Decision-Making and Execution</span>
+        </h1>
+        <p class="hero-subtitle">
+          Psyche AI helps users stay clear, intentional, and consistent in action.
+          We are building the decision layer between thought and execution.
+        </p>
+
+        <div class="hero-cta">
+          <a href="#contact" class="btn btn-primary">Request Demo</a>
+          <a href="/subliminalgen" class="btn btn-outline">View Product</a>
+        </div>
+
+        <div class="hero-proof">
+          <div class="proof-pill">Revenue-generating iOS product</div>
+          <div class="proof-pill">Consumer wedge, platform vision</div>
+          <div class="proof-pill">Built by ex-Meta / Tinder founder</div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card-top">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <div class="hero-card-body">
+          <div class="mock-title">Psyche AI Platform Overview</div>
+
+          <div class="mock-module">
+            <h4>SubliminalGen - Live Product</h4>
+            <p>
+              AI-generated audio conditioning for focus, emotional stability,
+              and internal clarity.
+            </p>
+            <div class="mock-flow">
+              <span class="flow-chip">State conditioning</span>
+              <span class="flow-chip">Personalized audio</span>
+              <span class="flow-chip">Daily reinforcement</span>
+            </div>
+          </div>
+
+          <div class="mock-module">
+            <h4>Essence - Next Layer</h4>
+            <p>
+              Conversational AI guidance for decision clarity, behavioral support,
+              and consistent follow-through.
+            </p>
+            <div class="mock-flow">
+              <span class="flow-chip">Decision support</span>
+              <span class="flow-chip">Behavior tracking</span>
+              <span class="flow-chip">Execution loop</span>
+            </div>
+          </div>
+
+          <div class="mock-module">
+            <h4>Long-Term Vision</h4>
+            <p>
+              A decision-intelligence platform that helps people think clearly,
+              decide intentionally, and execute consistently.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="product">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Product</div>
+        <h2 class="section-title">A Live Wedge Into a Larger Platform</h2>
+        <p class="section-subtitle">
+          Psyche AI is building a decision-intelligence platform. SubliminalGen is
+          the live wedge; Essence expands it into interactive AI guidance.
+        </p>
+      </div>
+
+      <div class="wedge-grid">
+        <div class="card">
+          <div class="status status-live">Live</div>
+          <h3>SubliminalGen</h3>
+          <p>
+            AI-generated audio conditioning that helps users reinforce focus,
+            emotional stability, and internal clarity through daily repetition.
+          </p>
+          <ul class="bullet-list">
+            <li><strong>AI music generation</strong> for personalized audio tracks</li>
+            <li><strong>Custom affirmations</strong> layered into user-tailored sessions</li>
+            <li><strong>Frequency library</strong> for extended listening experiences</li>
+            <li><strong>Cloud sync</strong> and persistent playback across sessions</li>
+          </ul>
+          <a href="/subliminalgen" class="btn btn-primary">View Product</a>
+        </div>
+
+        <div class="card">
+          <div class="status status-build">In Development</div>
+          <h3>Essence</h3>
+          <p>
+            Conversational AI for decision support and consistent execution,
+            designed to help users reduce mental noise and follow through with clarity.
+          </p>
+          <ul class="bullet-list">
+            <li><strong>Decision support</strong> in real-time conversational flows</li>
+            <li><strong>Behavioral tracking</strong> to identify execution patterns</li>
+            <li><strong>Personalized reinforcement</strong> across decisions and routines</li>
+            <li><strong>Guided clarity loops</strong> connecting thought to action</li>
+          </ul>
+          <span class="btn btn-outline" style="cursor: default;">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="capabilities">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Capabilities</div>
+        <h2 class="section-title">What Psyche AI Does</h2>
+        <p class="section-subtitle">
+          A system designed to align identity, clarify intention, support decisions, and reinforce consistent action over time.
+        </p>
+      </div>
+
+      <div class="capabilities-grid">
+        <div class="capability-card">
+          <div class="capability-icon">&#9834;</div>
+          <h4>State Conditioning</h4>
+          <p>
+            Personalized audio designed to stabilize focus, clarity, and emotional state.
+          </p>
+        </div>
+
+        <div class="capability-card">
+          <div class="capability-icon">&#10022;</div>
+          <h4>Decision Support</h4>
+          <p>
+              Tools that help users stay aligned with intention and make clear decisions by removing mental noise.
+          </p>
+        </div>
+
+        <div class="capability-card">
+          <div class="capability-icon">&#8634;</div>
+          <h4>Consistent Execution</h4>
+          <p>
+            Reinforcement loops that turn good decisions into consistent action.
+          </p>
+        </div>
+
+        <div class="capability-card">
+          <div class="capability-icon">&#9678;</div>
+          <h4>Habit Reinforcement</h4>
+          <p>
+            A structured loop that helps users drop unhelpful thoughts, return to intention, and reinforce consistent action over time.
+          </p>
+        </div>
+
+        <div class="capability-card">
+          <div class="capability-icon">AI</div>
+          <h4>Conversational Guidance</h4>
+          <p>
+            AI support that helps users return to clarity, intention, and the next aligned step.
+          </p>
+        </div>
+
+        <div class="capability-card">
+          <div class="capability-icon">&#8594;</div>
+          <h4>Identity-Driven Loop</h4>
+          <p>
+            The system creates an identity-driven loop: intention guides decisions, decisions drive action, and results reinforce the cycle. The longer it runs, the harder the system is to replace — this is the retention engine.
+          </p>
+        </div>
+      </div>
+
+      <div class="loop-box">
+        <span class="loop-step">Identity</span>
+        <span class="loop-arrow">&#8594;</span>
+        <span class="loop-step">Intention</span>
+        <span class="loop-arrow">&#8594;</span>
+        <span class="loop-step">Decision</span>
+        <span class="loop-arrow">&#8594;</span>
+        <span class="loop-step">Action</span>
+      </div>
+      <p style="text-align: center; color: var(--gray-500); font-size: 0.95rem; margin-top: 16px;">
+        State conditioning supports clarity and consistency across the loop.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="solution">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Problem / Solution</div>
+        <h2 class="section-title">Modern Tools Make People Faster, Not Clearer</h2>
+        <p class="section-subtitle">
+          Productivity software helps people do more. Psyche AI helps them decide better.
+        </p>
+      </div>
+
+      <div class="problem-solution-grid">
+        <div class="problem-box">
+          <h3>Problem</h3>
+          <ul>
+            <li><strong>Mental noise</strong> makes it harder to prioritize what matters</li>
+            <li><strong>Decision fatigue</strong> reduces confidence and execution quality</li>
+            <li><strong>Inconsistent follow-through</strong> breaks momentum over time</li>
+            <li><strong>Fragmented tools</strong> fail to connect state, decisions, and behavior</li>
+          </ul>
+        </div>
+
+        <div class="solution-box">
+          <h3>Psyche AI</h3>
+          <ul>
+            <li><strong>State layer</strong> improves internal clarity through audio conditioning</li>
+            <li><strong>AI guidance layer</strong> supports decision-making in real time</li>
+            <li><strong>Behavior layer</strong> reinforces consistency across routines and actions</li>
+            <li><strong>System loop</strong> compounds clarity and execution over consistent use</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark" id="why-now">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Why Now</div>
+        <h2 class="section-title">The Decision Layer of AI Is Still Open</h2>
+        <p class="section-subtitle">
+          AI can now support personalized cognition and real-time decision guidance at scale.
+        </p>
+      </div>
+
+      <div class="why-now-grid">
+        <div class="why-card">
+          <h4>LLMs Enable Real-Time Guidance</h4>
+          <p>
+            Recent AI capabilities make contextual, personalized support possible
+            in a way that was previously expensive and hard to scale.
+          </p>
+        </div>
+
+        <div class="why-card">
+          <h4>The Market Is Shifting Beyond Productivity</h4>
+          <p>
+            Users do not just want to do more. They want to think better, decide
+            better, and follow through more consistently.
+          </p>
+        </div>
+
+        <div class="why-card">
+          <h4>Category Convergence Is Happening</h4>
+          <p>
+            AI personal tools, performance systems, coaching, and wellness products
+            are converging into a new decision-intelligence category.
+          </p>
+        </div>
+
+        <div class="why-card">
+          <h4>Category Leaders Can Define the Layer</h4>
+          <p>
+            The decision layer between thought and action has not yet been won.
+            There is room to define a new category early.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="vision-box">
+        <div class="section-label">Vision</div>
+        <div class="vision-text">
+          Psyche AI is building the decision layer between thought and action.
+        </div>
+        <p class="vision-subtext">
+          We are starting with consumer products and expanding toward a broader
+          AI operating system for decision-making and execution.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="team">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Team</div>
+        <h2 class="section-title">Built by Technical Operators</h2>
+        <p class="section-subtitle">
+          Small team, high execution velocity, product-first approach.
+        </p>
+      </div>
+
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-kicker">Founder</div>
+          <h3>Eva Wang - Founder &amp; CEO</h3>
+          <p>
+            Full-time founder building Psyche AI across product, engineering,
+            and AI systems. Previously built large-scale systems across Meta,
+            Tinder, Amazon, and ad-tech infrastructure roles.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Meta</span>
+            <span class="tag">Tinder</span>
+            <span class="tag">Amazon</span>
+            <span class="tag">Stanford GSB LEAD</span>
+            <span class="tag">Technical Founder</span>
+          </div>
+        </div>
+
+        <div class="team-card">
+          <div class="team-kicker">Support</div>
+          <h3>Advisory and Technical Bench</h3>
+          <p>
+            Supported by experienced technical advisors, including a Staff Software
+            Engineer at Meta. Psyche AI is also exploring deeper collaboration with
+            senior AI talent as the company scales.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Meta Advisor</span>
+            <span class="tag">AI Systems</span>
+            <span class="tag">Architecture</span>
+            <span class="tag">Scaling</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta" id="contact">
+    <div class="container">
+      <div class="cta-inner">
+        <h2>See the Product and the Platform Vision</h2>
+        <p>
+          Request a demo, try the live product, or get in touch with the team.
+        </p>
+        <div class="cta-buttons">
+          <a href="mailto:info@psyche-ai.xyz?subject=Request%20Demo%20for%20Psyche%20AI" class="btn btn-light">Request Demo</a>
+          <a href="/subliminalgen" class="btn btn-ghost-light">Try Product</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>
+        Psyche AI LLC &middot; <a href="mailto:info@psyche-ai.xyz">info@psyche-ai.xyz</a> &middot;
+        <a href="https://www.psyche-ai.xyz">psyche-ai.xyz</a>
+      </p>
+      <p>&copy; 2026 Psyche AI LLC. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
