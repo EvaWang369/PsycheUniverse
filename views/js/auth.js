@@ -31,17 +31,25 @@ const AuthManager = {
   },
 
   logout() {
-    const session = this.getSession();
-    if (session) {
-      fetch('/api/auth/logout', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${session.token}` }
-      }).catch(() => {});
+    // Get session directly from localStorage to avoid recursive getSession() call
+    const data = localStorage.getItem(this.SESSION_KEY);
+    if (data) {
+      try {
+        const session = JSON.parse(data);
+        if (session && session.token) {
+          fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${session.token}` }
+          }).catch(() => {});
+        }
+      } catch (e) {}
     }
     localStorage.removeItem(this.USER_KEY);
     localStorage.removeItem(this.SESSION_KEY);
     this.updateUI();
-    closeUserDropdown();
+    if (typeof closeUserDropdown === 'function') {
+      closeUserDropdown();
+    }
   },
 
   isLoggedIn() {
