@@ -20,15 +20,24 @@ async function loadMetaphors() {
     // Load metaphors from database instead of static catalog
     const metaphorsResponse = await fetch('/api/metaphors');
     if (metaphorsResponse.ok) {
-      metaphors = await metaphorsResponse.json();
+      const data = await metaphorsResponse.json();
+      // Handle case where API returns empty array or error object
+      if (Array.isArray(data) && data.length > 0) {
+        metaphors = data;
+        console.log('Loaded', metaphors.length, 'metaphors from API');
+      } else {
+        console.warn('API returned empty data, using static catalog');
+        metaphors = METAPHOR_CATALOG.slice();
+      }
     } else {
+      console.warn('API error, using static catalog:', metaphorsResponse.status);
       // Fallback to static catalog
       metaphors = METAPHOR_CATALOG.slice();
     }
     
     metaphors.sort((a, b) => (a.order_index ?? 9999) - (b.order_index ?? 9999));
 
-    if (AuthManager.isLoggedIn()) {
+    if (typeof AuthManager !== 'undefined' && AuthManager.isLoggedIn()) {
       const purchasesResponse = await fetch('/api/user/purchases', {
         headers: AuthManager.getAuthHeaders()
       });
@@ -59,11 +68,17 @@ function renderMetaphors() {
   const moreGrid = document.getElementById('moreGrid');
   const expandingGrid = document.getElementById('expandingGrid');
 
+  if (!coreGrid || !moreGrid || !expandingGrid) {
+    console.error('Grid elements not found');
+    return;
+  }
+
   coreGrid.innerHTML = '';
   moreGrid.innerHTML = '';
   expandingGrid.innerHTML = '';
 
-  const available = metaphors.filter(m => m.status === 'available');
+  // Default status to 'available' if not set
+  const available = metaphors.filter(m => (m.status || 'available') === 'available');
   const comingSoon = metaphors.filter(m => m.status === 'coming_soon');
 
   available.slice(0, 3).forEach(m => {
